@@ -11,7 +11,7 @@ export const SidebarProvider = ({ children }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { socket } = useNotification();
+  // const { socket } = useNotification();
 
   const toggleCartDrawer = () => setCartDrawerOpen(!cartDrawerOpen);
   const closeCartDrawer = () => setCartDrawerOpen(false);
