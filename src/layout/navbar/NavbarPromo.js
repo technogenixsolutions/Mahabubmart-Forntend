@@ -137,7 +137,7 @@ const NavbarPromo = () => {
                       </Link>
                     )}
 
-                    <Popover className="relative font-serif">
+                    {/* <Popover className="relative font-serif">
                       <Popover.Button className="group inline-flex items-center py-2 text-sm font-medium hover:text-emerald-600 focus:outline-none">
                         <span>
                           {showingTranslateValue(
@@ -299,7 +299,7 @@ const NavbarPromo = () => {
                           </div>
                         </Popover.Panel>
                       </Transition>
-                    </Popover>
+                    </Popover> */}
 
                     {storeCustomizationSetting?.navbar?.offers_menu_status && (
                       <Link href="/offer">
