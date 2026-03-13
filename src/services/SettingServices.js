@@ -1,62 +1,21 @@
-// import requests from "./httpServices";
-
-// const SettingServices = {
-//   //store setting all function
-//   getOnlineStoreSetting: async () => {
-//     return requests.get("/setting/store/all");
-//   },
-//   //store customization setting all function
-//   getStoreCustomizationSetting: async () => {
-//     return requests.get("/setting/store/customization/all");
-//   },
-
-//   getShowingLanguage: async () => {
-//     return requests.get(`/language/show`);
-//   },
-
-//   getGlobalSetting: async () => {
-//     return requests.get("/setting/global/all");
-//   },
-// };
-
-// export default SettingServices;
-
-
 import requests from "./httpServices";
 
-const noCache = {
-  params: { t: Date.now() },
-  headers: {
-    "Cache-Control": "no-cache",
-  },
-};
-
 const SettingServices = {
-  // store setting
+  //store setting all function
   getOnlineStoreSetting: async () => {
-    const res = await requests.get("/setting/store/all", noCache);
-    return res.data;
+    return requests.get("/setting/store/all");
   },
-
-  // store customization setting
+  //store customization setting all function
   getStoreCustomizationSetting: async () => {
-    const res = await requests.get(
-      "/setting/store/customization/all",
-      noCache
-    );
-    return res.data;
+    return requests.get("/setting/store/customization/all");
   },
 
-  // language
   getShowingLanguage: async () => {
-    const res = await requests.get("/language/show", noCache);
-    return res.data;
+    return requests.get(`/language/show`);
   },
 
-  // global setting
   getGlobalSetting: async () => {
-    const res = await requests.get("/setting/global/all", noCache);
-    return res.data;
+    return requests.get("/setting/global/all");
   },
 };
 
