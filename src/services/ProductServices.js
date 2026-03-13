@@ -1,0 +1,26 @@
+import requests from "./httpServices";
+
+const ProductServices = {
+  getShowingProducts: async () => {
+    return requests.get("/products/show");
+  },
+  // getShowingStoreProducts: async ({ category = "", title = "" }) => {
+  //   return requests.get(`/products/store?category=${category}&title=${title}`);
+  // },
+
+
+  getShowingStoreProducts: async ({ category = "", title = "", page = 1, limit = 15, price = "" }) => {
+    let query = `?category=${category}&title=${title}&page=${page}&limit=${limit}`;
+    if (price) query += `&price=${price}`;
+    return requests.get(`/products/store${query}`);
+  },
+  getDiscountedProducts: async () => {
+    return requests.get("/products/discount");
+  },
+
+  getProductBySlug: async (slug) => {
+    return requests.get(`/products/${slug}`);
+  },
+};
+
+export default ProductServices;

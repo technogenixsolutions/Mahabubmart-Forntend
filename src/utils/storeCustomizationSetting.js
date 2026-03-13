@@ -1,0 +1,5 @@
+const storeCustomization = {
+
+};
+
+export {storeCustomization};
