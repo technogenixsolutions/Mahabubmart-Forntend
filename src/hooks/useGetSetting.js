@@ -1,20 +1,132 @@
-import Cookies from "js-cookie";
-import {useEffect, useState} from "react";
-import {useDispatch, useSelector} from "react-redux";
+// import Cookies from "js-cookie";
+// import {useEffect, useState} from "react";
+// import {useDispatch, useSelector} from "react-redux";
 
-//internal import
+// //internal import
+// // import useAsync from "./useAsync";
+// import SettingServices from "@services/SettingServices";
+// import {addSetting} from "@redux/slice/settingSlice";
+// import {storeCustomization} from "@utils/storeCustomizationSetting";
 // import useAsync from "./useAsync";
+
+// const useGetSetting = () => {
+//   const lang = Cookies.get("_lang");
+//   const dispatch = useDispatch();
+
+//   const {data: initalData} = useAsync(SettingServices.getGlobalSetting);
+//   const {data} = useAsync(SettingServices.getStoreCustomizationSetting);
+//   const [error, setError] = useState("");
+//   const [loading, setLoading] = useState(false);
+
+//   const settings = useSelector((state) => state.setting.settingItem);
+
+//   const globalSetting = settings.find(
+//     (value) => value.name === "globalSetting"
+//   );
+
+//   const storeCustomizationSetting = settings.find(
+//     (value) => value.name === "storeCustomizationSetting"
+//   );
+
+//   // useEffect(() => {
+//   //   setSocket(io(process.env.NEXT_PUBLIC_API_BASE_URL));
+//   //   // setSocket(io("http://localhost:5065"));
+//   // }, []);
+
+//   useEffect(() => {
+//     // Function to fetch and add the setting
+//     const fetchAndAddSetting = async () => {
+//       try {
+//         setLoading(true);
+
+//         const res = await SettingServices.getStoreCustomizationSetting();
+//         // console.log("res", res);
+//         const storeCustomizationSettingData = {
+//           ...res,
+//           name: "storeCustomizationSetting",
+//         };
+//         // console.log("Object.keys(res).length", Object.keys(res).length);
+//         if (Object.keys(res).length > 0) {
+//           dispatch(addSetting(storeCustomizationSettingData));
+//         } else {
+//           console.log(
+//             "store customization setting not available in db! use local one"
+//           );
+//           const storeCustomizationData = {
+//             ...storeCustomization?.setting,
+//             name: "storeCustomizationSetting",
+//           };
+//           dispatch(addSetting(storeCustomizationData));
+//         }
+
+//         setLoading(false);
+//       } catch (err) {
+//         setError(err.message);
+//       }
+//     };
+
+//     const fetchGlobalSetting = async () => {
+//       try {
+//         // setLoading(true);
+//         console.log("globalSetting setting not available");
+//         const res = await SettingServices.getGlobalSetting();
+//         const globalSettingData = {
+//           ...res,
+//           name: "globalSetting",
+//         };
+
+//         dispatch(addSetting(globalSettingData));
+
+//         // setLoading(false);
+//       } catch (err) {
+//         setError(err.message);
+//       }
+//     };
+
+//     // Check if the setting is not in the store and fetch it
+//     if (!storeCustomizationSetting) {
+//       fetchAndAddSetting();
+//     }
+
+//     if (!globalSetting) {
+//       fetchGlobalSetting();
+//     }
+
+//     // Check if the "lang" value is not set and set a default value
+//     if (!lang) {
+//       Cookies.set("_lang", "en", {
+//         sameSite: "None",
+//         secure: true,
+//       });
+//     }
+//   }, [lang]);
+
+//   return {
+//     lang,
+//     error,
+//     loading,
+//     globalSetting,
+//     storeCustomizationSetting,
+//   };
+// };
+
+// export default useGetSetting;
+
+
+
+import Cookies from "js-cookie";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+// internal import
 import SettingServices from "@services/SettingServices";
-import {addSetting} from "@redux/slice/settingSlice";
-import {storeCustomization} from "@utils/storeCustomizationSetting";
-import useAsync from "./useAsync";
+import { addSetting } from "@redux/slice/settingSlice";
+import { storeCustomization } from "@utils/storeCustomizationSetting";
 
 const useGetSetting = () => {
   const lang = Cookies.get("_lang");
   const dispatch = useDispatch();
 
-  const {data: initalData} = useAsync(SettingServices.getGlobalSetting);
-  const {data} = useAsync(SettingServices.getStoreCustomizationSetting);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -28,78 +140,66 @@ const useGetSetting = () => {
     (value) => value.name === "storeCustomizationSetting"
   );
 
-  // useEffect(() => {
-  //   setSocket(io(process.env.NEXT_PUBLIC_API_BASE_URL));
-  //   // setSocket(io("http://localhost:5065"));
-  // }, []);
-
   useEffect(() => {
-    // Function to fetch and add the setting
-    const fetchAndAddSetting = async () => {
+    const fetchSettings = async () => {
       try {
         setLoading(true);
 
-        const res = await SettingServices.getStoreCustomizationSetting();
-        // console.log("res", res);
-        const storeCustomizationSettingData = {
-          ...res,
-          name: "storeCustomizationSetting",
+        // 🔥 always fetch latest global setting
+        const globalRes = await SettingServices.getGlobalSetting({
+          params: { t: Date.now() }, // cache bypass
+        });
+
+        const globalSettingData = {
+          ...globalRes,
+          name: "globalSetting",
         };
-        // console.log("Object.keys(res).length", Object.keys(res).length);
-        if (Object.keys(res).length > 0) {
+
+        dispatch(addSetting(globalSettingData));
+
+        // 🔥 always fetch latest store customization
+        const storeRes =
+          await SettingServices.getStoreCustomizationSetting({
+            params: { t: Date.now() }, // cache bypass
+          });
+
+        if (Object.keys(storeRes).length > 0) {
+          const storeCustomizationSettingData = {
+            ...storeRes,
+            name: "storeCustomizationSetting",
+          };
+
           dispatch(addSetting(storeCustomizationSettingData));
         } else {
           console.log(
-            "store customization setting not available in db! use local one"
+            "store customization setting not available in db! using local one"
           );
+
           const storeCustomizationData = {
             ...storeCustomization?.setting,
             name: "storeCustomizationSetting",
           };
+
           dispatch(addSetting(storeCustomizationData));
         }
 
         setLoading(false);
       } catch (err) {
         setError(err.message);
+        setLoading(false);
       }
     };
 
-    const fetchGlobalSetting = async () => {
-      try {
-        // setLoading(true);
-        console.log("globalSetting setting not available");
-        const res = await SettingServices.getGlobalSetting();
-        const globalSettingData = {
-          ...res,
-          name: "globalSetting",
-        };
+    fetchSettings();
 
-        dispatch(addSetting(globalSettingData));
-
-        // setLoading(false);
-      } catch (err) {
-        setError(err.message);
-      }
-    };
-
-    // Check if the setting is not in the store and fetch it
-    if (!storeCustomizationSetting) {
-      fetchAndAddSetting();
-    }
-
-    if (!globalSetting) {
-      fetchGlobalSetting();
-    }
-
-    // Check if the "lang" value is not set and set a default value
+    // default language
     if (!lang) {
       Cookies.set("_lang", "en", {
         sameSite: "None",
         secure: true,
       });
     }
-  }, [lang]);
+  }, []);
 
   return {
     lang,
