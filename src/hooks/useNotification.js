@@ -4,15 +4,15 @@ import { useDispatch } from "react-redux";
 import io from "socket.io-client";
 
 // Create a single socket instance
-// const socket = io(process.env.NEXT_PUBLIC_API_SOCKET_URL);
+const socket = io(process.env.NEXT_PUBLIC_API_SOCKET_URL);
 
 const useNotification = () => {
   const dispatch = useDispatch();
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    // setSocket(io(import.meta.env.VITE_APP_API_BASE_URL));
-    setSocket(io("http://localhost:5055"));
+    setSocket(io(import.meta.env.VITE_APP_API_BASE_URL));
+    // setSocket(io("http://localhost:5055"));
   }, []);
 
   useEffect(() => {
