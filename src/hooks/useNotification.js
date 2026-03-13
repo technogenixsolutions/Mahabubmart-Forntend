@@ -11,7 +11,7 @@ const useNotification = () => {
   const [socket, setSocket] = useState(null);
 
   useEffect(() => {
-    setSocket(io(import.meta.env.NEXT_PUBLIC_API_BASE_URL));
+    setSocket(io(process.env.NEXT_PUBLIC_API_BASE_URL));
     // setSocket(io("http://localhost:5055"));
   }, []);
 
