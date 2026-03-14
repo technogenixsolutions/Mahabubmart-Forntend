@@ -249,7 +249,7 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
             <div className="mx-auto px-3 lg:px-10 max-w-screen-2xl">
               <div className="flex items-center pb-4">
                 <ol className="flex items-center w-full overflow-hidden font-serif">
-                  <li className="text-sm pr-1 transition duration-200 ease-in cursor-pointer hover:text-emerald-500 font-semibold">
+                  <li className="text-sm pr-1 transition duration-200 ease-in cursor-pointer hover:text-[#1F6BBF] font-semibold">
                     <Link href="/">
                       <a>Home</a>
                     </Link>
@@ -258,7 +258,7 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                     {" "}
                     <FiChevronRight />{" "}
                   </li>
-                  <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-emerald-500 font-semibold ">
+                  <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-[#1F6BBF] font-semibold ">
                     <Link
                       href={`/search?category=${category_name}&_id=${product?.category?._id}` || "/"}
                     >
@@ -424,7 +424,7 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                               </div>
                               <button
                                 onClick={() => handleAddToCart(product)}
-                                className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-emerald-500 hover:bg-emerald-600 w-full h-12"
+                                className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db]  hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] w-full h-12"
                               >
                                 {t("common:addToCart")}
                               </button>

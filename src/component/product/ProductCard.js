@@ -128,7 +128,7 @@ const ProductCard = ({ product, attributes }) => {
                     item.id === product._id && (
                       <div
                         key={item.id}
-                        className="h-9 w-auto flex flex-wrap items-center justify-evenly py-1 px-2 bg-emerald-500 text-white rounded"
+                        className="h-9 w-auto flex flex-wrap items-center justify-evenly py-1 px-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] text-white rounded"
                       >
                         <button
                           onClick={() =>
@@ -161,7 +161,7 @@ const ProductCard = ({ product, attributes }) => {
               <button
                 onClick={() => handleAddItem(product)}
                 aria-label="cart"
-                className="h-9 w-9 flex items-center justify-center border border-gray-200 rounded text-emerald-500 hover:border-emerald-500 hover:bg-emerald-500 hover:text-white transition-all"
+                className="h-9 w-9 flex items-center justify-center border border-gray-200 rounded text-[#1F6BBF] hover:border-[#1F6BBF] hover:bg-[#1F6BBF] hover:text-white transition-all"
               >
                 {" "}
                 <span className="text-xl">

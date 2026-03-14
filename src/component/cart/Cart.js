@@ -50,12 +50,12 @@ const Cart = () => {
   const checkoutClass = (
     <button
       onClick={closeCartDrawer}
-      className="w-full py-3 px-3 rounded-lg bg-emerald-500 hover:bg-emerald-600 flex items-center justify-between bg-heading text-sm sm:text-base text-white focus:outline-none transition duration-300"
+      className="w-full py-3 px-3 rounded-lg bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] flex items-center justify-between bg-heading text-sm sm:text-base text-white focus:outline-none transition duration-300"
     >
       <span className="align-middle font-medium font-serif">
         Proceed To Checkout
       </span>
-      <span className="rounded-lg font-bold font-serif py-2 px-3 bg-white text-emerald-600">
+      <span className="rounded-lg font-bold font-serif py-2 px-3 bg-white text-[#1F6BBF]">
         {currency}
         {cartTotal.toFixed(2)}
       </span>
@@ -93,7 +93,7 @@ const Cart = () => {
             <div className="flex flex-col h-full justify-center">
               <div className="flex flex-col items-center">
                 <div className="flex justify-center items-center w-20 h-20 rounded-full bg-emerald-100">
-                  <span className="text-emerald-600 text-4xl block">
+                  <span className="text-[#1F6BBF] text-4xl block">
                     <IoBagHandle />
                   </span>
                 </div>

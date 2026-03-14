@@ -69,7 +69,7 @@ const Coupon = ({ couponInHome }) => {
                         Inactive
                       </span>
                     ) : (
-                      <span className="text-emerald-600 inline-block px-4 py-1 rounded-full font-medium text-xs bg-emerald-100">
+                      <span className="text-[#1F6BBF] inline-block px-4 py-1 rounded-full font-medium text-xs bg-emerald-100">
                         Active
                       </span>
                     )}
@@ -121,11 +121,11 @@ const Coupon = ({ couponInHome }) => {
                       >
                         <button className="block w-full">
                           {copied && coupon.couponCode === copiedCode ? (
-                            <span className="text-emerald-600 text-sm leading-7 font-semibold">
+                            <span className="text-[#1F6BBF] text-sm leading-7 font-semibold">
                               Copied!
                             </span>
                           ) : (
-                            <span className="uppercase font-serif font-semibold text-sm leading-7 text-emerald-600">
+                            <span className="uppercase font-serif font-semibold text-sm leading-7 text-[#1F6BBF]">
                               {coupon.couponCode}{" "}
                             </span>
                           )}
@@ -217,7 +217,7 @@ const Coupon = ({ couponInHome }) => {
                             Inactive
                           </span>
                         ) : (
-                          <span className="text-emerald-600 inline-block">
+                          <span className="text-[#1F6BBF] inline-block">
                             Active
                           </span>
                         )}
@@ -231,11 +231,11 @@ const Coupon = ({ couponInHome }) => {
                       >
                         <button className="block w-full">
                           {copied && coupon.couponCode === copiedCode ? (
-                            <span className="text-emerald-600 text-base leading-7 font-semibold">
+                            <span className="text-[#1F6BBF] text-base leading-7 font-semibold">
                               Copied!
                             </span>
                           ) : (
-                            <span className="uppercase font-serif font-semibold text-base leading-7 text-emerald-600">
+                            <span className="uppercase font-serif font-semibold text-base leading-7 text-[#1F6BBF]">
                               {coupon.couponCode}{" "}
                             </span>
                           )}

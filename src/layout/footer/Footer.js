@@ -48,7 +48,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link1}` ||
                       "/"
                     }>
-                    <a className="text-black inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -67,7 +67,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link2}` ||
                       "/"
                     }>
-                    <a className="text-black inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-[#1F6BBF]">
                       {/* {t('common:footer-contact-us')} */}
 
                       <CMSkeleton
@@ -88,7 +88,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link3}` ||
                       "/"
                     }>
-                    <a className="text-black inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-[#1F6BBF]">
                       {/* {t('common:footer-careers')} */}
                       {showingTranslateValue(
                         storeCustomizationSetting?.footer_block_one_link_three_title
@@ -111,7 +111,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link4}` ||
                       "/"
                     }>
-                    <a className="text-black  inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -145,7 +145,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link1}` ||
                       "/"
                     }>
-                    <a className="text-black  inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -165,7 +165,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link2}` ||
                       "/"
                     }>
-                    <a className="text-black  inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -184,7 +184,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link3}` ||
                       "/"
                     }>
-                    <a className="text-black  inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -203,7 +203,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link4}` ||
                       "/"
                     }>
-                    <a className="text-black inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -238,7 +238,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link1
                         : "#"
                     }`}>
-                    <a className="text-black  inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -258,7 +258,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link2
                         : "#"
                     }`}>
-                    <a className="text-black  inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -278,7 +278,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link3
                         : "#"
                     }`}>
-                    <a className="text-black inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -298,7 +298,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link4
                         : "#"
                     }`}>
-                    <a className="text-black inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-[#1F6BBF]">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -364,7 +364,7 @@ const Footer = () => {
                     storeCustomizationSetting?.footer?.social_pinterest ||
                     storeCustomizationSetting?.footer?.social_linkedin ||
                     storeCustomizationSetting?.footer?.social_whatsapp) && (
-                    <span className="text-emerald-500 leading-7 font-medium block mb-2 pb-0.5">
+                    <span className="text-[#1F6BBF]  leading-7 font-medium block mb-2 pb-0.5">
                       {t("common:footer-follow-us")}
                     </span>
                   )}
@@ -464,7 +464,7 @@ const Footer = () => {
                   <p className="text-[#161616] leading-7 font-medium block">
                     {t("common:footer-call-us")}
                   </p>
-                  <h5 className="text-2xl font-bold text-emerald-500 leading-7">
+                  <h5 className="text-2xl font-bold text-[#1F6BBF] leading-7">
                     {/* +012345-67900 */}
                     {storeCustomizationSetting?.footer?.bottom_contact}
                   </h5>
@@ -500,7 +500,7 @@ const Footer = () => {
       <a
         target="_blank"
         rel="noopener noreferrer"
-        className="text-emerald-500"
+        className="text-[#1F6BBF]"
       >
         Mahabubmart
       </a>
@@ -511,7 +511,7 @@ const Footer = () => {
       href="https://www.technogenixsolutions.com/"
       target="_blank"
       rel="noopener noreferrer"
-      className="text-emerald-500 font-medium"
+      className="text-[#1F6BBF] font-medium"
     >
       TechnoGenix Solutions
     </a>

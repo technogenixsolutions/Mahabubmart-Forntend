@@ -70,7 +70,7 @@ const NavbarPromo = () => {
                     {storeCustomizationSetting?.navbar
                       ?.categories_menu_status && (
                       <Popover className="relative font-serif">
-                        <Popover.Button className="group inline-flex items-center py-2 hover:text-emerald-600 focus:outline-none">
+                        <Popover.Button className="group inline-flex items-center py-2 hover:text-[#1F6BBF] focus:outline-none">
                           <span className="font-serif text-sm font-medium">
                             {showingTranslateValue(
                               storeCustomizationSetting?.navbar?.categories
@@ -78,7 +78,7 @@ const NavbarPromo = () => {
                           </span>
 
                           <ChevronDownIcon
-                            className="ml-1 h-3 w-3 group-hover:text-emerald-600"
+                            className="ml-1 h-3 w-3 group-hover:text-[#1F6BBF]"
                             aria-hidden="true"
                           />
                         </Popover.Button>
@@ -105,7 +105,7 @@ const NavbarPromo = () => {
                       <Link href="/products">
                         <a
                           onClick={() => setIsLoading(!isLoading)}
-                          className="font-serif mx-4 py-2 text-sm font-medium hover:text-emerald-600"
+                          className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]"
                         >
                           All Products
                         </a>
@@ -115,7 +115,7 @@ const NavbarPromo = () => {
                       <Link href="/about-us">
                         <a
                           onClick={() => setIsLoading(!isLoading)}
-                          className="font-serif mx-4 py-2 text-sm font-medium hover:text-emerald-600"
+                          className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]"
                         >
                           {showingTranslateValue(
                             storeCustomizationSetting?.navbar?.about_us
@@ -128,7 +128,7 @@ const NavbarPromo = () => {
                       <Link href="/contact-us">
                         <a
                           onClick={() => setIsLoading(!isLoading)}
-                          className="font-serif mx-4 py-2 text-sm font-medium hover:text-emerald-600"
+                          className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]"
                         >
                           {showingTranslateValue(
                             storeCustomizationSetting?.navbar?.contact_us
@@ -305,7 +305,7 @@ const NavbarPromo = () => {
                       <Link href="/offer">
                         <a
                           onClick={() => setIsLoading(!isLoading)}
-                          className="relative inline-flex items-center  bg-red-100 font-serif ml-4 py-0 px-2 rounded text-sm font-medium text-red-500 hover:text-emerald-600"
+                          className="relative inline-flex items-center  bg-red-100 font-serif ml-4 py-0 px-2 rounded text-sm font-medium text-red-500 hover:text-[#1F6BBF]"
                         >
                           {showingTranslateValue(
                             storeCustomizationSetting?.navbar?.offers
@@ -356,7 +356,7 @@ const NavbarPromo = () => {
               <Link href="/privacy-policy">
                 <a
                   onClick={() => setIsLoading(!isLoading)}
-                  className="font-serif mx-4 py-2 text-sm font-medium hover:text-emerald-600"
+                  className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]"
                 >
                   {showingTranslateValue(
                     storeCustomizationSetting?.navbar?.privacy_policy
@@ -368,7 +368,7 @@ const NavbarPromo = () => {
               <Link href="/terms-and-conditions">
                 <a
                   onClick={() => setIsLoading(!isLoading)}
-                  className="font-serif mx-4 py-2 text-sm font-medium hover:text-emerald-600"
+                  className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]"
                 >
                   {showingTranslateValue(
                     storeCustomizationSetting?.navbar?.term_and_condition

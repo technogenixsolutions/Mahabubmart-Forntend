@@ -57,7 +57,7 @@ const NavBarTop = () => {
                 href={`tel:${
                   storeCustomizationSetting?.navbar?.phone 
                 }`}
-                className="font-bold text-emerald-500 ml-1"
+                className="font-bold text-[#1F6BBF] ml-1"
               >
                 {storeCustomizationSetting?.navbar?.phone}
               </a>
@@ -67,7 +67,7 @@ const NavBarTop = () => {
               {storeCustomizationSetting?.navbar?.about_menu_status && (
                 <div>
                   <Link href="/about-us">
-                    <a className="font-medium hover:text-emerald-600">
+                    <a className="font-medium hover:text-[#1F6BBF]">
                       {showingTranslateValue(
                         storeCustomizationSetting?.navbar?.about_us
                       )}
@@ -79,7 +79,7 @@ const NavBarTop = () => {
               {storeCustomizationSetting?.navbar?.contact_menu_status && (
                 <div>
                   <Link href="/contact-us">
-                    <a className="font-medium hover:text-emerald-600">
+                    <a className="font-medium hover:text-[#1F6BBF]">
                       {showingTranslateValue(
                         storeCustomizationSetting?.navbar?.contact_us
                       )}
@@ -90,7 +90,7 @@ const NavBarTop = () => {
               )}
               <button
                 onClick={handleModal}
-                className="font-medium hover:text-emerald-600"
+                className="font-medium hover:text-[#1F6BBF]"
               >
                 {showingTranslateValue(
                   storeCustomizationSetting?.navbar?.my_account
@@ -100,7 +100,7 @@ const NavBarTop = () => {
               {userInfo?.email ? (
                 <button
                   onClick={handleLogOut}
-                  className="flex items-center font-medium hover:text-emerald-600"
+                  className="flex items-center font-medium hover:text-[#1F6BBF]"
                 >
                   <span className="mr-1">
                     <IoLockOpenOutline />
@@ -112,7 +112,7 @@ const NavBarTop = () => {
               ) : (
                 <button
                   onClick={() => setModalOpen(!modalOpen)}
-                  className="flex items-center font-medium hover:text-emerald-600"
+                  className="flex items-center font-medium hover:text-[#1F6BBF]"
                 >
                   <span className="mr-1">
                     <FiUser />

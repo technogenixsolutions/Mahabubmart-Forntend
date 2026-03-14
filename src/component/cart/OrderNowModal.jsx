@@ -112,7 +112,7 @@ const OrderNowModal = ({ close }) => {
             <div className="w-full">
               {couponInfo?.couponCode ? (
                 <div className="bg-emerald-50 px-4 py-3 w-full rounded-md flex justify-between items-center">
-                  <p className="text-emerald-600 font-medium">Coupon Applied</p>
+                  <p className="text-[#1F6BBF] font-medium">Coupon Applied</p>
                   <div className="flex items-center gap-3">
                     <span className="text-red-500 font-semibold">
                       {couponInfo.couponCode}

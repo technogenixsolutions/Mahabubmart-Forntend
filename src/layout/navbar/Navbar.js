@@ -60,7 +60,7 @@ const Navbar = () => {
         <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       )}
 
-      <div className="bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#36C2F0] sticky top-0 z-20">
+      <div className="bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] sticky top-0 z-20">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
           <div className="top-bar h-16 lg:h-auto flex items-center justify-between py-4 mx-auto">
             <Link href="/">

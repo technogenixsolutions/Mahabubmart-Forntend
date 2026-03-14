@@ -49,7 +49,7 @@ const CardTwo = () => {
               href={`${storeCustomizationSetting?.home?.quick_delivery_link}`|| '/'}
             >
               <a
-                className="lg:w-1/3   text-xs font-serif font-medium inline-block mt-5 px-8 py-3 bg-emerald-500 text-center text-white rounded-full hover:text-white contact-btn"
+                className="lg:w-1/3   text-xs font-serif font-medium inline-block mt-5 px-8 py-3 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] text-center text-white rounded-full hover:text-white contact-btn"
                 target="_blank"
               >
                 {showingTranslateValue(

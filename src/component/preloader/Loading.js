@@ -5,7 +5,7 @@ const Loading = ({ loading }) => {
   return (
     <div className="text-lg text-center py-6">
       <ScaleLoader
-        color="#34D399"
+        color="#1F6BBF"
         loading={loading}
         height={30}
         width={3}

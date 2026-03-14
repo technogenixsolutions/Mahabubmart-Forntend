@@ -327,7 +327,7 @@ const ProductModal = ({
                   <button
                     onClick={() => handleAddToCart(product)}
                     disabled={product.quantity < 1}
-                    className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-emerald-500 hover:bg-emerald-600 w-full h-12"
+                    className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] "
                   >
                     {t("common:addToCart")}
                   </button>
@@ -346,7 +346,7 @@ const ProductModal = ({
                       >
                         <button
                           type="button"
-                          className="text-gray-600 font-serif font-medium underline ml-2 hover:text-teal-600"
+                          className="text-gray-600 font-serif font-medium underline ml-2 hover:text-[#1F6BBF]"
                           onClick={() => setIsLoading(!isLoading)}
                         >
                           {category_name}

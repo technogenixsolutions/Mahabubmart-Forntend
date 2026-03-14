@@ -145,7 +145,7 @@ const MainCarousel = () => {
                   {item?.info}
                 </p>
                 <Link href={item.url || "/" }>
-                  <a className="hidden sm:inline-block lg:inline-block text-sm leading-6 font-serif font-medium mt-6 px-6 py-2 bg-emerald-500 text-center rounded-md text-white hover:bg-emerald-600">
+                  <a className="hidden sm:inline-block lg:inline-block text-sm leading-6 font-serif font-medium mt-6 px-6 py-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] text-center rounded-md text-white hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2]  transition-all duration-300">
                     {item.buttonName}
                   </a>
                 </Link>

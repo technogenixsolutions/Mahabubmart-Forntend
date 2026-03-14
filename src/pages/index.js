@@ -148,7 +148,7 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
                               ))}
                           </div><div className="text-center mt-8">
                               <Link href="/products">
-                                <button className="px-6 py-2 bg-[#02b17c] hover:bg-green-700 text-white rounded-md">
+                                <button className="px-6 py-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2]  transition-all duration-300 text-white rounded-md">
                                   View All Trending Products
                                 </button>
                               </Link>
@@ -218,7 +218,7 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
                               ))}
                           </div><div className="text-center mt-8">
                               <Link href="/discount-products">
-                                <button className="px-6 py-2 bg-[#02b17c] hover:bg-green-700 text-white rounded-md">
+                                <button className="px-6 py-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2]  transition-all duration-300 text-white rounded-md">
                                   View All Discount Products
                                 </button>
                               </Link>
@@ -233,7 +233,7 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
             {storeCustomizationSetting?.home?.delivery_status && (
               <div className="block mx-auto max-w-screen-2xl">
                 <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
-                  <div className="lg:p-16 p-6 bg-[#02b17c] shadow-sm border rounded-lg">
+                  <div className="lg:p-16 p-6 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] shadow-sm border rounded-lg">
                     <CardTwo />
                   </div>
                 </div>
