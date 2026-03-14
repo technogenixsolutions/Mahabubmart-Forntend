@@ -27,7 +27,7 @@ const Navbar = () => {
   const router = useRouter();
 
   const {storeCustomizationSetting} = useGetSetting();
-  // console.log("storeCustomizationSetting", storeCustomizationSetting);
+  
 
   const {
     state: {userInfo},
@@ -67,8 +67,8 @@ const Navbar = () => {
               <a className="mr-3 lg:mr-12 xl:mr-12 hidden md:hidden lg:block">
                 <Image
                   width={120}
-                  height={100}
-                  src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773482630/cno4dflj4kz83rim1qbi.png"
+                  height={45}
+                  src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773483391/uep0jplj2bhqn1djjl5j.png"
                   alt="mahabubmart"
                 />
               </a>
