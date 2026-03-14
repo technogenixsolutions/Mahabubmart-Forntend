@@ -60,7 +60,7 @@ const Navbar = () => {
         <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       )}
 
-      <div className="bg-[#161616] sticky top-0 z-20">
+      <div className="bg-[#02b17c] sticky top-0 z-20">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
           <div className="top-bar h-16 lg:h-auto flex items-center justify-between py-4 mx-auto">
             <Link href="/">
@@ -68,8 +68,8 @@ const Navbar = () => {
                 <Image
                   width={120}
                   height={45}
-                  src="https://i.ibb.co/BzGjtD4/Electric-Mart-front-Broken-100.png"
-                  alt="logo"
+                  src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+                  alt="mahabubmart"
                 />
               </a>
             </Link>

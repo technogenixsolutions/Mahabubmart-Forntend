@@ -27,7 +27,7 @@ const Footer = () => {
   const {loading, storeCustomizationSetting} = useGetSetting();
 
   return (
-    <div className="pb-16 lg:pb-0 xl:pb-0 bg-[#161616] text-white">
+    <div className="pb-16 lg:pb-0 xl:pb-0 bg-[#eeebeb] text-black">
       <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
         <div className="grid grid-cols-2 md:grid-cols-7 xl:grid-cols-12 gap-5 sm:gap-9 lg:gap-11 xl:gap-7 py-10 lg:py-16 justify-between">
           {storeCustomizationSetting?.footer?.block1_status && (
@@ -111,7 +111,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link4}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -145,7 +145,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link1}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -165,7 +165,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link2}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -184,7 +184,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link3}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -203,7 +203,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block2_sub_link4}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -238,7 +238,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link1
                         : "#"
                     }`}>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -258,7 +258,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link2
                         : "#"
                     }`}>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black  inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -278,7 +278,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link3
                         : "#"
                     }`}>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -298,7 +298,7 @@ const Footer = () => {
                         ? storeCustomizationSetting?.footer?.block3_sub_link4
                         : "#"
                     }`}>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -321,12 +321,12 @@ const Footer = () => {
                   <Image
                     width={110}
                     height={40}
-                    src={storeCustomizationSetting?.footer?.block4_logo}
-                    alt="logo"
+                    src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+                    alt="mahabubmart"
                   />
                 </a>
               </Link>
-              <p className="leading-7 font-sans text-sm text-white mt-3">
+              <p className="leading-7 font-sans text-sm text-black mt-3">
                 {showingTranslateValue(
                   storeCustomizationSetting?.footer?.block4_address
                 )}
@@ -493,20 +493,30 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 flex justify-center py-4">
-        <p className="text-sm text-gray-500 leading-6">
-          Copyright 2023 @{" "}
-          <Link href="https://softfixup.com">
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-emerald-500">
-              Soft Fixup
-            </a>
-          </Link>
-          , All rights reserved.
-        </p>
-      </div>
+<div className="mx-auto max-w-screen-2xl px-3 sm:px-10 flex justify-center py-4">
+  <p className="text-sm text-gray-500 leading-6 text-center">
+    © {new Date().getFullYear()} @{" "}
+    <Link href="https://mahabubmart.com">
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-emerald-500"
+      >
+        Mahabubmart
+      </a>
+    </Link>
+    , All rights reserved. <br />
+    Developed by{" "}
+    <a
+      href="https://www.technogenixsolutions.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-emerald-500 font-medium"
+    >
+      TechnoGenix Solutions
+    </a>
+  </p>
+</div>
     </div>
   );
 };
