@@ -149,7 +149,7 @@ const useCheckoutSubmit = () => {
     const fullName = `${data.firstName || ""} ${data.lastName || ""}`.trim();
 
     const orderInfo = {
-         user_info: {
+     user_info: {
       name: fullName,   // ✅ একটাই name
       email: data.email,
       contact: data.contact,

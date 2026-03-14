@@ -58,13 +58,13 @@ const Checkout = () => {
 
     if (user) {
       const userInfo = JSON.par
-      console.log(userInfo)
+   
 
-      setValue("firstName", userInfo?.name?.split(" ")[1] || "");
-      setValue("lastName", userInfo?.name?.split(" ")[2] || "");
+      setValue("firstName", userInfo?.name?.split(" ")[0] || "");
+      setValue("lastName", userInfo?.name?.split(" ")[1] || "");
       setValue("contact", userInfo?.phone || "");
       setValue("email", userInfo?.email || "");
-      setValue("address", userInfo.address || "");
+      setValue("address", userInfo?.address || "");
     }
   }, [setValue]);
 
