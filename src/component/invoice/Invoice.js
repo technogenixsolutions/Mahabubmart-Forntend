@@ -46,15 +46,15 @@ const Invoice = ({ data, printRef, globalSetting, currency }) => {
                   <Image
                     width={110}
                     height={40}
-                    src="/public/logo/invoice.webp"
-                    alt="logo"
+                    src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+                    alt="mahabubmart"
                   />
                 </a>
               </Link>
             </h2>
             <p className="text-sm text-gray-500">
               {globalSetting?.address ||
-                "Cecilia Chapman, 561-4535 Nulla LA, <br /> United States 96522"}
+                "Cecilia Chapman, 561-4535 Nulla LA, United States 96522"}
             </p>
           </div>
         </div>
@@ -171,7 +171,7 @@ const Invoice = ({ data, printRef, globalSetting, currency }) => {
               Total Amount
             </span>
             <span className="text-2xl font-serif font-bold text-red-500 block">
-              {currency}
+              {"৳"}
               {getNumberTwo(data.total)}
             </span>
           </div>

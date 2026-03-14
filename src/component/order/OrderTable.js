@@ -18,12 +18,12 @@ const OrderTable = ({ data, currency }) => {
             {item.quantity}{" "}
           </td>
           <td className="px-6 py-1 whitespace-nowrap font-bold text-center font-DejaVu">
-            {currency}
+            {"৳"}
             {getNumberTwo(item.price)}
           </td>
 
           <td className="px-6 py-1 whitespace-nowrap text-right font-bold font-DejaVu k-grid text-red-500">
-            {currency}
+            {"৳"}
             {getNumberTwo(item.itemTotal)}
           </td>
         </tr>
