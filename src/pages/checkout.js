@@ -31,7 +31,7 @@ const Checkout = () => {
     handleShippingCost,
 
     register,
-      setValue,
+        setValue,
     errors,
     showCard,
 
@@ -57,8 +57,7 @@ const Checkout = () => {
     const user = Cookies.get("userInfo");
 
     if (user) {
-      const userInfo = JSON.par
-   
+      const userInfo = JSON.parse(user);
 
       setValue("firstName", userInfo?.name?.split(" ")[0] || "");
       setValue("lastName", userInfo?.name?.split(" ")[1] || "");
