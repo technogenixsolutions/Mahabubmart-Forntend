@@ -17,6 +17,7 @@ import MainCarousel from "@component/carousel/MainCarousel";
 import FeatureCategory from "@component/category/FeatureCategory";
 import AttributeServices from "@services/AttributeServices";
 import CMSkeleton from "@component/preloader/CMSkeleton";
+import FAQ from "@component/faq/FAQ";
 
 const Home = ({ popularProducts, discountProducts, attributes }) => {
 
@@ -152,18 +153,8 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
               </div>
             )}
 
-            {/* promotional banner card */}
-            {storeCustomizationSetting?.home?.delivery_status && (
-              <div className="block mx-auto max-w-screen-2xl">
-                <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
-                  <div className="lg:p-16 p-6 bg-[#161616] shadow-sm border rounded-lg">
-                    <CardTwo />
-                  </div>
-                </div>
-              </div>
-            )}
 
-            {/* discounted products */}
+               {/* discounted products */}
             {storeCustomizationSetting?.home?.discount_product_status && (
               <div
                 id="discount"
@@ -226,6 +217,27 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
                 </div>
               </div>
             )}
+
+            {/* promotional banner card */}
+            {storeCustomizationSetting?.home?.delivery_status && (
+              <div className="block mx-auto max-w-screen-2xl">
+                <div className="mx-auto max-w-screen-2xl px-4 sm:px-10">
+                  <div className="lg:p-16 p-6 bg-[#02b17c] shadow-sm border rounded-lg">
+                    <CardTwo />
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* FAQ*/}
+         <div className="block mx-auto max-w-screen-2xl">
+                <div className="mx-auto max-w-screen-2xl px-4 sm:px-10 my-14">
+                  <h2 className="text-center font-bold text-lg my-3">FAQ</h2>
+                  <div className="lg:p-16 p-6  shadow-sm border rounded-lg ">
+                    <FAQ />
+                  </div>
+                </div>
+              </div>
           </div>
         </Layout>
       )}
