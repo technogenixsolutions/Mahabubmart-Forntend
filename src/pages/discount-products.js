@@ -14,7 +14,7 @@ import ProductCard from "@component/product/ProductCard";
 import AttributeServices from "@services/AttributeServices";
 import CMSkeleton from "@component/preloader/CMSkeleton";
 
-const ProductsPage = ({ initialProducts, attributes }) => {
+const DiscountProductsPage = ({ initialProducts, attributes,  }) => {
   const router = useRouter();
   const { isLoading, setIsLoading } = useContext(SidebarContext);
   const { loading, error, storeCustomizationSetting } = useGetSetting();
@@ -34,7 +34,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
     setLoadingMore(true);
     try {
       const nextPage = page + 1;
-      const data = await ProductServices.getAllProducts({
+      const data = await ProductServices.getDiscountedProducts({
         page: nextPage,
         limit,
         price: priceSort,
@@ -54,7 +54,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
     setPage(1);
     setLoadingMore(true);
     try {
-      const data = await ProductServices.getAllProducts({
+      const data = await ProductServices.getDiscountedProducts({
         page: 1,
         limit,
         price: sortValue,
@@ -83,15 +83,13 @@ const ProductsPage = ({ initialProducts, attributes }) => {
                       height={30}
                       loading={loading}
                       data={
-                        storeCustomizationSetting?.home?.popular_title ||
-                        "All Products"
+                     storeCustomizationSetting?.home?.latest_discount_title ||
+                        "All Discounted Products"
                       }
                     />
                   </h2>
                   <p className="text-base font-sans text-gray-600 leading-6">
-                    See all our popular products in this week. You can choose
-                    your daily needs products from this list and get some
-                    special offer with free shipping.
+                    "Explore our latest discounted products and grab the best deals before they're gone!"
                   </p>
                 </div>
               </div>
@@ -99,7 +97,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
               {/* Sorting */}
               <div className="flex justify-end mb-4">
                 <select
-                  className="border px-3 py-2 rounded "
+                  className="border px-3 py-2 rounded"
                   value={priceSort}
                   onChange={handleSortChange}
                 >
@@ -153,7 +151,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
 // Server Side Props
 export const getServerSideProps = async (context) => {
   const [data, attributes] = await Promise.all([
-    ProductServices.getAllProducts({ page: 1, limit: 15 }),
+    ProductServices.getDiscountedProducts({ page: 1, limit: 15 }),
     AttributeServices.getShowingAttributes(),
   ]);
 
@@ -165,4 +163,4 @@ export const getServerSideProps = async (context) => {
   };
 };
 
-export default ProductsPage;
+export default DiscountProductsPage;

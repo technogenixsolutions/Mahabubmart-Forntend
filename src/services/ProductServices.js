@@ -9,13 +9,25 @@ const ProductServices = {
   // },
 
 
-  getShowingStoreProducts: async ({ category = "", title = "", page = 1, limit = 15, price = "" }) => {
+  getShowingStoreProducts: async ({ category = "", title = "", page = 1, limit = 1, price = "" }) => {
     let query = `?category=${category}&title=${title}&page=${page}&limit=${limit}`;
     if (price) query += `&price=${price}`;
     return requests.get(`/products/store${query}`);
   },
-  getDiscountedProducts: async () => {
-    return requests.get("/products/discount");
+  getAllProducts: async ({ category = "", title = "", page = 1, limit = 15, price = "" }) => {
+    let query = `?category=${category}&title=${title}&page=${page}&limit=${limit}`;
+    if (price) query += `&price=${price}`;
+    return requests.get(`/products${query}`);
+  },
+  // getDiscountedProducts: async () => {
+  //   return requests.get("/products/discount");
+  // },
+
+
+    getDiscountedProducts: async ({ category = "", title = "", page = 1, limit = 15, price = "" }) => {
+    let query = `?category=${category}&title=${title}&page=${page}&limit=${limit}`;
+    if (price) query += `&price=${price}`;
+    return requests.get(`/products/discount${query}`);
   },
 
   getProductBySlug: async (slug) => {

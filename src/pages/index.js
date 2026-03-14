@@ -18,6 +18,7 @@ import FeatureCategory from "@component/category/FeatureCategory";
 import AttributeServices from "@services/AttributeServices";
 import CMSkeleton from "@component/preloader/CMSkeleton";
 import FAQ from "@component/faq/FAQ";
+import Link from "next/link";
 
 const Home = ({ popularProducts, discountProducts, attributes }) => {
 
@@ -132,21 +133,26 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
                         loading={loading}
                       />
                     ) : (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                        {popularProducts
-                          ?.slice(
-                            0,
-                            storeCustomizationSetting?.home
-                              ?.popular_product_limit
-                          )
-                          ?.map((product) => (
-                            <ProductCard
-                              key={product._id}
-                              product={product}
-                              attributes={attributes}
-                            />
-                          ))}
-                      </div>
+                      <><div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
+                            {popularProducts
+                              ?.slice(
+                                0,
+                                storeCustomizationSetting?.home
+                                  ?.popular_product_limit
+                              )
+                              ?.map((product) => (
+                                <ProductCard
+                                  key={product._id}
+                                  product={product}
+                                  attributes={attributes} />
+                              ))}
+                          </div><div className="text-center mt-8">
+                              <Link href="/products">
+                                <button className="px-6 py-2 bg-[#02b17c] hover:bg-green-700 text-white rounded-md">
+                                  View All Trending Products
+                                </button>
+                              </Link>
+                            </div></>
                     )}
                   </div>
                 </div>
@@ -197,21 +203,26 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
                         loading={loading}
                       />
                     ) : (
-                      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
-                        {discountProducts
-                          ?.slice(
-                            0,
-                            storeCustomizationSetting?.home
-                              ?.latest_discount_product_limit
-                          )
-                          .map((product) => (
-                            <ProductCard
-                              key={product._id}
-                              product={product}
-                              attributes={attributes}
-                            />
-                          ))}
-                      </div>
+                      <><div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-5 2xl:grid-cols-6 gap-2 md:gap-3 lg:gap-3">
+                            {discountProducts
+                              ?.slice(
+                                0,
+                                storeCustomizationSetting?.home
+                                  ?.latest_discount_product_limit
+                              )
+                              .map((product) => (
+                                <ProductCard
+                                  key={product._id}
+                                  product={product}
+                                  attributes={attributes} />
+                              ))}
+                          </div><div className="text-center mt-8">
+                              <Link href="/discount-products">
+                                <button className="px-6 py-2 bg-[#02b17c] hover:bg-green-700 text-white rounded-md">
+                                  View All Discount Products
+                                </button>
+                              </Link>
+                            </div></>
                     )}
                   </div>
                 </div>
