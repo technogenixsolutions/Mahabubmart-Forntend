@@ -68,7 +68,7 @@ const Navbar = () => {
                 <Image
                   width={120}
                   height={45}
-                  src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+                  src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773482630/cno4dflj4kz83rim1qbi.png"
                   alt="mahabubmart"
                 />
               </a>
