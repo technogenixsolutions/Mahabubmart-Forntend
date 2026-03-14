@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import Cookies from "js-cookie";
 import dynamic from "next/dynamic";
 import { CardElement } from "@stripe/react-stripe-js";
 import Link from "next/link";
@@ -28,9 +29,12 @@ const Checkout = () => {
     handleSubmit,
     submitHandler,
     handleShippingCost,
+
     register,
+      setValue,
     errors,
     showCard,
+
     setShowCard,
     error,
     stripe,
@@ -48,9 +52,27 @@ const Checkout = () => {
     isCheckoutSubmit,
   } = useCheckoutSubmit();
 
+
+   useEffect(() => {
+    const user = Cookies.get("userInfo");
+
+    if (user) {
+      const userInfo = JSON.par
+      console.log(userInfo)
+
+      setValue("firstName", userInfo?.name?.split(" ")[1] || "");
+      setValue("lastName", userInfo?.name?.split(" ")[2] || "");
+      setValue("contact", userInfo?.phone || "");
+      setValue("email", userInfo?.email || "");
+      setValue("address", userInfo.address || "");
+    }
+  }, [setValue]);
+
   const { t } = useTranslation();
   const { storeCustomizationSetting } = useGetSetting();
   const { showingTranslateValue } = useUtilsFunction();
+
+
 
   return (
     <>

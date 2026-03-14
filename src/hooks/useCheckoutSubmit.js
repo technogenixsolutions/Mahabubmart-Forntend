@@ -146,8 +146,18 @@ const useCheckoutSubmit = () => {
 
     setIsCheckoutSubmit(true);
 
+    const fullName = `${data.firstName || ""} ${data.lastName || ""}`.trim();
+
     const orderInfo = {
-      user_info: data,
+         user_info: {
+      name: fullName,   // ✅ একটাই name
+      email: data.email,
+      contact: data.contact,
+      address: data.address,
+      city: data.city,
+      country: data.country,
+      zipCode: data.zipCode,
+    },
       cart: items,
       subTotal: cartTotal,
       shippingCost,
@@ -175,6 +185,7 @@ const useCheckoutSubmit = () => {
     submitHandler,
     handleShippingCost: setShippingCost,
     register,
+    setValue,
     errors,
     showCard,
     setShowCard,
