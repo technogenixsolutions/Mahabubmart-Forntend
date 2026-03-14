@@ -48,7 +48,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link1}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-emerald-500">
                       <CMSkeleton
                         count={1}
                         height={10}
@@ -67,7 +67,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link2}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-emerald-500">
                       {/* {t('common:footer-contact-us')} */}
 
                       <CMSkeleton
@@ -88,7 +88,7 @@ const Footer = () => {
                       `${storeCustomizationSetting?.footer?.block1_sub_link3}` ||
                       "/"
                     }>
-                    <a className="text-white inline-block w-full hover:text-emerald-500">
+                    <a className="text-black inline-block w-full hover:text-emerald-500">
                       {/* {t('common:footer-careers')} */}
                       {showingTranslateValue(
                         storeCustomizationSetting?.footer_block_one_link_three_title
