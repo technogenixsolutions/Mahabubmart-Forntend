@@ -74,7 +74,7 @@ const MyOrders = () => {
               </h2>
             ) : data?.orders?.length === 0 ? (
               <div className="text-center">
-                <span className="flex justify-center my-30 pt-16 text-emerald-500 font-semibold text-6xl">
+                <span className="flex justify-center my-30 pt-16 text-[#1F6BBF] font-semibold text-6xl">
                   <IoBagHandle />
                 </span>
                 <h2 className="font-medium text-md my-4 text-gray-600">
@@ -137,7 +137,7 @@ const MyOrders = () => {
                               <OrderHistory order={order} />
                               <td className="px-5 py-3 whitespace-nowrap text-right text-sm">
                                 <Link href={`/order/${order._id}`}>
-                                  <a className="px-3 py-1 bg-emerald-100 text-xs text-emerald-600 hover:bg-emerald-500 hover:text-white transition-all font-semibold rounded-full">
+                                  <a className="px-3 py-1 bg-emerald-100 text-xs text-[#1F6BBF] hover:bg-[#1F6BBF] hover:text-white transition-all font-semibold rounded-full">
                                     Details
                                   </a>
                                 </Link>

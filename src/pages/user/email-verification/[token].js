@@ -40,7 +40,7 @@ const EmailVerification = ({ params }) => {
       {loading ? (
         <Loading loading={loading} />
       ) : success ? (
-        <div className="text-emerald-500">
+        <div className="text-[#1F6BBF]">
           <IoCheckmarkCircle className="mx-auto mb-2 text-center text-4xl" />
           <h2 className="text-xl font-medium"> {success} </h2>
         </div>

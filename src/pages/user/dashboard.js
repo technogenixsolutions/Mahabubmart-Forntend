@@ -117,26 +117,26 @@ const Dashboard = ({ title, description, children }) => {
                   {userSidebar?.map((item) => (
                     <span
                       key={item.title}
-                      className="p-2 my-2 flex font-serif items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600"
+                      className="p-2 my-2 flex font-serif items-center rounded-md hover:bg-gray-50 w-full hover:text-[#1F6BBF]"
                     >
                       <item.icon
                         className="flex-shrink-0 h-4 w-4"
                         aria-hidden="true"
                       />
                       <Link href={item.href || '/'}>
-                        <a className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600">
+                        <a className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-[#1F6BBF]">
                           {item.title}
                         </a>
                       </Link>
                     </span>
                   ))}
-                  <span className="p-2 flex font-serif items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600">
+                  <span className="p-2 flex font-serif items-center rounded-md hover:bg-gray-50 w-full hover:text-[#1F6BBF]">
                     <span className="mr-2">
                       <IoLockOpenOutline />
                     </span>{" "}
                     <button
                       onClick={handleLogOut}
-                      className="inline-flex items-center justify-between text-sm font-medium w-full hover:text-emerald-600"
+                      className="inline-flex items-center justify-between text-sm font-medium w-full hover:text-[#1F6BBF]"
                     >
                       {showingTranslateValue(
                         storeCustomizationSetting?.navbar?.logout

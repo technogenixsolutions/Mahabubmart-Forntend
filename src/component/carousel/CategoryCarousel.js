@@ -124,7 +124,7 @@ const CategoryCarousel = () => {
                     )}
                   </div>
 
-                  <h3 className="text-xs text-gray-600 mt-2 font-serif group-hover:text-emerald-500">
+                  <h3 className="text-xs text-gray-600 mt-2 font-serif group-hover:text-[#1F6BBF]">
                     {showingTranslateValue(category?.name)}
                   </h3>
                 </div>

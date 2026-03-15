@@ -72,7 +72,7 @@ const Order = ({ params }) => {
               {showingTranslateValue(
                 storeCustomizationSetting?.dashboard?.invoice_message_first
               )}{" "}
-              <span className="font-bold text-emerald-600">
+              <span className="font-bold text-[#1F6BBF]">
                 {data?.user_info?.name},
               </span>{" "}
               {showingTranslateValue(
@@ -99,7 +99,7 @@ const Order = ({ params }) => {
                 {/* Download PDF Button */}
                 <button
                   onClick={handleDownloadPDF}
-                  className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-emerald-500 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md"
+                  className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-[#1F6BBF] text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md"
                 >
                   {showingTranslateValue(
                     storeCustomizationSetting?.dashboard?.download_button
@@ -112,7 +112,7 @@ const Order = ({ params }) => {
                 {/* Print Button */}
                 <ReactToPrint
                   trigger={() => (
-                    <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-emerald-500 text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
+                    <button className="mb-3 sm:mb-0 md:mb-0 lg:mb-0 flex items-center justify-center bg-[#1F6BBF] text-white transition-all font-serif text-sm font-semibold h-10 py-2 px-5 rounded-md">
                       {showingTranslateValue(
                         storeCustomizationSetting?.dashboard?.print_button
                       )}{" "}

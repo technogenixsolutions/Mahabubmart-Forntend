@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useForm } from "react-hook-form";
 import Cookies from "js-cookie";
 
@@ -10,8 +10,16 @@ import CustomerServices from "@services/CustomerServices";
 import { notifyError, notifySuccess } from "@utils/toast";
 import useGetSetting from "@hooks/useGetSetting";
 import useUtilsFunction from "@hooks/useUtilsFunction";
+import { useRouter } from "next/router";
+import { UserContext } from "@context/UserContext";
 
 const ChangePassword = () => {
+
+   const router = useRouter();
+    const {
+      dispatch,
+      state: { userInfo },
+    } = useContext(UserContext);
   const {
     register,
     handleSubmit,
@@ -31,6 +39,13 @@ const ChangePassword = () => {
       .then((res) => {
         notifySuccess(res.message);
         setLoading(false);
+
+      // 🔐 Auto Logout After Successful Password Change
+      dispatch({ type: "USER_LOGOUT" });
+      Cookies.remove("userInfo");
+      Cookies.remove("couponInfo");
+
+      router.push("/"); 
       })
       .catch((err) => {
         setLoading(false);
@@ -44,6 +59,16 @@ const ChangePassword = () => {
       setValue("email", user.email);
     }
   });
+
+
+    const handleLogOut = () => {
+      dispatch({ type: "USER_LOGOUT" });
+      Cookies.remove("userInfo");
+      Cookies.remove("couponInfo");
+      router.push("/");
+    };
+  
+   
 
   return (
     <Dashboard
@@ -115,7 +140,7 @@ const ChangePassword = () => {
             <button
               disabled={loading}
               type="submit"
-              className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
+              className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none  text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
             >
               <img
                 src="/loader/spinner.gif"
@@ -128,7 +153,7 @@ const ChangePassword = () => {
           ) : (
             <button
               type="submit"
-              className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none bg-emerald-500 text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white hover:bg-emerald-600 h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
+              className="md:text-sm leading-5 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-medium text-center justify-center border-0 border-transparent rounded-md placeholder-white focus-visible:outline-none focus:outline-none  text-white px-5 md:px-6 lg:px-8 py-2 md:py-3 lg:py-3 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] h-12 mt-1 text-sm lg:text-sm w-full sm:w-auto"
             >
               {showingTranslateValue(
                 storeCustomizationSetting?.dashboard?.change_password
