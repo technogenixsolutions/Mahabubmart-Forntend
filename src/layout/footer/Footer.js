@@ -7,9 +7,14 @@ import {
   FacebookIcon,
   LinkedinIcon,
   PinterestIcon,
-  TwitterIcon,
+
   WhatsappIcon,
 } from "react-share";
+
+import { FaSquareInstagram } from "react-icons/fa6";
+import { SiTiktok } from "react-icons/si";
+
+
 
 //internal import
 import {UserContext} from "@context/UserContext";
@@ -398,7 +403,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <TwitterIcon size={34} round />
+                            <FaSquareInstagram  size={34} round color={["#FD1D1D"] }/>
                           </a>
                         </Link>
                       </li>
@@ -415,7 +420,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <PinterestIcon size={34} round />
+                            <SiTiktok size={34} round color={["#000000"]} />
                           </a>
                         </Link>
                       </li>

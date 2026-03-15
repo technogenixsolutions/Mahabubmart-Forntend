@@ -84,35 +84,13 @@ const userSidebar = [
   },
 ];
 
-const sliderData = [
-  {
-    id: 1,
-    title: "Slider1Title",
-    info: "Slider1description",
-    url: "/search?Category=biscuits--cakes",
-    image: "/slider/slider-1.jpg",
-  },
-  {
-    id: 2,
-    title: "Slider2Title",
-    info: "Slider2description",
-    url: "/search?Category=fish--meat",
-    image: "/slider/slider-2.jpg",
-  },
-  {
-    id: 3,
-    title: "Slider3Title",
-    info: "Slider3description",
-    url: "/search?category=fresh-vegetable",
-    image: "/slider/slider-3.jpg",
-  },
-];
+
 
 const ctaCardData = [
   {
     id: 1,
     title: "Buy Your",
-    subTitle: "Electric Products",
+    subTitle: "Electris Products",
     image: "/cta/cta-bg-1.png",
     url: "/search?category=fresh-vegetable",
   },
@@ -165,7 +143,7 @@ const contactData = [
     title: "contact-page-box1-title",
     info: "contact-page-box1-info",
     icon: FiMail,
-    contact: "Electric Mart@gmail.com",
+    contact: "Mahabubmart@gmail.com",
     className: "bg-emerald-100",
   },
   {
@@ -186,4 +164,4 @@ const contactData = [
   },
 ];
 
-export {pages, userSidebar, sliderData, ctaCardData, featurePromo, contactData};
+export {pages, userSidebar, ctaCardData, featurePromo, contactData};

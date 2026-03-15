@@ -130,7 +130,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
                   {products.length >= limit && (
                     <div className="flex justify-center mt-6">
                       <button
-                        className={`px-6 py-2 bg-green-500 hover:bg-green-600 text-white rounded font-semibold ${
+                        className={`px-6 py-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] transition-all focus:outline-none text-white rounded font-semibold ${
                           loadingMore ? "opacity-50 cursor-not-allowed" : ""
                         }`}
                         onClick={handleLoadMore}

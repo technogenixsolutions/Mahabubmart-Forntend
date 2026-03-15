@@ -1,8 +1,8 @@
 {
-  "name": "Electric Mart-store",
+  "name": "Mahabubmart-store",
   "version": "0.1.0",
-  "description": "this is Electric Mart-store built with next.js and tailwindcss",
-  "homepage": "https://Electric Mart-store.vercel.app/",
+  "description": "this is Mahabubmart-store built with next.js and tailwindcss",
+  "homepage": "https://Mahabubmart-store.vercel.app/",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -50,7 +50,7 @@
     "react-dropzone": "^14.2.3",
     "react-google-login": "^5.2.2",
     "react-hook-form": "^7.24.0",
-    "react-icons": "^4.3.1",
+    "react-icons": "^4.12.0",
     "react-loading-skeleton": "^3.3.1",
     "react-paginate": "^8.1.3",
     "react-redux": "^8.0.2",

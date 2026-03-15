@@ -79,21 +79,21 @@ const Category = () => {
                    <Link href="/products">
                                       <a
                                        
-                                        className="font-serif mx-4 py-2 text-sm font-medium hover:text-emerald-600"
-                                      >
+                                        className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]">
+                                      
                                         All Products
                                       </a>
                                     </Link>
-              {pages.map((item) => (
+              {pages?.map((item) => (
                 <a
                   key={item.title || "/"}
                   href={item.href || "/"}
-                  className="p-2 flex font-serif items-center rounded-md hover:bg-gray-50 w-full hover:text-emerald-600">
+                  className="p-2 flex font-serif items-center rounded-md hover:bg-gray-50 w-full hover:text-[#1F6BBF]">
                   <item.icon
                     className="flex-shrink-0 h-4 w-4"
                     aria-hidden="true"
                   />
-                  <p className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-emerald-600">
+                  <p className="inline-flex items-center justify-between ml-2 text-sm font-medium w-full hover:text-[#1F6BBF]">
                     {item.title}
                   </p>
                 </a>

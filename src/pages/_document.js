@@ -1,4 +1,4 @@
-import Document, {Html, Head, Main, NextScript} from "next/document";
+import Document, { Html, Head, Main, NextScript } from "next/document";
 
 class MyDocument extends Document {
   static async getInitialProps(ctx) {
@@ -9,25 +9,47 @@ class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          <link rel="icon" href="/favicon.png" />
+          {/* Favicon */}
+          <link rel="icon" href="/MahabubMart.png" />
+
+          {/* Basic SEO */}
+          <meta charSet="UTF-8" />
+          <meta name="author" content="Mahabubmart" />
           <meta
-            property="og:title"
-            content="Electric Mart - Electric & Electronics Store e-commerce Template"
+            name="description"
+            content="Mahabubmart is a trusted online shopping platform in Bangladesh offering electronics, gadgets, home appliances and daily essentials at affordable prices."
           />
-          <meta property="og:type" content="eCommerce Website" />
+
+          {/* Open Graph (Facebook / Social Share) */}
+          <meta property="og:title" content="Mahabubmart | Online Shopping for Electronics & Gadgets in Bangladesh" />
+          <meta property="og:type" content="website" />
           <meta
             property="og:description"
-            content="Electric & Electronics Store e-commerce Template"
+            content="Shop electronics, gadgets, home appliances and daily essentials from Mahabubmart with great deals and fast delivery across Bangladesh."
           />
-          <meta
-            property="og:url"
-            content="https://Electric Mart-store.vercel.app/"
-          />
+          <meta property="og:url" content="https://www.mahabubmart.com/" />
           <meta
             property="og:image"
-            content="https://res.cloudinary.com/ahossain/image/upload/v1636729752/facebook-page_j7alju.png"
+            content="https://www.mahabubmart.com/MahabubMart.png"
           />
+          <meta property="og:site_name" content="Mahabubmart" />
+
+          {/* Twitter Card */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Mahabubmart Online Store" />
+          <meta
+            name="twitter:description"
+            content="Buy electronics, gadgets and daily essentials online from Mahabubmart."
+          />
+          <meta
+            name="twitter:image"
+            content="https://www.mahabubmart.com/MahabubMart.png"
+          />
+
+          {/* Theme */}
+          <meta name="theme-color" content="#ffffff" />
         </Head>
+
         <body>
           <Main />
           <NextScript />
