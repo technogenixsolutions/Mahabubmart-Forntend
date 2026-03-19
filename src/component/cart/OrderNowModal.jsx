@@ -48,9 +48,9 @@ const OrderNowModal = ({ close }) => {
     <>
       <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex items-end md:items-center justify-center">
         <div className="bg-white w-full max-w-md rounded-t-2xl md:rounded-lg overflow-hidden 
-                  max-h-[90vh] flex flex-col">
+                  max-h-[100vh] flex flex-col">
 
-          <div className="flex justify-between items-center px-4 py-3 border-b sticky top-0 bg-white z-10">
+          <div className="flex justify-between items-center px-4 py-2 border-b sticky top-0 bg-white z-10">
             <h3 className="font-semibold text-sm">
               ক্যাশ অন ডেলিভারিতে অর্ডার করতে আপনার তথ্য দিন
             </h3>
@@ -59,7 +59,7 @@ const OrderNowModal = ({ close }) => {
             </button>
           </div>
 
-          <form onSubmit={handleSubmit(handleSubmitOrder)} className="p-4 space-y-4 text-sm overflow-y-auto">
+          <form onSubmit={handleSubmit(handleSubmitOrder)} className="p-2 space-y-2 text-sm overflow-y-auto">
 
             <InputArea
               register={register}
