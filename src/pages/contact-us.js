@@ -54,7 +54,7 @@ const ContactUs = () => {
               />
             ) : (
               <div className="border p-10 rounded-lg text-center">
-                <span className="flex justify-center text-4xl text-emerald-500 mb-4">
+                <span className="flex justify-center text-4xl text-[#1F6BBF] mb-4">
                   <FiMail />
                 </span>
                 <h5 className="text-xl mb-2 font-bold">
@@ -65,7 +65,7 @@ const ContactUs = () => {
                 <p className="mb-0 text-base opacity-90 leading-7">
                   <a
                     href={`mailto:${storeCustomizationSetting?.contact_us?.email_box_email}` || ''}
-                    className="text-emerald-500"
+                    className="text-[#1F6BBF]"
                   >
                     {showingTranslateValue(
                       storeCustomizationSetting?.contact_us?.email_box_email
@@ -87,7 +87,7 @@ const ContactUs = () => {
               />
             ) : (
               <div className="border p-10 rounded-lg text-center">
-                <span className="flex justify-center text-4xl text-emerald-500 mb-4">
+                <span className="flex justify-center text-4xl text-[#1F6BBF] mb-4">
                   <FiBell />
                 </span>
                 <h5 className="text-xl mb-2 font-bold">
@@ -98,7 +98,7 @@ const ContactUs = () => {
                 <p className="mb-0 text-base opacity-90 leading-7">
                   <a
                     href={`mailto:${storeCustomizationSetting?.contact_us?.call_box_phone}` || ''}
-                    className="text-emerald-500"
+                    className="text-[#1F6BBF]"
                   >
                     {showingTranslateValue(
                       storeCustomizationSetting?.contact_us?.call_box_phone
@@ -119,7 +119,7 @@ const ContactUs = () => {
               />
             ) : (
               <div className="border p-10 rounded-lg text-center">
-                <span className="flex justify-center text-4xl text-emerald-500 mb-4">
+                <span className="flex justify-center text-4xl text-[#1F6BBF] mb-4">
                   <FiMapPin />
                 </span>
                 <h5 className="text-xl mb-2 font-bold">
