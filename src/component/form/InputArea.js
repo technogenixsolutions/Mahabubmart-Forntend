@@ -23,8 +23,9 @@ const InputArea = ({
           </div>
         )}
         <input
-          {...register(`${name}`, {
+           {...register(name, {
             required: `${label} is required!`,
+            ...registerOptions, // 👈 merge custom validation
           })}
           type={type}
           name={name}

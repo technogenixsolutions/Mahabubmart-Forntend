@@ -69,13 +69,28 @@ const OrderNowModal = ({ close }) => {
             />
             <Error errorName={errors.firstName} />
 
-            <InputArea
-              register={register}
-              name="contact"
-              label="ফোন নাম্বার"
-              placeholder="01XXXXXXXXX"
-              type="tel"
-            />
+          <InputArea
+  register={register}
+  name="contact"
+  label="ফোন নাম্বার"
+  placeholder="01XXXXXXXXX"
+  type="tel"
+  registerOptions={{
+    required: "ফোন নাম্বার প্রয়োজন",
+    pattern: {
+      value: /^01[3-9]\d{8}$/,
+      message: "সঠিক বাংলাদেশি নাম্বার দিন (01XXXXXXXXX)",
+    },
+    minLength: {
+      value: 11,
+      message: "নাম্বার অবশ্যই ১১ ডিজিট হতে হবে",
+    },
+    maxLength: {
+      value: 11,
+      message: "নাম্বার অবশ্যই ১১ ডিজিট হতে হবে",
+    },
+  }}
+/>
             <Error errorName={errors.contact} />
 
             <InputArea
