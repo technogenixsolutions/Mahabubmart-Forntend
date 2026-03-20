@@ -302,7 +302,7 @@ const Checkout = () => {
                       <button
                         type="submit"
                         disabled={isEmpty || isCheckoutSubmit}
-                        className="from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] transition-all  cursor-pointer  rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
+                        className="bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] transition-all focus:outline-none  cursor-pointer  rounded py-3 text-center text-sm font-serif font-medium text-white flex justify-center w-full"
                       >
                         {isCheckoutSubmit ? (
                           <span className="flex justify-center text-center">
