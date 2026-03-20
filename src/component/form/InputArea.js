@@ -10,6 +10,7 @@ const InputArea = ({
   defaultValue,
   autocomplete,
   placeholder,
+  registerOptions = {}, 
 }) => {
   return (
     <>

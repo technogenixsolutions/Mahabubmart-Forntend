@@ -76,7 +76,6 @@ const OrderNowModal = ({ close }) => {
   placeholder="01XXXXXXXXX"
   type="tel"
   registerOptions={{
-    required: "ফোন নাম্বার প্রয়োজন",
     pattern: {
       value: /^01[3-9]\d{8}$/,
       message: "সঠিক বাংলাদেশি নাম্বার দিন (01XXXXXXXXX)",
