@@ -35,6 +35,7 @@ import useUtilsFunction from "@hooks/useUtilsFunction";
 import Discount from "@component/common/Discount";
 import ImageCarousel from "@component/carousel/ImageCarousel";
 import useGetSetting from "@hooks/useGetSetting";
+import Reviews from "./Reviews/Reviews";
 
 const ProductScreen = ({ product, attributes, relatedProduct }) => {
   // console.log('attributes',attributes)
@@ -441,7 +442,7 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                               >
                                 <button
                                   type="button"
-                                  className="text-gray-600 font-serif font-medium underline ml-2 hover:text-teal-600"
+                                  className="text-gray-600 font-serif font-medium underline ml-2 hover:text-[#1F6BBF]"
                                   onClick={() => setIsLoading(!isLoading)}
                                 >
                                   {category_name}
@@ -460,41 +461,41 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                               {t("common:shareYourSocialText")}
                             </p>
                             <ul className="flex mt-4">
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-emerald-500  mr-2 transition ease-in-out duration-500">
+                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF] mr-2 transition ease-in-out duration-500">
                                 <FacebookShareButton
-                                  url={`https://supermarket-plum.vercel.app/product/${router.query.slug}`}
+                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
                                   quote=""
                                 >
                                   <FacebookIcon size={32} round />
                                 </FacebookShareButton>
                               </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-emerald-500  mr-2 transition ease-in-out duration-500">
+                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
                                 <TwitterShareButton
-                                  url={`https://supermarket-plum.vercel.app/product/${router.query.slug}`}
+                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
                                   quote=""
                                 >
                                   <TwitterIcon size={32} round />
                                 </TwitterShareButton>
                               </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-emerald-500  mr-2 transition ease-in-out duration-500">
+                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
                                 <RedditShareButton
-                                  url={`https://supermarket-plum.vercel.app/product/${router.query.slug}`}
+                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
                                   quote=""
                                 >
                                   <RedditIcon size={32} round />
                                 </RedditShareButton>
                               </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-emerald-500  mr-2 transition ease-in-out duration-500">
+                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
                                 <WhatsappShareButton
-                                  url={`https://supermarket-plum.vercel.app/product/${router.query.slug}`}
+                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
                                   quote=""
                                 >
                                   <WhatsappIcon size={32} round />
                                 </WhatsappShareButton>
                               </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-emerald-500  mr-2 transition ease-in-out duration-500">
+                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
                                 <LinkedinShareButton
-                                  url={`https://supermarket-plum.vercel.app/product/${router.query.slug}`}
+                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
                                   quote=""
                                 >
                                   <LinkedinIcon size={32} round />
@@ -514,6 +515,10 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                       </div>
                     </div>
                   </div>
+                </div>
+
+                <div>
+               <Reviews product={product} />
                 </div>
               </div>
 
