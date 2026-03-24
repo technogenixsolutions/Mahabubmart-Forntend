@@ -266,10 +266,10 @@ export const getServerSideProps = async (context) => {
       title: query ? query : "",
     }),
 
-    AttributeServices.getShowingAttributes(),
+    AttributeServices?.getShowingAttributes(),
   ]);
 
-  const popularProducts = data?.products.filter((p) => p.prices.discount < 1);
+  const popularProducts = data?.products?.filter((p) => p.prices.discount < 1);
  
 
   const discountProducts = data?.products.filter(

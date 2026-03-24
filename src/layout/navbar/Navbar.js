@@ -15,7 +15,7 @@ import {UserContext} from "@context/UserContext";
 import LoginModal from "@component/modal/LoginModal";
 import CartDrawer from "@component/drawer/CartDrawer";
 import {SidebarContext} from "@context/SidebarContext";
-import useGetSetting from "@hooks/useGetSetting";
+
 
 const Navbar = () => {
   const {t} = useTranslation();
@@ -25,8 +25,6 @@ const Navbar = () => {
   const {toggleCartDrawer} = useContext(SidebarContext);
   const {totalItems} = useCart();
   const router = useRouter();
-
-  const {storeCustomizationSetting} = useGetSetting();
   
 
   const {
@@ -62,15 +60,20 @@ const Navbar = () => {
 
       <div className="bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] sticky top-0 z-20">
         <div className="max-w-screen-2xl mx-auto px-3 sm:px-10">
-          <div className="top-bar h-16 lg:h-auto flex items-center justify-between py-4 mx-auto">
+          <div className="top-bar h-16 flex items-center justify-between mx-auto">
             <Link href="/">
               <a className="mr-3 lg:mr-12 xl:mr-12 hidden md:hidden lg:block">
-                <Image
-                  width={120}
-                  height={45}
-                  src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773483391/uep0jplj2bhqn1djjl5j.png"
-                  alt="mahabubmart"
-                />
+  
+ 
+    <Image
+     src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+  alt="mahabubmart"
+  width={200}
+  height={80}
+  className="object-contain h-12 w-auto brightness-0 invert"
+  priority
+    />
+ 
               </a>
             </Link>
             <div className="w-full transition-all duration-200 ease-in-out lg:flex lg:max-w-[520px] xl:max-w-[750px] 2xl:max-w-[900px] md:mx-12 lg:mx-4 xl:mx-0">

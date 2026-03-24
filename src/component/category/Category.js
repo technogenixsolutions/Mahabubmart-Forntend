@@ -25,14 +25,18 @@ const Category = () => {
         <div className="w-full flex justify-between items-center h-16 px-6 py-4 bg-[#161616] text-white border-b border-gray-100">
           <h2 className="font-semibold font-serif text-lg m-0 text-heading flex align-center">
             <Link href="/">
-              <a className="mr-10">
+            
                 <Image
-                  width={100}
-                  height={38}
-                  src="https://i.ibb.co/BzGjtD4/Electric-Mart-front-Broken-100.png"
-                  alt="logo"
+             
+     src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+  alt="mahabubmart"
+  width={190}
+  height={60}
+  className="object-contain brightness-0 invert"
+  priority
+  
                 />
-              </a>
+           
             </Link>
           </h2>
           <button
