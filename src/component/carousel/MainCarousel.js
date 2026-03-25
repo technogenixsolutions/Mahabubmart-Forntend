@@ -150,7 +150,7 @@ const MainCarousel = () => {
   if (filteredSliderData.length === 0) return null;
   return (
     <>
-      <Swiper
+      {/* <Swiper
         spaceBetween={30}
         centeredSlides={true}
         autoplay={{
@@ -205,7 +205,75 @@ const MainCarousel = () => {
             </div>
           </SwiperSlide>
         ))}
-      </Swiper>
+      </Swiper> */}
+
+
+      <Swiper
+      spaceBetween={30}
+      centeredSlides={true}
+      autoplay={{
+        delay: 2000,
+        disableOnInteraction: false,
+      }}
+      loop={filteredSliderData.length > 1} // 🔥 only loop if >1 slide
+      pagination={
+        (storeCustomizationSetting?.slider?.bottom_dots ||
+          storeCustomizationSetting?.slider?.both_slider) && {
+          clickable: true,
+        }
+      }
+      navigation={
+        (storeCustomizationSetting?.slider?.left_right_arrow ||
+          storeCustomizationSetting?.slider?.both_slider) && {
+          clickable: true,
+        }
+      }
+      modules={[Autoplay, Pagination, Navigation]}
+      className="mySwiper"
+    >
+      {filteredSliderData.map((item, i) => (
+        <SwiperSlide
+          className="h-full relative rounded-lg overflow-hidden"
+          key={item.id}
+        >
+          {/* image */}
+          <Image
+            layout="responsive"
+            width={950}
+            height={400}
+            src={item.image}
+            alt={item.title || "slider"}
+            className="object-cover"
+          />
+
+          {/* content */}
+          <div className="absolute top-0 left-0 z-10 flex flex-col w-full h-full justify-center">
+            <div className="pl-4 pr-12 sm:pl-10 sm:pr-16 w-10/12 lg:w-8/12 xl:w-7/12">
+              
+              {item?.title && (
+                <h1 className="mb-2 font-DejaVu text-xl sm:text-lg md:text-2xl lg:text-3xl font-bold text-gray-800">
+                  {item?.title}
+                </h1>
+              )}
+
+              {item?.info && (
+                <p className="text-base leading-6 text-gray-600 font-sans">
+                  {item.info}
+                </p>
+              )}
+
+              {item.buttonName && (
+                <Link href={item?.url || "/"}>
+                  <a className="inline-block mt-6 px-6 py-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] rounded-md text-white hover:opacity-90 transition">
+                    {item?.buttonName}
+                  </a>
+                </Link>
+              )}
+            </div>
+          </div>
+        </SwiperSlide>
+      ))}
+    </Swiper>
     </>
   );
 };
