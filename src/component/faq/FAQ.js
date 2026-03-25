@@ -32,7 +32,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure>
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                       <span>
                         {showingTranslateValue(
                           storeCustomizationSetting?.faq?.faq_one
@@ -56,7 +56,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure as="div" className="mt-2">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
                       <span>
                         {" "}
                         {showingTranslateValue(
@@ -81,7 +81,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure as="div" className="mt-2">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
                       <span>
                         {" "}
                         {showingTranslateValue(
@@ -105,7 +105,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure as="div" className="mt-2">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
                       <span>
                         {" "}
                         {showingTranslateValue(
@@ -129,7 +129,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure as="div" className="mt-2">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
                       <span>
                         {showingTranslateValue(
                           storeCustomizationSetting?.faq?.faq_five
@@ -152,7 +152,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure as="div" className="mt-2">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
                       <span>
                         {showingTranslateValue(
                           storeCustomizationSetting?.faq?.faq_six
@@ -175,7 +175,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure>
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none focus-visible:ring focus-visible:ring-purple-500 focus-visible:ring-opacity-75">
                       <span>
                         {" "}
                         {showingTranslateValue(
@@ -200,7 +200,7 @@ const { storeCustomizationSetting } = useGetSetting();
               <Disclosure as="div" className="mt-2">
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-emerald-500 bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
+                    <Disclosure.Button className="flex justify-between w-full px-4 py-3 text-base font-medium text-left text-gray-600 focus:text-[#1F6BBF] bg-gray-50 hover:bg-emerald-50 rounded-lg focus:outline-none">
                       <span>
                         {showingTranslateValue(
                           storeCustomizationSetting?.faq?.faq_eight
