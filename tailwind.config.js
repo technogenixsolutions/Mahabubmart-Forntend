@@ -17,7 +17,7 @@ module.exports = {
         header: "560px",
       },
       backgroundImage: {
-        "page-header": "url('/page-header-bg.jpg')",
+        "page-header": "url('/page-header-bg.png')",
         "contact-header": "url('/page-header-bg-2.jpg')",
         subscribe: "url('/subscribe-bg.jpg')",
         "app-download": "url('/app-download.jpg')",

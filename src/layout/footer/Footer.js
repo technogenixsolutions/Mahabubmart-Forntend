@@ -322,12 +322,14 @@ const Footer = () => {
           {storeCustomizationSetting?.footer?.block4_status && (
             <div className="pb-3.5 sm:pb-0 col-span-1 md:col-span-2 lg:col-span-3">
               <Link href="/">
-                <a className="mr-3 lg:mr-12 xl:mr-12" rel="noreferrer">
+                <a className="mr-3 lg:mr-12 xl:mr-12 flex items-center h-12" rel="noreferrer">
                   <Image
-                    width={110}
-                    height={40}
                     src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
-                    alt="mahabubmart"
+      alt="mahabubmart"
+      width={180}
+      height={60}
+      className="object-contain h-12 w-auto brightness-0 "
+      priority
                   />
                 </a>
               </Link>

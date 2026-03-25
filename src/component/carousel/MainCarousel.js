@@ -17,85 +17,137 @@ const MainCarousel = () => {
   const { showingTranslateValue, showingUrl, showingImage } =
     useUtilsFunction();
 
+  // const sliderData = [
+  //   {
+  //     id: 1,
+
+  //     title: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.first_title
+  //     ),
+  //     info: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.first_description
+  //     ),
+  //     buttonName: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.first_button
+  //     ),
+  //     url: showingUrl(storeCustomizationSetting?.slider?.first_link),
+  //     image:
+  //       showingImage(storeCustomizationSetting?.slider?.first_img) 
+  //   },
+  //   {
+  //     id: 2,
+  //     title: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.second_title
+  //     ),
+  //     info: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.second_description
+  //     ),
+  //     buttonName: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.second_button
+  //     ),
+  //     url: showingUrl(storeCustomizationSetting?.slider?.second_link),
+  //     image:
+  //       showingImage(storeCustomizationSetting?.slider?.second_img) 
+  //   },
+  //   {
+  //     id: 3,
+  //     title: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.third_title
+  //     ),
+  //     info: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.third_description
+  //     ),
+  //     buttonName: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.third_button
+  //     ),
+  //     url: showingUrl(storeCustomizationSetting?.slider?.third_link),
+  //     image:
+  //       showingImage(storeCustomizationSetting?.slider?.third_img) 
+  //   },
+  //   {
+  //     id: 4,
+  //     title: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.four_title
+  //     ),
+  //     info: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.four_description
+  //     ),
+  //     buttonName: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.four_button
+  //     ),
+  //     url: showingUrl(storeCustomizationSetting?.slider?.four_link),
+  //     image:
+  //       showingImage(storeCustomizationSetting?.slider?.four_img)
+  //   },
+  //   {
+  //     id: 5,
+  //     title: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.five_title
+  //     ),
+  //     info: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.five_description
+  //     ),
+  //     buttonName: showingTranslateValue(
+  //       storeCustomizationSetting?.slider?.five_button
+  //     ),
+  //     url: showingUrl(storeCustomizationSetting?.slider?.five_link),
+  //     image:
+  //       showingImage(storeCustomizationSetting?.slider?.five_img) 
+  //   },
+  // ];
+
+
+   // 🔥 raw slider data (same as before)
   const sliderData = [
     {
       id: 1,
-
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.first_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.first_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.first_button
-      ),
+      title: showingTranslateValue(storeCustomizationSetting?.slider?.first_title),
+      info: showingTranslateValue(storeCustomizationSetting?.slider?.first_description),
+      buttonName: showingTranslateValue(storeCustomizationSetting?.slider?.first_button),
       url: showingUrl(storeCustomizationSetting?.slider?.first_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.first_img) 
+      image: showingImage(storeCustomizationSetting?.slider?.first_img),
     },
     {
       id: 2,
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.second_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.second_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.second_button
-      ),
+      title: showingTranslateValue(storeCustomizationSetting?.slider?.second_title),
+      info: showingTranslateValue(storeCustomizationSetting?.slider?.second_description),
+      buttonName: showingTranslateValue(storeCustomizationSetting?.slider?.second_button),
       url: showingUrl(storeCustomizationSetting?.slider?.second_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.second_img) 
+      image: showingImage(storeCustomizationSetting?.slider?.second_img),
     },
     {
       id: 3,
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.third_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.third_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.third_button
-      ),
+      title: showingTranslateValue(storeCustomizationSetting?.slider?.third_title),
+      info: showingTranslateValue(storeCustomizationSetting?.slider?.third_description),
+      buttonName: showingTranslateValue(storeCustomizationSetting?.slider?.third_button),
       url: showingUrl(storeCustomizationSetting?.slider?.third_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.third_img) 
+      image: showingImage(storeCustomizationSetting?.slider?.third_img),
     },
     {
       id: 4,
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.four_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.four_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.four_button
-      ),
+      title: showingTranslateValue(storeCustomizationSetting?.slider?.four_title),
+      info: showingTranslateValue(storeCustomizationSetting?.slider?.four_description),
+      buttonName: showingTranslateValue(storeCustomizationSetting?.slider?.four_button),
       url: showingUrl(storeCustomizationSetting?.slider?.four_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.four_img)
+      image: showingImage(storeCustomizationSetting?.slider?.four_img),
     },
     {
       id: 5,
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.five_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.five_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.five_button
-      ),
+      title: showingTranslateValue(storeCustomizationSetting?.slider?.five_title),
+      info: showingTranslateValue(storeCustomizationSetting?.slider?.five_description),
+      buttonName: showingTranslateValue(storeCustomizationSetting?.slider?.five_button),
       url: showingUrl(storeCustomizationSetting?.slider?.five_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.five_img) 
+      image: showingImage(storeCustomizationSetting?.slider?.five_img),
     },
   ];
 
+  // ✅ only valid data filter
+  const filteredSliderData = sliderData.filter(
+    (item) => item?.image && item?.title
+  );
+
+  // ❌ no data হলে কিছুই show হবে না
+  if (filteredSliderData.length === 0) return null;
   return (
     <>
       <Swiper
