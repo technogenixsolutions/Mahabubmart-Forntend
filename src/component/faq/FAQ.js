@@ -40,7 +40,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -65,7 +65,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -90,7 +90,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -114,7 +114,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -137,7 +137,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -160,7 +160,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -184,7 +184,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
@@ -208,7 +208,7 @@ const { storeCustomizationSetting } = useGetSetting();
                       </span>
                       <ChevronUpIcon
                         className={`${
-                          open ? "transform rotate-180 text-emerald-500" : ""
+                          open ? "transform rotate-180 text-[#1F6BBF]" : ""
                         } w-5 h-5 text-gray-500`}
                       />
                     </Disclosure.Button>
