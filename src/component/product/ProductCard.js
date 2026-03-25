@@ -1,9 +1,9 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoAdd, IoBagAddSharp, IoRemove } from "react-icons/io5";
 import { useCart } from "react-use-cart";
-
+import Cookies from "js-cookie";
 //internal import
 
 import Price from "@component/common/Price";
@@ -14,18 +14,33 @@ import Discount from "@component/common/Discount";
 import useUtilsFunction from "@hooks/useUtilsFunction";
 import ProductModal from "@component/modal/ProductModal";
 import useGetSetting from "@hooks/useGetSetting";
+import { trackEvent } from "@utils/trackEvent";
+import { UserContext } from "@context/UserContext";
 
 const ProductCard = ({ product, attributes }) => {
+  
+  
   const [modalOpen, setModalOpen] = useState(false);
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
 
   const { items, addItem, updateItemQuantity, inCart } = useCart();
   const { handleIncreaseQuantity } = useAddToCart();
   const { globalSetting } = useGetSetting();
   const { showingTranslateValue } = useUtilsFunction();
+  
 
   const currency = globalSetting?.default_currency || "$";
 
-  // console.log('attributes in product cart',attributes)
+
+    useEffect(() => {
+      if (Cookies.get("userInfo")) {
+        const user = JSON.parse(Cookies.get("userInfo"));
+        setEmail(user.email);
+        setPhone(user.phone);
+        
+      }
+    }, []);
 
   const handleAddItem = (p) => {
     if (p.stock < 1) return notifyError("Insufficient stock!");
@@ -45,7 +60,17 @@ const ProductCard = ({ product, attributes }) => {
       originalPrice: product.prices?.originalPrice,
     };
     addItem(newItem);
+
+
+    trackEvent("AddToCart", {
+    value: newItem.price,
+    content_ids: [newItem.id],
+    email: email || "", // optional if user logged in
+    phone: phone || "",
+  });
   };
+
+
 
   const handleModalOpen = (event, id) => {
     setModalOpen(event);
