@@ -64,36 +64,36 @@ const MainCarousel = () => {
       image:
         showingImage(storeCustomizationSetting?.slider?.third_img) 
     },
-    {
-      id: 4,
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.four_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.four_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.four_button
-      ),
-      url: showingUrl(storeCustomizationSetting?.slider?.four_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.four_img)
-    },
-    {
-      id: 5,
-      title: showingTranslateValue(
-        storeCustomizationSetting?.slider?.five_title
-      ),
-      info: showingTranslateValue(
-        storeCustomizationSetting?.slider?.five_description
-      ),
-      buttonName: showingTranslateValue(
-        storeCustomizationSetting?.slider?.five_button
-      ),
-      url: showingUrl(storeCustomizationSetting?.slider?.five_link),
-      image:
-        showingImage(storeCustomizationSetting?.slider?.five_img) 
-    },
+    // {
+    //   id: 4,
+    //   title: showingTranslateValue(
+    //     storeCustomizationSetting?.slider?.four_title
+    //   ),
+    //   info: showingTranslateValue(
+    //     storeCustomizationSetting?.slider?.four_description
+    //   ),
+    //   buttonName: showingTranslateValue(
+    //     storeCustomizationSetting?.slider?.four_button
+    //   ),
+    //   url: showingUrl(storeCustomizationSetting?.slider?.four_link),
+    //   image:
+    //     showingImage(storeCustomizationSetting?.slider?.four_img)
+    // },
+    // {
+    //   id: 5,
+    //   title: showingTranslateValue(
+    //     storeCustomizationSetting?.slider?.five_title
+    //   ),
+    //   info: showingTranslateValue(
+    //     storeCustomizationSetting?.slider?.five_description
+    //   ),
+    //   buttonName: showingTranslateValue(
+    //     storeCustomizationSetting?.slider?.five_button
+    //   ),
+    //   url: showingUrl(storeCustomizationSetting?.slider?.five_link),
+    //   image:
+    //     showingImage(storeCustomizationSetting?.slider?.five_img) 
+    // },
   ];
 
   return (
