@@ -62,39 +62,42 @@ const ProductCard = ({ product, attributes }) => {
     addItem(newItem);
 
 
+// / 🔥 UNIQUE EVENT ID
+const eventId = "addtocart_" + Date.now();
 
-  // 🔥 UNIQUE EVENT ID
-  const eventId = "addtocart_" + Date.now();
+// 🔥 FACEBOOK PIXEL (Browser)
+if (typeof window !== "undefined" && window.fbq) {
+  window.fbq(
+    "track",
+    "AddToCart",
+    {
+      value: newItem.price,
+      currency: "BDT",
+      content_ids: [newItem.id],
+      content_type: "product",
+      contents: [
+        {
+          id: newItem.id,
+          quantity: 1,
+          item_price: newItem.price,
+        },
+      ],
+      content_name: newItem.title,
+    },
+    { eventID: eventId }
+  );
+}
 
-  // 🔥 FACEBOOK PIXEL (Browser)
-  if (typeof window !== "undefined" && window.fbq) {
-    window.fbq(
-      "track",
-      "AddToCart",
-      {
-        value: newItem.price,
-        currency: "BDT",
-        content_ids: [newItem.id],
-        content_type: "product",
-        content_name: newItem.title,
-      },
-      { eventID: eventId }
-    );
-  }
-
-  // 🔥 SEND TO BACKEND
-  trackEvent("AddToCart", {
-    value: newItem.price,
-    currency: "BDT",
-    content_ids: [newItem.id],
-    content_name: newItem.title,
-
-    email: email || "",
-    phone: phone || "",
-
-    event_id: eventId,
-    event_source_url: window.location.href,
-  });
+// 🔥 SEND TO BACKEND (FB CAPI + GA4)
+trackEvent("AddToCart", {
+  value: newItem.price,
+  currency: "BDT",
+  product: newItem,      // backend extractProduct() use করবে
+  email: email || "",
+  phone: phone || "",
+  event_id: eventId,
+  event_source_url: window.location.href,
+});
   };
 
 
