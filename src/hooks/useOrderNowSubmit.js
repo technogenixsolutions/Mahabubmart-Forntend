@@ -12,6 +12,7 @@ import CouponServices from "@services/CouponServices";
 import SettingServices from "@services/SettingServices";
 import useAsync from "@hooks/useAsync";
 import { notifyError, notifySuccess } from "@utils/toast";
+import { purchase } from "@utils/fbCheckout";
 
 const useOrderNowSubmit = () => {
   const {
@@ -90,56 +91,117 @@ const useOrderNowSubmit = () => {
   }, [total, couponInfo, minimumAmount]);
 
   /* ================= SUBMIT ORDER ================= */
+  // const submitHandler = async (data) => {
+  //   try {
+  //     setIsSubmitting(true);
+
+  //     // 🔒 FINAL SAFETY CHECK
+  //     if (couponInfo?.couponCode && total < minimumAmount) {
+  //       notifyError(
+  //         `Minimum ${minimumAmount} টাকা না হলে কুপনসহ অর্ডার করা যাবে না`
+  //       );
+  //       setIsSubmitting(false);
+  //       return null;
+  //     }
+
+  //     const orderUserInfo = {
+  //       name: data.firstName,
+  //       contact: data.contact,
+  //       address: data.address,
+  //     };
+
+  //     const orderInfo = {
+  //       user: userInfo?._id || null,
+  //       user_info: orderUserInfo,
+  //       shippingOption: data.shippingOption,
+  //       paymentMethod: "Cash",
+  //       status: "Pending",
+  //       cart: items,
+  //       subTotal: cartTotal,
+  //       shippingCost,
+  //       discount: discountAmount,
+  //       total,
+  //     };
+
+  //     const res = await OrderServices.addOrder(orderInfo);
+
+      
+
+  //     notifySuccess("আপনার অর্ডার সফল হয়েছে 🎉");
+
+  //     Cookies.remove("couponInfo");
+  //     sessionStorage.removeItem("products");
+  //     emptyCart();
+
+  //     setIsSubmitting(false);
+  //     return res;
+
+  //   } catch (err) {
+  //     notifyError(err?.message || "Order failed!");
+  //     setIsSubmitting(false);
+  //     return null;
+  //   }
+  // };
+
+
   const submitHandler = async (data) => {
-    try {
-      setIsSubmitting(true);
+  try {
+    setIsSubmitting(true);
 
-      // 🔒 FINAL SAFETY CHECK
-      if (couponInfo?.couponCode && total < minimumAmount) {
-        notifyError(
-          `Minimum ${minimumAmount} টাকা না হলে কুপনসহ অর্ডার করা যাবে না`
-        );
-        setIsSubmitting(false);
-        return null;
-      }
-
-      const orderUserInfo = {
-        name: data.firstName,
-        contact: data.contact,
-        address: data.address,
-      };
-
-      const orderInfo = {
-        user: userInfo?._id || null,
-        user_info: orderUserInfo,
-        shippingOption: data.shippingOption,
-        paymentMethod: "Cash",
-        status: "Pending",
-        cart: items,
-        subTotal: cartTotal,
-        shippingCost,
-        discount: discountAmount,
-        total,
-      };
-
-      const res = await OrderServices.addOrder(orderInfo);
-
-      notifySuccess("আপনার অর্ডার সফল হয়েছে 🎉");
-
-      Cookies.remove("couponInfo");
-      sessionStorage.removeItem("products");
-      emptyCart();
-
-      setIsSubmitting(false);
-      return res;
-
-    } catch (err) {
-      notifyError(err?.message || "Order failed!");
+    // 🔒 FINAL SAFETY CHECK
+    if (couponInfo?.couponCode && total < minimumAmount) {
+      notifyError(
+        `Minimum ${minimumAmount} টাকা না হলে কুপনসহ অর্ডার করা যাবে না`
+      );
       setIsSubmitting(false);
       return null;
     }
-  };
 
+    const orderUserInfo = {
+      name: data.firstName,
+      contact: data.contact,
+      address: data.address,
+    };
+
+    const orderInfo = {
+      user: userInfo?._id || null,
+      user_info: orderUserInfo,
+      shippingOption: data.shippingOption,
+      paymentMethod: "Cash",
+      status: "Pending",
+      cart: items,
+      subTotal: cartTotal,
+      shippingCost,
+      discount: discountAmount,
+      total,
+    };
+
+    // 🔹 Add order
+    const res = await OrderServices.addOrder(orderInfo);
+
+    // 🔹 Call purchase function after successful order
+    if (res) {
+      await purchase(res, {
+        email: data.email,
+        phone: data.contact,
+      });
+    }
+
+    notifySuccess("আপনার অর্ডার সফল হয়েছে 🎉");
+
+    Cookies.remove("couponInfo");
+    sessionStorage.removeItem("products");
+    emptyCart();
+
+    setIsSubmitting(false);
+    return res;
+
+  } catch (err) {
+    notifyError(err?.message || "Order failed!");
+    setIsSubmitting(false);
+    return null;
+  }
+};
   /* ================= APPLY COUPON ================= */
   const handleCouponCode = (e) => {
     e.preventDefault();
