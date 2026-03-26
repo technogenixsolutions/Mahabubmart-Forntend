@@ -13,9 +13,9 @@ const mapCartToPayload = (cart, total = 0) => {
   return {
     value: total,
     currency: "BDT",
-    content_ids: items.map((i) => i.id),
+    content_ids: items?.map((i) => i.id),
     items,
-    contents: items.map((i) => ({
+    contents: items?.map((i) => ({
       id: i.id,
       quantity: i.quantity,
       item_price: i.item_price,
@@ -24,12 +24,11 @@ const mapCartToPayload = (cart, total = 0) => {
   };
 };
 
-// 🔹 InitiateCheckout Event
-export const initiateCheckout = (cartData, user) => {
+export const initiateCheckout = async (cartData, user) => {
   const payload = mapCartToPayload(cartData.cart, cartData.total);
   const eventId = "initcheckout_" + Date.now();
 
-  trackEvent("InitiateCheckout", {
+  await trackEvent("InitiateCheckout", {
     ...payload,
     email: user?.email || "",
     phone: user?.phone || "",
@@ -38,12 +37,11 @@ export const initiateCheckout = (cartData, user) => {
   });
 };
 
-// 🔹 Purchase Event
-export const purchase = (orderData, user) => {
+export const purchase = async (orderData, user) => {
   const payload = mapCartToPayload(orderData.cart, orderData.total);
   const eventId = "purchase_" + Date.now();
 
-  trackEvent("Purchase", {
+  await trackEvent("Purchase", {
     ...payload,
     email: user?.email || "",
     phone: user?.phone || "",
