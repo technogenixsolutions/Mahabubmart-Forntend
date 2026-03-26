@@ -118,7 +118,7 @@ const Cart = () => {
             <CartItem key={i + 1} item={item} />
           ))}
         </div>
-      <div className="mx-5 my-3">
+  <div className="mx-5 my-3">
   {items.length > 0 && orderNowButton}
 
   {items.length > 0 && (
@@ -127,11 +127,11 @@ const Cart = () => {
         <div onClick={handleOpenLogin}>{checkoutClass}</div>
       ) : (
         <div
-          onClick={() => {
+          onClick={async () => {
             // 🔹 Trigger InitiateCheckout only for logged-in users
-            initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+            await initiateCheckout({ cart: items, total: cartTotal }, userInfo);
 
-            // 🔹 Redirect to checkout page
+            // 🔹 Redirect to checkout page only after API call completes
             router.push("/checkout");
           }}
         >
