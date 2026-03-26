@@ -37,6 +37,7 @@ import ImageCarousel from "@component/carousel/ImageCarousel";
 import useGetSetting from "@hooks/useGetSetting";
 import Reviews from "./Reviews/Reviews";
 import Cookies from "js-cookie";
+import { trackEvent } from "@utils/trackEvent";
 const ProductScreen = ({ product, attributes, relatedProduct }) => {
   // console.log('attributes',attributes)
   const router = useRouter();
