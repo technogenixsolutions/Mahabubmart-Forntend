@@ -12,6 +12,7 @@ import getStripe from "@utils/stripe";
 import { UserProvider } from "@context/UserContext";
 import DefaultSeo from "@component/common/DefaultSeo";
 import { SidebarProvider } from "@context/SidebarContext";
+import { FbPixel } from "@utils/fbpixlescript";
 const stripePromise = getStripe();
 
 let persistor = persistStore(store);
@@ -19,6 +20,7 @@ let persistor = persistStore(store);
 function MyApp({ Component, pageProps }) {
   return (
     <>
+      <FbPixel />
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <UserProvider>
           <Provider store={store}>

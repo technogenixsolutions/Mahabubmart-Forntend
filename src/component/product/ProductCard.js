@@ -62,11 +62,38 @@ const ProductCard = ({ product, attributes }) => {
     addItem(newItem);
 
 
-    trackEvent("AddToCart", {
+
+  // 🔥 UNIQUE EVENT ID
+  const eventId = "addtocart_" + Date.now();
+
+  // 🔥 FACEBOOK PIXEL (Browser)
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq(
+      "track",
+      "AddToCart",
+      {
+        value: newItem.price,
+        currency: "BDT",
+        content_ids: [newItem.id],
+        content_type: "product",
+        content_name: newItem.title,
+      },
+      { eventID: eventId }
+    );
+  }
+
+  // 🔥 SEND TO BACKEND
+  trackEvent("AddToCart", {
     value: newItem.price,
+    currency: "BDT",
     content_ids: [newItem.id],
-    email: email || "", // optional if user logged in
+    content_name: newItem.title,
+
+    email: email || "",
     phone: phone || "",
+
+    event_id: eventId,
+    event_source_url: window.location.href,
   });
   };
 
