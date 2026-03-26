@@ -15,6 +15,7 @@ import DefaultSeo from "@component/common/DefaultSeo";
 import { SidebarProvider } from "@context/SidebarContext";
 import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
+import { FbPixel } from "@utils/fbpixlescript";
 const stripePromise = getStripe();
 
 let persistor = persistStore(store);
@@ -62,6 +63,8 @@ const router = useRouter();
 
   return (
     <>
+
+    <FbPixel /> 
     
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <UserProvider>
