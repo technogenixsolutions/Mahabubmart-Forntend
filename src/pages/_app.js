@@ -13,7 +13,7 @@ import getStripe from "@utils/stripe";
 import { UserProvider } from "@context/UserContext";
 import DefaultSeo from "@component/common/DefaultSeo";
 import { SidebarProvider } from "@context/SidebarContext";
-
+import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
 const stripePromise = getStripe();
 
@@ -21,50 +21,69 @@ let persistor = persistStore(store);
 
 function MyApp({ Component, pageProps }) {
 
+ const router = useRouter();
+  const [email, setEmail] = useState(null);
+  const [phone, setPhone] = useState(null);
 
-   const router = useRouter();
+  // get user from cookie once
+  useEffect(() => {
+    if (Cookies.get("userInfo")) {
+      const user = JSON.parse(Cookies.get("userInfo"));
+      setEmail(user.email || null);
+      setPhone(user.phone || null);
+    }
+  }, []);
+
   useEffect(() => {
     const handlePageView = () => {
+      const product = pageProps.product || null;
+
+      const contents = product
+        ? [
+            {
+              id: product._id.toString(),
+              quantity: 1,
+              item_price: product.price || 0,
+            },
+          ]
+        : [];
+
+      const content_ids = product ? [product._id.toString()] : [];
+
       const pageViewData = {
         event_id: Date.now().toString(), // unique per pageview
-        email: pageProps.user?.email || null,
-        phone: pageProps.user?.phone || null,
-        value: 0,
-        content_ids: pageProps.product ? [pageProps.product._id] : [],
-        items: pageProps.product
+        email, // hashed server-side in backend
+        phone, // hashed server-side
+        value: product?.price || 0,
+        currency: "BDT",
+        content_ids,
+        contents,
+        content_type: product ? "product" : "other",
+        items: product
           ? [
               {
-                id: pageProps.product._id,
-                name: pageProps.product.name,
+                item_id: product._id.toString(),
+                item_name: product.name,
                 quantity: 1,
-                item_price: pageProps.product.price,
+                price: product.price || 0,
               },
             ]
           : [],
-        contents: pageProps.product
-          ? [
-              {
-                id: pageProps.product._id,
-                quantity: 1,
-                item_price: pageProps.product.price,
-              },
-            ]
-          : [], // FB CAPI safe empty array
-        content_type: "product",
         page_path: router.asPath,
       };
 
-      // ❗ PageView backend call with IP, user-agent handled server-side
+      // backend call: IP and user-agent handled server-side
       trackEvent("PageView", pageViewData);
     };
 
-    // initial page load
+    // initial load
     handlePageView();
 
     // route changes
     router.events.on("routeChangeComplete", handlePageView);
     return () => router.events.off("routeChangeComplete", handlePageView);
-  }, [router.events, pageProps.user, pageProps.product, router.asPath]);
+  }, [router.events, email, phone, pageProps.product, router.asPath]);
+
   return (
     <>
     
