@@ -21,65 +21,41 @@ let persistor = persistStore(store);
 
 function MyApp({ Component, pageProps }) {
 
- const router = useRouter();
-  const [email, setEmail] = useState(null);
-  const [phone, setPhone] = useState(null);
+const router = useRouter();
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
 
-  // get user from cookie once
   useEffect(() => {
     if (Cookies.get("userInfo")) {
       const user = JSON.parse(Cookies.get("userInfo"));
-      setEmail(user.email || null);
-      setPhone(user.phone || null);
+      setEmail(user.email);
+      setPhone(user.phone);
     }
   }, []);
 
   useEffect(() => {
     const handlePageView = () => {
-      const product = pageProps.product || null;
-
-      const contents = product
-        ? [
-            {
-              id: product._id.toString(),
-              quantity: 1,
-              item_price: product.price || 0,
-            },
-          ]
-        : [];
-
-      const content_ids = product ? [product._id.toString()] : [];
-
       const pageViewData = {
-        event_id: Date.now().toString(), // unique per pageview
-        email, // hashed server-side in backend
-        phone, // hashed server-side
-        value: product?.price || 0,
-        currency: "BDT",
-        content_ids,
-        contents,
-        content_type: product ? "product" : "other",
-        items: product
+        event_id: Date.now().toString(),
+        email: email || "",
+        phone: phone || "",
+        value: 0,
+        items: pageProps.product
           ? [
               {
-                item_id: product._id.toString(),
-                item_name: product.name,
+                id: pageProps.product._id,
+                name: pageProps.product.name,
                 quantity: 1,
-                price: product.price || 0,
+                item_price: pageProps.product.price,
               },
             ]
           : [],
         page_path: router.asPath,
       };
-
-      // backend call: IP and user-agent handled server-side
       trackEvent("PageView", pageViewData);
     };
 
-    // initial load
     handlePageView();
-
-    // route changes
     router.events.on("routeChangeComplete", handlePageView);
     return () => router.events.off("routeChangeComplete", handlePageView);
   }, [router.events, email, phone, pageProps.product, router.asPath]);
