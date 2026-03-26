@@ -22,6 +22,10 @@ const Layout = ({title, description, children}) => {
           </title>
           {description && <meta name="description" content={description} />}
           <link ref="icon" href="/favicon.png" />
+
+
+           {/* 🔹 Facebook Domain Verification */}
+        <meta name="facebook-domain-verification" content="5mxlj583bsjbxc2blfg7zu89sosolx" />
         </Head>
         <NavBarTop />
         <Navbar />
