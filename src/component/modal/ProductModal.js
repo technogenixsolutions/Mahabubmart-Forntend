@@ -16,7 +16,8 @@ import Discount from "@component/common/Discount";
 import VariantList from "@component/variants/VariantList";
 import { SidebarContext } from "@context/SidebarContext";
 import useUtilsFunction from "@hooks/useUtilsFunction";
-
+import { trackEvent } from "@utils/trackEvent";
+import Cookies from "js-cookie";
 const ProductModal = ({
   modalOpen,
   setModalOpen,
@@ -31,7 +32,8 @@ const ProductModal = ({
   const { handleAddItem, setItem, item } = useAddToCart();
   const { lang, showingTranslateValue, getNumber, getNumberTwo } =
     useUtilsFunction();
-
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
   // react hook
   const [value, setValue] = useState("");
   const [price, setPrice] = useState(0);
@@ -140,6 +142,15 @@ const ProductModal = ({
   ]);
   // console.log("product", product);
 
+      useEffect(() => {
+        if (Cookies.get("userInfo")) {
+          const user = JSON.parse(Cookies.get("userInfo"));
+          setEmail(user.email);
+          setPhone(user.phone);
+          
+        }
+      }, []);
+
   useEffect(() => {
     const res = Object.keys(Object.assign({}, ...product?.variants));
 
@@ -197,6 +208,42 @@ const ProductModal = ({
       // console.log("newItem", newItem);
 
       handleAddItem(newItem);
+
+
+
+        // 🔥 UNIQUE EVENT ID
+        const eventId = "addtocart_" + Date.now();
+      
+        // 🔥 FACEBOOK PIXEL (Browser)
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq(
+            "track",
+            "AddToCart",
+            {
+              value: newItem.price,
+              currency: "BDT",
+              content_ids: [newItem.id],
+              content_type: "product",
+              content_name: newItem.title,
+            },
+            { eventID: eventId }
+          );
+        }
+      
+        // 🔥 SEND TO BACKEND
+        trackEvent("AddToCart", {
+          value: newItem.price,
+          currency: "BDT",
+          content_ids: [newItem.id],
+          content_name: newItem.title,
+      
+          email: email || "",
+          phone: phone || "",
+      
+          event_id: eventId,
+          event_source_url: window.location.href,
+        });
+        
     } else {
       return notifyError("Please select all variant first!");
     }
