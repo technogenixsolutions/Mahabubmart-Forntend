@@ -3,10 +3,10 @@ import { trackEvent } from "@utils/trackEvent";
 
 // 🔹 Extract content_ids and items from cart
 const mapCartToPayload = (cart, total = 0) => {
-  const items = cart.map((i) => ({
-    id: i.id || i._id,
-    name: i.name || i.title || "Product",
-    quantity: i.quantity || 1,
+  const items = cart?.map((i) => ({
+    id: i?._id || i._id,
+    name: i?.name || i?.title || "Product",
+    quantity: i?.quantity || 1,
     item_price: i.price || 0,
   }));
 
