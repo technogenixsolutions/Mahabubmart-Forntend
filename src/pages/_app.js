@@ -13,7 +13,7 @@ import getStripe from "@utils/stripe";
 import { UserProvider } from "@context/UserContext";
 import DefaultSeo from "@component/common/DefaultSeo";
 import { SidebarProvider } from "@context/SidebarContext";
-import { FbPixel } from "@utils/fbpixlescript";
+
 import { trackEvent } from "@utils/trackEvent";
 const stripePromise = getStripe();
 
@@ -61,7 +61,7 @@ useEffect(() => {
   }, [router.events, pageProps.user, pageProps.product, router.asPath]);
   return (
     <>
-      <FbPixel />
+    
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <UserProvider>
           <Provider store={store}>
