@@ -12,6 +12,7 @@ import { SidebarContext } from "@context/SidebarContext";
 import SettingServices from "@services/SettingServices";
 import useAsync from "@hooks/useAsync";
 import OrderNowModal from "./OrderNowModal";
+import { initiateCheckout } from "@utils/fbCheckout";
 
 const Cart = () => {
   const router = useRouter();
@@ -37,7 +38,12 @@ const Cart = () => {
 
   const orderNowButton = (
   <button
-    onClick={() => setOrderNowOpen(true)}
+     onClick={() => {
+        // 🔹 Trigger InitiateCheckout
+        initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+
+        setOrderNowOpen(true);
+      }}
     className="w-full mb-3 py-3 px-3 rounded-lg bg-orange-500 hover:bg-orange-600 
     flex items-center justify-center text-sm sm:text-base text-white 
     font-medium font-serif transition duration-300"
@@ -112,23 +118,32 @@ const Cart = () => {
             <CartItem key={i + 1} item={item} />
           ))}
         </div>
-        <div className="mx-5 my-3">
-          {items.length > 0 && orderNowButton}
+      <div className="mx-5 my-3">
+  {items.length > 0 && orderNowButton}
 
-          {items.length <= 0 ? (
-            checkoutClass
-          ) : (
-            <span>
-              {!userInfo ? (
-                <div onClick={handleOpenLogin}>{checkoutClass}</div>
-              ) : (
-                <Link href="/checkout">
-                  <a>{checkoutClass}</a>
-                </Link>
-              )}
-            </span>
-          )}
+  {items.length > 0 && (
+    <>
+      {!userInfo ? (
+        <div onClick={handleOpenLogin}>{checkoutClass}</div>
+      ) : (
+        <div
+          onClick={() => {
+            // 🔹 Trigger InitiateCheckout only for logged-in users
+            initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+
+            // 🔹 Redirect to checkout page
+            router.push("/checkout");
+          }}
+        >
+          {checkoutClass}
         </div>
+      )}
+    </>
+  )}
+
+  {/* 🔹 Optional: show disabled button if cart empty */}
+  {items.length <= 0 && checkoutClass}
+</div>
       </div>
     </>
   );
