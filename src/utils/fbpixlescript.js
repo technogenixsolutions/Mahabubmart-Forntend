@@ -1,8 +1,11 @@
-// utils/fbPixel.js
 import Script from "next/script";
 
 export const FbPixel = () => (
-  <Script id="fb-pixel" strategy="afterInteractive">
+  <Script
+    id="fb-pixel"
+    strategy="afterInteractive"
+    crossOrigin="anonymous"
+  >
     {`
       !function(f,b,e,v,n,t,s){
         if(f.fbq)return;n=f.fbq=function(){n.callMethod?
@@ -14,8 +17,8 @@ export const FbPixel = () => (
       }(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
 
-      fbq('init', '1759892261652978'); // ✅ change to your Pixel ID
-      fbq('track', 'PageView'); // ✅ automatic
+      fbq('init', '1759892261652978'); 
+      fbq('track', 'PageView');
     `}
   </Script>
 );
