@@ -81,16 +81,16 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
 
   useEffect(() => {
     trackEvent("ViewContent", {
-      event_id: product.id + "-" + Date.now(), // optional, deduplication
+      event_id: product._id + "-" + Date.now(), // optional, deduplication
       email: email,   // optional, hashed server-side
       phone: phone,   // optional
-      content_ids: [product.id],
+      content_ids: [product._id],
       content_name: product.title,
       content_category: product.category,
       value: product.price,
       items: [
         {
-          id: product.id,
+          id: product._id,
           quantity: 1,
           item_price: product.price,
         },
