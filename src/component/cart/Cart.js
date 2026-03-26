@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useCart } from "react-use-cart";
 import { IoBagCheckOutline, IoClose, IoBagHandle } from "react-icons/io5";
 
@@ -22,7 +22,7 @@ const Cart = () => {
   const { data: globalSetting } = useAsync(SettingServices.getGlobalSetting);
   const [orderNowOpen, setOrderNowOpen] = useState(false);
 
-
+const [pendingCheckout, setPendingCheckout] = useState(false);
   const currency = globalSetting?.default_currency || "৳"
 
   const {
@@ -38,12 +38,10 @@ const Cart = () => {
 
   const orderNowButton = (
   <button
-     onClick={() => {
-        // 🔹 Trigger InitiateCheckout
-        initiateCheckout({ cart: items, total: cartTotal }, userInfo);
-
-        setOrderNowOpen(true);
-      }}
+    onClick={async () => {
+      await initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+      setOrderNowOpen(true);
+    }}
     className="w-full mb-3 py-3 px-3 rounded-lg bg-orange-500 hover:bg-orange-600 
     flex items-center justify-center text-sm sm:text-base text-white 
     font-medium font-serif transition duration-300"
@@ -51,22 +49,60 @@ const Cart = () => {
     🛒 Order Now (Cash on Delivery)
   </button>
 );
+const handleCheckout = async () => {
+  if (!userInfo) {
+    setPendingCheckout(true); // 🔥 mark as pending
+    handleOpenLogin();
+    return;
+  }
 
-
-  const checkoutClass = (
-    <button
-      onClick={closeCartDrawer}
-      className="w-full py-3 px-3 rounded-lg bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] flex items-center justify-between bg-heading text-sm sm:text-base text-white focus:outline-none transition duration-300"
-    >
-      <span className="align-middle font-medium font-serif">
-        Proceed To Checkout
-      </span>
-      <span className="rounded-lg font-bold font-serif py-2 px-3 bg-white text-[#1F6BBF]">
-        {currency}
-        {cartTotal.toFixed(2)}
-      </span>
-    </button>
+  // 🔹 Call InitiateCheckout FIRST
+  await initiateCheckout(
+    { cart: items, total: cartTotal },
+    userInfo
   );
+
+  closeCartDrawer();
+  router.push("/checkout");
+};
+
+ // 🔥 CHECKOUT BUTTON (MAIN FIX)
+const checkoutButton = (
+  <button
+    onClick={handleCheckout}
+    className="w-full py-3 px-3 rounded-lg bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] 
+    hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] 
+    flex items-center justify-between text-sm sm:text-base text-white transition duration-300"
+  >
+    <span className="font-medium font-serif">
+      Proceed To Checkout
+    </span>
+
+    <span className="rounded-lg font-bold font-serif py-2 px-3 bg-white text-[#1F6BBF]">
+      {currency}
+      {cartTotal.toFixed(2)}
+    </span>
+  </button>
+);
+
+
+useEffect(() => {
+  if (userInfo && pendingCheckout) {
+    // 🔥 After login → run checkout flow
+    const runCheckout = async () => {
+      await initiateCheckout(
+        { cart: items, total: cartTotal },
+        userInfo
+      );
+
+      setPendingCheckout(false);
+      closeCartDrawer();
+      router.push("/checkout");
+    };
+
+    runCheckout();
+  }
+}, [userInfo, pendingCheckout]);
 
   return (
     <>
@@ -94,56 +130,37 @@ const Cart = () => {
             </span>
           </button>
         </div>
-        <div className="overflow-y-scroll flex-grow scrollbar-hide w-full max-h-full">
+    {/* CART ITEMS */}
+        <div className="overflow-y-scroll flex-grow scrollbar-hide w-full">
           {isEmpty && (
-            <div className="flex flex-col h-full justify-center">
-              <div className="flex flex-col items-center">
-                <div className="flex justify-center items-center w-20 h-20 rounded-full bg-emerald-100">
-                  <span className="text-[#1F6BBF] text-4xl block">
-                    <IoBagHandle />
-                  </span>
-                </div>
-                <h3 className="font-serif font-semibold text-gray-700 text-lg pt-5">
-                  Your cart is empty
-                </h3>
-                <p className="px-12 text-center text-sm text-gray-500 pt-2">
-                  No items added in your cart. Please add product to your cart
-                  list.
-                </p>
+            <div className="flex flex-col h-full justify-center items-center">
+              <div className="w-20 h-20 rounded-full bg-emerald-100 flex items-center justify-center">
+                <IoBagHandle className="text-4xl text-[#1F6BBF]" />
               </div>
+
+              <h3 className="font-serif text-gray-700 text-lg pt-5">
+                Your cart is empty
+              </h3>
+
+              <p className="text-sm text-gray-500 pt-2 text-center px-10">
+                No items added in your cart.
+              </p>
             </div>
           )}
 
           {items?.map((item, i) => (
-            <CartItem key={i + 1} item={item} />
+            <CartItem key={i} item={item} />
           ))}
         </div>
-  <div className="mx-5 my-3">
-  {items.length > 0 && orderNowButton}
 
-  {items.length > 0 && (
-    <>
-      {!userInfo ? (
-        <div onClick={handleOpenLogin}>{checkoutClass}</div>
-      ) : (
-        <div
-          onClick={async () => {
-            // 🔹 Trigger InitiateCheckout only for logged-in users
-            await initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+        {/* FOOTER BUTTONS */}
+        <div className="mx-5 my-3">
+          {items.length > 0 && orderNowButton}
 
-            // 🔹 Redirect to checkout page only after API call completes
-            router.push("/checkout");
-          }}
-        >
-          {checkoutClass}
+          {items.length > 0 && checkoutButton}
+
+          {items.length <= 0 && checkoutButton}
         </div>
-      )}
-    </>
-  )}
-
-  {/* 🔹 Optional: show disabled button if cart empty */}
-  {items.length <= 0 && checkoutClass}
-</div>
       </div>
     </>
   );

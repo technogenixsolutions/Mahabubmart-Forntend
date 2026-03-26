@@ -1,5 +1,5 @@
 // src/components/order/OrderNowModal.js
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import InputArea from "@component/form/InputArea";
 import Error from "@component/form/Error";
@@ -7,6 +7,8 @@ import InputShipping from "@component/form/InputShipping";
 
 import OrderSuccessModal from "./OrderSuccessModal";
 import useOrderNowSubmit from "@hooks/useOrderNowSubmit";
+import { purchase } from "@utils/fbCheckout";
+import { UserContext } from "@context/UserContext";
 
 const OrderNowModal = ({ close }) => {
   const {
@@ -29,10 +31,15 @@ const OrderNowModal = ({ close }) => {
   } = useOrderNowSubmit();
 
   const [successModalData, setSuccessModalData] = useState(null);
+  const { state: { userInfo } } = useContext(UserContext); // 🔹 get user info
 
   const handleSubmitOrder = async (data) => {
     const orderData = await submitHandler(data);
     if (!orderData) return;
+
+     if (userInfo) {
+      await purchase(orderData, userInfo); // 🔹 Purchase API call
+    }
 
     if (data.paymentMethod === "Cash") {
       setSuccessModalData(orderData);

@@ -13,6 +13,7 @@ import OrderServices from "@services/OrderServices";
 import CouponServices from "@services/CouponServices";
 import SettingServices from "@services/SettingServices";
 import { notifyError, notifySuccess } from "@utils/toast";
+import { purchase } from "@utils/fbCheckout";
 
 const useCheckoutSubmit = () => {
   const {
@@ -157,17 +158,25 @@ const useCheckoutSubmit = () => {
       status: "Pending",
     };
 
+
+
     if (data.paymentMethod === "Cash") {
-      OrderServices.addOrder(orderInfo)
-        .then((res) => {
-          notifySuccess("Order Confirmed!");
-          emptyCart();
-          Cookies.remove("couponInfo");
-          router.push(`/order/${res._id}`);
-        })
-        .catch((err) => notifyError(err.message))
-        .finally(() => setIsCheckoutSubmit(false));
-    }
+  OrderServices.addOrder(orderInfo)
+    .then(async (res) => {
+      // ✅ Fire purchase tracking
+      await purchase(res, {
+        email: data.email,
+        phone: data.contact,
+      });
+
+      notifySuccess("Order Confirmed!");
+      emptyCart();
+      Cookies.remove("couponInfo");
+      router.push(`/order/${res._id}`);
+    })
+    .catch((err) => notifyError(err.message))
+    .finally(() => setIsCheckoutSubmit(false));
+}
   };
 
   return {
