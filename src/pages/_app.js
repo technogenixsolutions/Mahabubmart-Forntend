@@ -23,9 +23,7 @@ function MyApp({ Component, pageProps }) {
 
 
    const router = useRouter();
-
-useEffect(() => {
-    // function to send PageView to backend
+  useEffect(() => {
     const handlePageView = () => {
       const pageViewData = {
         event_id: Date.now().toString(), // unique per pageview
@@ -36,28 +34,36 @@ useEffect(() => {
         items: pageProps.product
           ? [
               {
-                item_id: pageProps.product.id,
-                item_name: pageProps.product.name,
-                price: pageProps.product.price,
+                id: pageProps.product._id,
+                name: pageProps.product.name,
                 quantity: 1,
+                item_price: pageProps.product.price,
               },
             ]
           : [],
+        contents: pageProps.product
+          ? [
+              {
+                id: pageProps.product._id,
+                quantity: 1,
+                item_price: pageProps.product.price,
+              },
+            ]
+          : [], // FB CAPI safe empty array
+        content_type: "product",
         page_path: router.asPath,
       };
 
-      // call backend CAPI
+      // ❗ PageView backend call with IP, user-agent handled server-side
       trackEvent("PageView", pageViewData);
     };
 
-    // initial load
+    // initial page load
     handlePageView();
 
-    // route change
+    // route changes
     router.events.on("routeChangeComplete", handlePageView);
-    return () => {
-      router.events.off("routeChangeComplete", handlePageView);
-    };
+    return () => router.events.off("routeChangeComplete", handlePageView);
   }, [router.events, pageProps.user, pageProps.product, router.asPath]);
   return (
     <>
