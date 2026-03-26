@@ -36,7 +36,7 @@ import Discount from "@component/common/Discount";
 import ImageCarousel from "@component/carousel/ImageCarousel";
 import useGetSetting from "@hooks/useGetSetting";
 import Reviews from "./Reviews/Reviews";
-
+import Cookies from "js-cookie";
 const ProductScreen = ({ product, attributes, relatedProduct }) => {
   // console.log('attributes',attributes)
   const router = useRouter();
@@ -54,7 +54,8 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
   const { handleAddItem, item, setItem } = useAddToCart();
 
   // react hook
-
+  const [email, setEmail] = useState();
+  const [phone, setPhone] = useState();
   const [value, setValue] = useState("");
   const [price, setPrice] = useState(0);
   const [img, setImg] = useState("");
@@ -66,6 +67,35 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
   const [selectVa, setSelectVa] = useState({});
   const [variantTitle, setVariantTitle] = useState([]);
   const [variants, setVariants] = useState([]);
+
+  useEffect(() => {
+        if (Cookies.get("userInfo")) {
+          const user = JSON.parse(Cookies.get("userInfo"));
+          setEmail(user.email);
+          setPhone(user.phone);
+          
+        }
+      }, []);
+
+
+  useEffect(() => {
+    trackEvent("ViewContent", {
+      event_id: product.id + "-" + Date.now(), // optional, deduplication
+      email: user?.email,   // optional, hashed server-side
+      phone: user?.phone,   // optional
+      content_ids: [product.id],
+      content_name: product.title,
+      content_category: product.category,
+      value: product.price,
+      items: [
+        {
+          id: product.id,
+          quantity: 1,
+          item_price: product.price,
+        },
+      ],
+    });
+  }, [product]);
 
   useEffect(() => {
     if (value) {
