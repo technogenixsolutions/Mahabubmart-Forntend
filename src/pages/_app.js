@@ -25,19 +25,22 @@ function MyApp({ Component, pageProps }) {
 const router = useRouter();
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
-
+  const [eventId, setEventId] = useState(Date.now().toString());
   useEffect(() => {
     if (Cookies.get("userInfo")) {
       const user = JSON.parse(Cookies.get("userInfo"));
-      setEmail(user.email);
-      setPhone(user.phone);
+      setEmail(user.email || "");
+      setPhone(user.phone || "");
     }
   }, []);
 
   useEffect(() => {
     const handlePageView = () => {
+
+      const newEventId = Date.now().toString() + Math.floor(Math.random() * 1000);
+      setEventId(newEventId);
       const pageViewData = {
-        event_id: Date.now().toString(),
+        event_id: eventId,
         email: email || "",
         phone: phone || "",
         value: 0,
@@ -54,6 +57,12 @@ const router = useRouter();
         page_path: router.asPath,
       };
       trackEvent("PageView", pageViewData);
+
+        // Send event to Pixel (deduplicated)
+      if (typeof fbq === "function") {
+        fbq("track", "PageView", { event_id: newEventId });
+      }
+    
     };
 
     handlePageView();

@@ -1,6 +1,7 @@
+// utils/fbpixlescript.js
 import Script from "next/script";
 
-export const FbPixel = () => (
+export const FbPixel = ({ eventId }) => (
   <Script
     id="fb-pixel"
     strategy="afterInteractive"
@@ -18,7 +19,7 @@ export const FbPixel = () => (
       'https://connect.facebook.net/en_US/fbevents.js');
 
       fbq('init', '1759892261652978'); 
-      fbq('track', 'PageView');
+      fbq('track', 'PageView', { event_id: '${eventId}' });
     `}
   </Script>
 );
