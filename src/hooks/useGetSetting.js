@@ -68,7 +68,7 @@ const useGetSetting = () => {
     const fetchGlobalSetting = async () => {
       try {
         // setLoading(true);
-        console.log("globalSetting setting not available");
+        // console.log("globalSetting setting not available");
         const res = await SettingServices.getGlobalSetting();
         const globalSettingData = {
           ...res,
