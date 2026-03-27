@@ -35,7 +35,7 @@ const Card = () => {
         </span>
         <p className="font-sans leading-5 text-sm text-gray-500">
           {showingTranslateValue(
-            storeCustomizationSetting?.slug?.card_description_one
+            storeCustomizationSetting?.slug?.card_description_two
           )}
         </p>
       </li>
@@ -45,7 +45,7 @@ const Card = () => {
         </span>
         <p className="font-sans leading-5 text-sm text-gray-500">
           {showingTranslateValue(
-            storeCustomizationSetting?.slug?.card_description_two
+            storeCustomizationSetting?.slug?.card_description_three
           )}
         </p>
       </li>
@@ -55,7 +55,7 @@ const Card = () => {
         </span>
         <p className="font-sans leading-5 text-sm text-gray-500">
           {showingTranslateValue(
-            storeCustomizationSetting?.slug?.card_description_three
+            storeCustomizationSetting?.slug?.card_description_four
           )}
         </p>
       </li>
