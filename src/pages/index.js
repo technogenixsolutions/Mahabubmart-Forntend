@@ -64,7 +64,7 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
 
             {/* feature category's */}
             {storeCustomizationSetting?.home?.featured_status && (
-              <div className="bg-gray-100 lg:py-16 py-10">
+              <div className="hidden md:block lg:block bg-gray-100 lg:py-16 py-10">
                 <div className="mx-auto max-w-screen-2xl px-3 sm:px-10">
                   <div className="mb-10 flex justify-center">
                     <div className="text-center w-full lg:w-2/5">
@@ -100,7 +100,7 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
             {storeCustomizationSetting?.home?.popular_products_status && (
               <div className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10">
                 <div className="mb-10 flex justify-center">
-                  <div className="text-center w-full lg:w-2/5">
+                  <div className="text-center w-full lg:w-2/5 hidden md:block lg:block">
                     <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
                       <CMSkeleton
                         count={1}
@@ -167,7 +167,7 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
                 className="bg-gray-50 lg:py-16 py-10 mx-auto max-w-screen-2xl px-3 sm:px-10"
               >
                 <div className="mb-10 flex justify-center">
-                  <div className="text-center w-full lg:w-2/5">
+                  <div className="text-center w-full lg:w-2/5 hidden md:block lg:block">
                     <h2 className="text-xl lg:text-2xl mb-2 font-serif font-semibold">
                       <CMSkeleton
                         count={1}

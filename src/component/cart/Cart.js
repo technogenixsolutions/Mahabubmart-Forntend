@@ -20,7 +20,7 @@ const Cart = () => {
   const { isEmpty, items, cartTotal } = useCart();
   const { toggleCartDrawer, closeCartDrawer } = useContext(SidebarContext);
   const { data: globalSetting } = useAsync(SettingServices.getGlobalSetting);
-  const [orderNowOpen, setOrderNowOpen] = useState(false);
+ 
 
 const [pendingCheckout, setPendingCheckout] = useState(false);
   const currency = globalSetting?.default_currency || "৳"
@@ -39,8 +39,10 @@ const [pendingCheckout, setPendingCheckout] = useState(false);
   const orderNowButton = (
   <button
     onClick={async () => {
-      await initiateCheckout({ cart: items, total: cartTotal }, userInfo);
-      setOrderNowOpen(true);
+    await initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+
+     closeCartDrawer();
+    router.push("/cod"); // 🔹 Redirect to COD page
     }}
     className="w-full mb-3 py-3 px-3 rounded-lg bg-orange-500 hover:bg-orange-600 
     flex items-center justify-center text-sm sm:text-base text-white 
@@ -106,9 +108,7 @@ useEffect(() => {
 
   return (
     <>
-   {orderNowOpen && (
-  <OrderNowModal close={() => setOrderNowOpen(false)} />
-)}
+   
       {modalOpen && (
         <LoginModal modalOpen={modalOpen} setModalOpen={setModalOpen} />
       )}
