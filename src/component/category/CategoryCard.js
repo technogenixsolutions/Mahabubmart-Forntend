@@ -81,7 +81,7 @@ const CategoryCard = ({ title, icon, nested, id }) => {
       </a>
       {show && nested.length > 0 && (
         <ul className="pl-6 pb-3 pt-1 -mt-1">
-          {nested.map((children) => (
+          {nested?.map((children) => (
             <li key={children._id}>
               {children.children.length > 0 ? (
                 <a

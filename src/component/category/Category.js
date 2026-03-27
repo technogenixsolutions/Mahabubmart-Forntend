@@ -11,6 +11,7 @@ import {SidebarContext} from "@context/SidebarContext";
 import CategoryServices from "@services/CategoryServices";
 import CategoryCard from "@component/category/CategoryCard";
 import useUtilsFunction from "@hooks/useUtilsFunction";
+import CategoryItem from "./CategoryItem";
 
 const Category = () => {
   const {categoryDrawerOpen, closeCategoryDrawer} = useContext(SidebarContext);
@@ -18,6 +19,8 @@ const Category = () => {
   const {data, loading, error} = useAsync(() =>
     CategoryServices.getShowingCategory()
   );
+console.log(data)
+  
 
   return (
     <div className="flex flex-col w-full h-full bg-white cursor-pointer scrollbar-hide">
@@ -60,8 +63,8 @@ const Category = () => {
         ) : data.length === 0 ? (
           <Loading loading={loading} />
         ) : (
-          <div className="relative grid gap-2 p-6">
-            {data[0]?.children?.map((category) => (
+          <div className="relative ">
+            {/* {data[0]?.children?.map((category) => (
               <CategoryCard
                 key={category._id}
                 id={category._id}
@@ -69,8 +72,15 @@ const Category = () => {
                 nested={category.children}
                 title={showingTranslateValue(category?.name)}
               />
-            ))}
+            ))} */}
+
+               <div className="p-4">
+          {data[0]?.children?.map((category) => (
+            <CategoryItem key={category._id} item={category} />
+          ))}
+        </div>
           </div>
+        
         )}
 
         {categoryDrawerOpen && (
