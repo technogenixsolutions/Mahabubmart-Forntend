@@ -40,7 +40,7 @@ const router = useRouter();
       const newEventId = Date.now().toString() + Math.floor(Math.random() * 1000);
       setEventId(newEventId);
       const pageViewData = {
-        event_id: eventId,
+        event_id: newEventId,
         email: email || "",
         phone: phone || "",
         value: 0,
@@ -73,7 +73,7 @@ const router = useRouter();
   return (
     <>
 
-    <FbPixel /> 
+    <FbPixel eventId={eventId}/> 
     
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <UserProvider>
