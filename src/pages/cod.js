@@ -44,9 +44,11 @@ const cod = () => {
     const orderData = await submitHandler(data);
     if (!orderData) return;
 
-     if (userInfo) {
-      await purchase(orderData, userInfo); // 🔹 Purchase API call
-    }
+    // ✅ শুধু form data থেকে নাও — userInfo লাগবে না
+  await purchase(orderData, {
+    email: data.email || "",
+    phone: data.contact || "",
+  });
 
     if (data.paymentMethod === "Cash") {
       setSuccessModalData(orderData);
