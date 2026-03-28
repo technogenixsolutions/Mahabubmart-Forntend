@@ -78,10 +78,10 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
         }
       }, []);
 
-
+const newEventId = product._id + "-" + Date.now() + "-" + Math.floor(Math.random()*1000);
   useEffect(() => {
     trackEvent("ViewContent", {
-      event_id: product._id + "-" + Date.now(), // optional, deduplication
+      event_id: newEventId, // optional, deduplication
       email: email,   // optional, hashed server-side
       phone: phone,   // optional
       content_ids: [product._id],
@@ -252,42 +252,43 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
       handleAddItem(newItem);
 
 
+
 // / 🔥 UNIQUE EVENT ID
-const eventId = "addtocart_" + Date.now();
+  const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
-// 🔥 FACEBOOK PIXEL (Browser)
-if (typeof window !== "undefined" && window.fbq) {
-  window.fbq(
-    "track",
-    "AddToCart",
-    {
-      value: newItem.price,
-      currency: "BDT",
-      content_ids: [newItem.id],
-      content_type: "product",
-      contents: [
-        {
-          id: newItem.id,
-          quantity: 1,
-          item_price: newItem.price,
-        },
-      ],
-      content_name: newItem.title,
-    },
-    { eventID: eventId }
-  );
-}
+// /  // 🔹 1️⃣ Browser Pixel (FB)
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq(
+      "track",
+      "AddToCart",
+      {
+        value: newItem.price,
+        currency: "BDT",
+        content_ids: [newItem.id],
+        content_type: "product",
+        contents: [
+          {
+            id: newItem.id,
+            quantity: 1,
+            item_price: newItem.price,
+          },
+        ],
+        content_name: newItem.title,
+      },
+      { eventID: eventId } // ✅ This ensures CAPI + Pixel deduplication
+    );
+  }
 
-// 🔥 SEND TO BACKEND (FB CAPI + GA4)
-trackEvent("AddToCart", {
-  value: newItem.price,
-  currency: "BDT",
-  product: newItem,      // backend extractProduct() use করবে
-  email: email || "",
-  phone: phone || "",
-  event_id: eventId,
-  event_source_url: window.location.href,
-});
+  // 🔹 2️⃣ Backend (FB CAPI + GA4)
+  trackEvent("AddToCart", {
+    value: newItem.price,
+    currency: "BDT",
+    product: newItem, // backend will extract properly
+    email: email || "",
+    phone: phone || "",
+    event_id: eventId, // same eventId → dedup
+    event_source_url: window.location.href,
+  });
 
     } else {
       return notifyError("Please select all variant first!");

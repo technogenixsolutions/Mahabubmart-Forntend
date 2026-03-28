@@ -211,38 +211,43 @@ const ProductModal = ({
 
 
 
-        // 🔥 UNIQUE EVENT ID
-        const eventId = "addtocart_" + Date.now();
-      
-        // 🔥 FACEBOOK PIXEL (Browser)
-        if (typeof window !== "undefined" && window.fbq) {
-          window.fbq(
-            "track",
-            "AddToCart",
-            {
-              value: newItem.price,
-              currency: "BDT",
-              content_ids: [newItem.id],
-              content_type: "product",
-              content_name: newItem.title,
-            },
-            { eventID: eventId }
-          );
-        }
-      
-        // 🔥 SEND TO BACKEND
-        trackEvent("AddToCart", {
-          value: newItem.price,
-          currency: "BDT",
-          content_ids: [newItem.id],
-          content_name: newItem.title,
-      
-          email: email || "",
-          phone: phone || "",
-      
-          event_id: eventId,
-          event_source_url: window.location.href,
-        });
+ 
+// / 🔥 UNIQUE EVENT ID
+  const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+// /  // 🔹 1️⃣ Browser Pixel (FB)
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq(
+      "track",
+      "AddToCart",
+      {
+        value: newItem.price,
+        currency: "BDT",
+        content_ids: [newItem.id],
+        content_type: "product",
+        contents: [
+          {
+            id: newItem.id,
+            quantity: 1,
+            item_price: newItem.price,
+          },
+        ],
+        content_name: newItem.title,
+      },
+      { eventID: eventId } // ✅ This ensures CAPI + Pixel deduplication
+    );
+  }
+
+  // 🔹 2️⃣ Backend (FB CAPI + GA4)
+  trackEvent("AddToCart", {
+    value: newItem.price,
+    currency: "BDT",
+    product: newItem, // backend will extract properly
+    email: email || "",
+    phone: phone || "",
+    event_id: eventId, // same eventId → dedup
+    event_source_url: window.location.href,
+  });
         
     } else {
       return notifyError("Please select all variant first!");
