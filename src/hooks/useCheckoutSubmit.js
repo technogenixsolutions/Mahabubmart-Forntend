@@ -164,6 +164,8 @@ const useCheckoutSubmit = () => {
   OrderServices.addOrder(orderInfo)
     .then(async (res) => {
       // ✅ Fire purchase tracking
+
+      
       await purchase(res, {
         email: data.email,
         phone: data.contact,

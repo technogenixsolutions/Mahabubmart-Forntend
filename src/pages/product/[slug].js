@@ -78,25 +78,44 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
         }
       }, []);
 
-const newEventId = product._id + "-" + Date.now() + "-" + Math.floor(Math.random()*1000);
-  useEffect(() => {
-    trackEvent("ViewContent", {
-      event_id: newEventId, // optional, deduplication
-      email: email,   // optional, hashed server-side
-      phone: phone,   // optional
-      content_ids: [product._id],
-      content_name: product.title,
-      content_category: product.category,
-      value: product.price,
-      items: [
-        {
-          id: product._id,
-          quantity: 1,
-          item_price: product.price,
-        },
-      ],
-    });
-  }, [product]);
+
+useEffect(() => {
+  const eventId = product._id + "-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
+
+  // 🔹 1️⃣ Browser Pixel
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq(
+      "track",
+      "ViewContent",
+      {
+        content_ids: [product._id],
+        content_name: product.title,
+        content_type: "product",
+        value: product.price,
+        currency: "BDT",
+      },
+      { eventID: eventId }
+    );
+  }
+
+  // 🔹 2️⃣ Server (CAPI)
+  trackEvent("ViewContent", {
+    event_id: eventId,
+    email: email,
+    phone: phone,
+    content_ids: [product._id],
+    content_name: product.title,
+    content_category: product.category,
+    value: product.price,
+    items: [
+      {
+        id: product._id,
+        quantity: 1,
+        item_price: product.price,
+      },
+    ],
+  });
+}, [product]);
 
   useEffect(() => {
     if (value) {
