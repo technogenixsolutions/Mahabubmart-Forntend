@@ -165,7 +165,7 @@ const useCheckoutSubmit = () => {
     .then(async (res) => {
       // ✅ Fire purchase tracking
 
-await purchase(res, {
+  await purchase(res, {
   email: data.email || "",
   phone: data.contact || "",
   firstName: data.firstName || "",
@@ -173,7 +173,7 @@ await purchase(res, {
   city: data.city || "",        // ✅ checkout form এ আছে
   zipCode: data.zipCode || "",  // ✅ checkout form এ আছে
   country: data.country || "",  // ✅ checkout form এ আছে
-});
+ });
 
       notifySuccess("Order Confirmed!");
       emptyCart();
