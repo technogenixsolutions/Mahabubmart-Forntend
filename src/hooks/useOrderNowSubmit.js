@@ -12,7 +12,7 @@ import CouponServices from "@services/CouponServices";
 import SettingServices from "@services/SettingServices";
 import useAsync from "@hooks/useAsync";
 import { notifyError, notifySuccess } from "@utils/toast";
-import { purchase } from "@utils/fbCheckout";
+
 
 const useOrderNowSubmit = () => {
   const {
@@ -179,13 +179,8 @@ const useOrderNowSubmit = () => {
     // 🔹 Add order
     const res = await OrderServices.addOrder(orderInfo);
 
-    // 🔹 Call purchase function after successful order
-    if (res) {
-      await purchase(res, {
-        email: data.email,
-        phone: data.contact,
-      });
-    }
+
+  
 
     notifySuccess("আপনার অর্ডার সফল হয়েছে 🎉");
 
