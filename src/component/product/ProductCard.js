@@ -38,9 +38,7 @@ const [isNavigating, setIsNavigating] = useState(false);
   }, []);
 
 
-  const images = typeof product?.image === "string"
-  ? product.image.split(",").map(img => img.trim())
-  : product?.image || [];
+  const images = typeof product?.image === "string" ? product.image.split(",").map(img => img.trim()) : product?.image || [];
 
 const image1 = images[0] || null;
 const image2 = images[1] || null;
@@ -54,53 +52,6 @@ const handleMoreInfo = (slug) => {
 };
 
 
-  // const handleAddItem = (p) => {
-  //   if (p.stock < 1) return notifyError("Insufficient stock!");
-  //   if (p?.variants?.length > 0) {
-  //     setModalOpen(true);
-  //     return;
-  //   }
-  //   const { slug, variants, categories, description, ...updatedProduct } = product;
-  //   const newItem = {
-  //     ...updatedProduct,
-  //     title: showingTranslateValue(p?.title),
-  //     id: p._id,
-  //     variant: p.prices,
-  //     price: p.prices.price,
-  //     originalPrice: product.prices?.originalPrice,
-  //   };
-  //   addItem(newItem);
-
-  //   const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
-
-  //   if (typeof window !== "undefined" && window.fbq) {
-  //     window.fbq(
-  //       "track",
-  //       "AddToCart",
-  //       {
-  //         value: newItem.price,
-  //         currency: "BDT",
-  //         content_ids: [newItem.id],
-  //         content_type: "product",
-  //         contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
-  //         content_name: newItem.title,
-  //       },
-  //       { eventID: eventId }
-  //     );
-  //   }
-
-  //   trackEvent("AddToCart", {
-  //     value: newItem.price,
-  //     currency: "BDT",
-  //     product: newItem,
-  //     email: email || "",
-  //     phone: phone || "",
-  //     event_id: eventId,
-  //     event_source_url: window.location.href,
-  //   });
-  // };
-
-
 const handleAddItem = (p) => {
   if (p.stock < 1) return notifyError("Insufficient stock!");
   if (p?.variants?.length > 0) {
@@ -109,6 +60,13 @@ const handleAddItem = (p) => {
   }
  
   const { slug, variants, categories, description, ...updatedProduct } = product;
+
+    // ✅ image সঠিকভাবে নাও
+  const productImages = typeof product?.image === "string"
+    ? product.image.split(",").map(img => img.trim())
+    : product?.image || []; 
+
+
   const newItem = {
     ...updatedProduct,
     title: showingTranslateValue(p?.title),
@@ -116,6 +74,7 @@ const handleAddItem = (p) => {
     variant: p.prices,
     price: p.prices.price,
     originalPrice: product.prices?.originalPrice,
+    image: productImages[0] || "",
   };
  
   addItem(newItem);
