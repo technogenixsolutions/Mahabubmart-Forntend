@@ -15,48 +15,28 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   reactStrictMode: true,
 
+  // ✅ non-www → www redirect
   async redirects() {
     return [
-     {
-      source: "/:path*",
-      has: [
-        { type: "host", value: "mahabubmart.com" },
-      ],
-      destination: "https://www.mahabubmart.com/:path*",
-      permanent: true,
-    },
+      {
+        source: "/:path*",
+        has: [
+          { type: "host", value: "mahabubmart.com" },
+        ],
+        destination: "https://www.mahabubmart.com/:path*",
+        permanent: true,
+      },
     ];
   },
+
   eslint: {
-    // Warning: This allows production builds to successfully complete even if
-    // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
+
+  // ✅ শুধু আপনার actual locales রাখুন, example domains সরিয়ে দিলাম
   i18n: {
-    // These are all the locales you want to support in
-    // your application
     locales: ["en-US", "es", "fr", "nl-NL"],
-    // This is the default locale you want to be used when visiting
-    // a non-locale prefixed path e.g. `/hello`
     defaultLocale: "en-US",
-    // This is a list of locale domains and the default locale they
-    // should handle (these are only required when setting up domain routing)
-    domains: [
-      {
-        domain: "example.com",
-        defaultLocale: "en-US",
-        // other locales that should be handled on this domain
-        locales: ["es"],
-      },
-      {
-        domain: "example.nl",
-        defaultLocale: "nl-NL",
-      },
-      {
-        domain: "example.fr",
-        defaultLocale: "fr",
-      },
-    ],
   },
 
   images: {
@@ -68,18 +48,9 @@ module.exports = withPWA({
       "fakestoreapi.com",
       "res.cloudinary.com",
       "lh3.googleusercontent.com",
-      "res.cloudinary.com",
-      "lh3.googleusercontent.com",
-      "",
       "images.dashter.com",
     ],
   },
 
   ...nextTranslate(),
 });
-
-// const withBundleAnalyzer = require('@next/bundle-analyzer')({
-//   enabled: process.env.ANALYZE === 'true',
-// });
-
-// module.exports = withBundleAnalyzer({});

@@ -25,7 +25,7 @@ function MyApp({ Component, pageProps }) {
 const router = useRouter();
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
-  const [eventId, setEventId] = useState(Date.now().toString());
+  
   useEffect(() => {
     if (Cookies.get("userInfo")) {
       const user = JSON.parse(Cookies.get("userInfo"));
@@ -34,32 +34,27 @@ const router = useRouter();
     }
   }, []);
 
+
+
+// ✅ এই useEffect টা replace করুন আপনার _app.js এ
+
 useEffect(() => {
   const handlePageView = () => {
-    const newEventId = Date.now().toString() + Math.floor(Math.random() * 1000);
+    const newEventId = "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
     const pageViewData = {
       event_id: newEventId,
       email: email || "",
       phone: phone || "",
       value: 0,
-      items: pageProps.product
-        ? [
-            {
-              id: pageProps.product._id,
-              name: pageProps.product.name,
-              quantity: 1,
-              item_price: pageProps.product.price,
-            },
-          ]
-        : [],
-      page_path: window.location.href, // better than router.asPath for full URL
+      items: [],
+      event_source_url: window.location.href, // ✅ full URL
     };
 
-    // 🔹 Backend (CAPI + GA4)
+    // 🔹 Server CAPI + GA4
     trackEvent("PageView", pageViewData);
 
-    // 🔹 Browser Pixel
+    // 🔹 Browser Pixel — event_id দিয়ে deduplication
     if (typeof window !== "undefined" && window.fbq) {
       window.fbq("track", "PageView", {}, { eventID: newEventId });
     }
@@ -71,7 +66,7 @@ useEffect(() => {
   return () => {
     router.events.off("routeChangeComplete", handlePageView);
   };
-}, [router.events, email, phone, pageProps.product]);
+}, [router.events, email, phone]); // ✅ pageProps.product সরিয়ে দিলাম — PageView এ product দরকার নেই
 
   return (
     <>

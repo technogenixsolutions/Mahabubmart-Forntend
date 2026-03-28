@@ -80,9 +80,12 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
 
 
 useEffect(() => {
-  const eventId = product._id + "-" + Date.now() + "-" + Math.floor(Math.random() * 1000);
-
-  // 🔹 1️⃣ Browser Pixel
+  if (!product?._id) return;
+ 
+  const eventId =
+    "viewcontent_" + product._id + "_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+ 
+  // 🔹 Browser Pixel
   if (typeof window !== "undefined" && window.fbq) {
     window.fbq(
       "track",
@@ -97,25 +100,28 @@ useEffect(() => {
       { eventID: eventId }
     );
   }
-
-  // 🔹 2️⃣ Server (CAPI)
+ 
+  // 🔹 Server CAPI + GA4
   trackEvent("ViewContent", {
     event_id: eventId,
-    email: email,
-    phone: phone,
-    content_ids: [product._id],
-    content_name: product.title,
-    content_category: product.category,
+    email: email || "",
+    phone: phone || "",
+    event_source_url: window.location.href, // ✅ এটা আগে ছিল না
     value: product.price,
+    currency: "BDT",
     items: [
       {
         id: product._id,
+        name: product.title || "",
         quantity: 1,
         item_price: product.price,
+        price: product.price,
       },
     ],
+    content_ids: [product._id],
+    content_type: "product",
   });
-}, [product]);
+}, [product?._id]); // ✅ শুধু _id দিয়ে dependency — বারবার fire হবে না
 
   useEffect(() => {
     if (value) {
@@ -270,12 +276,9 @@ useEffect(() => {
       };
       handleAddItem(newItem);
 
-
-
-// / 🔥 UNIQUE EVENT ID
-  const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
-
-// /  // 🔹 1️⃣ Browser Pixel (FB)
+  const eventId ="addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+ 
+  // 🔹 Browser Pixel
   if (typeof window !== "undefined" && window.fbq) {
     window.fbq(
       "track",
@@ -285,29 +288,35 @@ useEffect(() => {
         currency: "BDT",
         content_ids: [newItem.id],
         content_type: "product",
-        contents: [
-          {
-            id: newItem.id,
-            quantity: 1,
-            item_price: newItem.price,
-          },
-        ],
+        contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
         content_name: newItem.title,
       },
-      { eventID: eventId } // ✅ This ensures CAPI + Pixel deduplication
+      { eventID: eventId }
     );
   }
-
-  // 🔹 2️⃣ Backend (FB CAPI + GA4)
+ 
+  // 🔹 Server CAPI + GA4
+  // ✅ items array পাঠাও — product object না
   trackEvent("AddToCart", {
     value: newItem.price,
     currency: "BDT",
-    product: newItem, // backend will extract properly
     email: email || "",
     phone: phone || "",
-    event_id: eventId, // same eventId → dedup
+    event_id: eventId,
     event_source_url: window.location.href,
+    items: [
+      {
+        id: newItem.id,
+        name: newItem.title,
+        quantity: 1,
+        item_price: newItem.price,
+        price: newItem.price,
+      },
+    ],
+    content_ids: [newItem.id],
+    content_type: "product",
   });
+
 
     } else {
       return notifyError("Please select all variant first!");

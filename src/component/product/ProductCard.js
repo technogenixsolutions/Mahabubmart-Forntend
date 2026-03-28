@@ -52,51 +52,115 @@ const handleMoreInfo = (slug) => {
   setIsNavigating(true);
   router.push(`/product/${slug}`);
 };
-  const handleAddItem = (p) => {
-    if (p.stock < 1) return notifyError("Insufficient stock!");
-    if (p?.variants?.length > 0) {
-      setModalOpen(true);
-      return;
-    }
-    const { slug, variants, categories, description, ...updatedProduct } = product;
-    const newItem = {
-      ...updatedProduct,
-      title: showingTranslateValue(p?.title),
-      id: p._id,
-      variant: p.prices,
-      price: p.prices.price,
-      originalPrice: product.prices?.originalPrice,
-    };
-    addItem(newItem);
 
-    const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
-    if (typeof window !== "undefined" && window.fbq) {
-      window.fbq(
-        "track",
-        "AddToCart",
-        {
-          value: newItem.price,
-          currency: "BDT",
-          content_ids: [newItem.id],
-          content_type: "product",
-          contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
-          content_name: newItem.title,
-        },
-        { eventID: eventId }
-      );
-    }
+  // const handleAddItem = (p) => {
+  //   if (p.stock < 1) return notifyError("Insufficient stock!");
+  //   if (p?.variants?.length > 0) {
+  //     setModalOpen(true);
+  //     return;
+  //   }
+  //   const { slug, variants, categories, description, ...updatedProduct } = product;
+  //   const newItem = {
+  //     ...updatedProduct,
+  //     title: showingTranslateValue(p?.title),
+  //     id: p._id,
+  //     variant: p.prices,
+  //     price: p.prices.price,
+  //     originalPrice: product.prices?.originalPrice,
+  //   };
+  //   addItem(newItem);
 
-    trackEvent("AddToCart", {
-      value: newItem.price,
-      currency: "BDT",
-      product: newItem,
-      email: email || "",
-      phone: phone || "",
-      event_id: eventId,
-      event_source_url: window.location.href,
-    });
+  //   const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+  //   if (typeof window !== "undefined" && window.fbq) {
+  //     window.fbq(
+  //       "track",
+  //       "AddToCart",
+  //       {
+  //         value: newItem.price,
+  //         currency: "BDT",
+  //         content_ids: [newItem.id],
+  //         content_type: "product",
+  //         contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
+  //         content_name: newItem.title,
+  //       },
+  //       { eventID: eventId }
+  //     );
+  //   }
+
+  //   trackEvent("AddToCart", {
+  //     value: newItem.price,
+  //     currency: "BDT",
+  //     product: newItem,
+  //     email: email || "",
+  //     phone: phone || "",
+  //     event_id: eventId,
+  //     event_source_url: window.location.href,
+  //   });
+  // };
+
+
+const handleAddItem = (p) => {
+  if (p.stock < 1) return notifyError("Insufficient stock!");
+  if (p?.variants?.length > 0) {
+    setModalOpen(true);
+    return;
+  }
+ 
+  const { slug, variants, categories, description, ...updatedProduct } = product;
+  const newItem = {
+    ...updatedProduct,
+    title: showingTranslateValue(p?.title),
+    id: p._id,
+    variant: p.prices,
+    price: p.prices.price,
+    originalPrice: product.prices?.originalPrice,
   };
+ 
+  addItem(newItem);
+ 
+  const eventId ="addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+ 
+  // 🔹 Browser Pixel
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq(
+      "track",
+      "AddToCart",
+      {
+        value: newItem.price,
+        currency: "BDT",
+        content_ids: [newItem.id],
+        content_type: "product",
+        contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
+        content_name: newItem.title,
+      },
+      { eventID: eventId }
+    );
+  }
+ 
+  // 🔹 Server CAPI + GA4
+  // ✅ items array পাঠাও — product object না
+  trackEvent("AddToCart", {
+    value: newItem.price,
+    currency: "BDT",
+    email: email || "",
+    phone: phone || "",
+    event_id: eventId,
+    event_source_url: window.location.href,
+    items: [
+      {
+        id: newItem.id,
+        name: newItem.title,
+        quantity: 1,
+        item_price: newItem.price,
+        price: newItem.price,
+      },
+    ],
+    content_ids: [newItem.id],
+    content_type: "product",
+  });
+};
 
   const cartItem = items.find((i) => i.id === product._id);
   const isInCart  = inCart(product._id);
