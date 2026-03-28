@@ -34,41 +34,44 @@ const router = useRouter();
     }
   }, []);
 
-  useEffect(() => {
-    const handlePageView = () => {
+useEffect(() => {
+  const handlePageView = () => {
+    const newEventId = Date.now().toString() + Math.floor(Math.random() * 1000);
 
-      const newEventId = Date.now().toString() + Math.floor(Math.random() * 1000);
-      setEventId(newEventId);
-      const pageViewData = {
-        event_id: newEventId,
-        email: email || "",
-        phone: phone || "",
-        value: 0,
-        items: pageProps.product
-          ? [
-              {
-                id: pageProps.product._id,
-                name: pageProps.product.name,
-                quantity: 1,
-                item_price: pageProps.product.price,
-              },
-            ]
-          : [],
-        page_path: router.asPath,
-      };
-      trackEvent("PageView", pageViewData);
-
-        // Send event to Pixel (deduplicated)
-      if (typeof fbq === "function") {
-        fbq("track", "PageView", { event_id: newEventId });
-      }
-    
+    const pageViewData = {
+      event_id: newEventId,
+      email: email || "",
+      phone: phone || "",
+      value: 0,
+      items: pageProps.product
+        ? [
+            {
+              id: pageProps.product._id,
+              name: pageProps.product.name,
+              quantity: 1,
+              item_price: pageProps.product.price,
+            },
+          ]
+        : [],
+      page_path: window.location.href, // better than router.asPath for full URL
     };
 
-    handlePageView();
-    router.events.on("routeChangeComplete", handlePageView);
-    return () => router.events.off("routeChangeComplete", handlePageView);
-  }, [router.events, email, phone, pageProps.product, router.asPath]);
+    // 🔹 Backend (CAPI + GA4)
+    trackEvent("PageView", pageViewData);
+
+    // 🔹 Browser Pixel
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "PageView", {}, { eventID: newEventId });
+    }
+  };
+
+  handlePageView(); // initial load
+
+  router.events.on("routeChangeComplete", handlePageView);
+  return () => {
+    router.events.off("routeChangeComplete", handlePageView);
+  };
+}, [router.events, email, phone, pageProps.product]);
 
   return (
     <>

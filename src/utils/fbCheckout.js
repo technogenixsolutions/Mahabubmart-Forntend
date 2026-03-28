@@ -27,7 +27,7 @@ const mapCartToPayload = (cart, total = 0) => {
 export const initiateCheckout = async (cartData, user) => {
   const payload = mapCartToPayload(cartData.cart, cartData.total);
   const eventId = "initcheckout_" + Date.now();
-console.log(cartData, 'hello')
+
   await trackEvent("InitiateCheckout", {
     ...payload,
     email: user?.email || "",

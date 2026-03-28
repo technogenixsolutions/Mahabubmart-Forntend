@@ -14,6 +14,19 @@ const withPWA = require("next-pwa")({
 
 module.exports = withPWA({
   reactStrictMode: true,
+
+  async redirects() {
+    return [
+     {
+      source: "/:path*",
+      has: [
+        { type: "host", value: "mahabubmart.com" },
+      ],
+      destination: "https://www.mahabubmart.com/:path*",
+      permanent: true,
+    },
+    ];
+  },
   eslint: {
     // Warning: This allows production builds to successfully complete even if
     // your project has ESLint errors.

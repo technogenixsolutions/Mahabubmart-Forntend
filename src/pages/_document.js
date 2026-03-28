@@ -27,7 +27,7 @@ class MyDocument extends Document {
             property="og:description"
             content="Shop electronics, gadgets, home appliances and daily essentials from Mahabubmart with great deals and fast delivery across Bangladesh."
           />
-          {/* <meta name="facebook-domain-verification" content="5mxlj583bsjbxc2blfg7zu89sosolx" /> */}
+           <meta name="facebook-domain-verification" content="dn3vu0z11fx4xv08ky4uhy899h7cnf" />
           <meta property="og:url" content="https://www.mahabubmart.com/" />
           <meta
             property="og:image"
