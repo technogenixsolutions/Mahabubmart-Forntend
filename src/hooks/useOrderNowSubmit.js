@@ -180,7 +180,6 @@ const useOrderNowSubmit = () => {
     const res = await OrderServices.addOrder(orderInfo);
 
 
-  
 
     notifySuccess("আপনার অর্ডার সফল হয়েছে 🎉");
 

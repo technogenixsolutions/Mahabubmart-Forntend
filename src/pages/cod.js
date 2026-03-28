@@ -45,9 +45,11 @@ const cod = () => {
     if (!orderData) return;
 
     // ✅ শুধু form data থেকে নাও — userInfo লাগবে না
-  await purchase(orderData, {
+   await purchase(orderData, {
     email: data.email || "",
     phone: data.contact || "",
+    firstName: data.firstName || "", // ✅ নতুন
+    address: data.address || "",     // ✅ নতুন
   });
 
     if (data.paymentMethod === "Cash") {

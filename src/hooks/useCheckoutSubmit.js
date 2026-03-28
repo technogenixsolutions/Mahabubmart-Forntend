@@ -165,11 +165,15 @@ const useCheckoutSubmit = () => {
     .then(async (res) => {
       // ✅ Fire purchase tracking
 
-      
-      await purchase(res, {
-        email: data.email,
-        phone: data.contact,
-      });
+await purchase(res, {
+  email: data.email || "",
+  phone: data.contact || "",
+  firstName: data.firstName || "",
+  lastName: data.lastName || "",
+  city: data.city || "",        // ✅ checkout form এ আছে
+  zipCode: data.zipCode || "",  // ✅ checkout form এ আছে
+  country: data.country || "",  // ✅ checkout form এ আছে
+});
 
       notifySuccess("Order Confirmed!");
       emptyCart();

@@ -57,16 +57,13 @@ export const initiateCheckout = async (cartData, user) => {
   });
 };
 
-// ✅ Purchase — order response থেকে cart নাও
 export const purchase = async (orderResponse, user) => {
-  // orderResponse এ cart array আছে (OrderServices.addOrder এর response)
   const cart = orderResponse?.cart || [];
   const total = orderResponse?.total || orderResponse?.subTotal || 0;
 
   const payload = mapCartToPayload(cart, total);
   const eventId = "purchase_" + (orderResponse?._id || Date.now()) + "_" + Math.floor(Math.random() * 1000);
 
-  // 🔹 Browser Pixel
   if (typeof window !== "undefined" && window.fbq) {
     window.fbq(
       "track",
@@ -82,13 +79,18 @@ export const purchase = async (orderResponse, user) => {
     );
   }
 
-  // 🔹 Server CAPI + GA4
-  await trackEvent("Purchase", {
-    ...payload,
-    email: user?.email || "",
-    phone: user?.phone || "",
-    event_id: eventId,
-    order_id: orderResponse?._id || "",
-    event_source_url: typeof window !== "undefined" ? window.location.href : "",
-  });
+ await trackEvent("Purchase", {
+  ...payload,
+  email: user?.email || "",
+  phone: user?.phone || "",
+  firstName: user?.firstName || "",
+  lastName: user?.lastName || "",
+  city: user?.city || "",
+  zipCode: user?.zipCode || "",
+  country: user?.country || "",
+  address: user?.address || "", // ✅ COD এর জন্য
+  event_id: eventId,
+  order_id: orderResponse?._id || "",
+  event_source_url: typeof window !== "undefined" ? window.location.href : "",
+});
 };
