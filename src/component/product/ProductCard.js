@@ -1,56 +1,64 @@
 import dynamic from "next/dynamic";
-import Image from "next/image";
-import { useContext, useEffect, useState } from "react";
-import { IoAdd, IoBagAddSharp, IoRemove } from "react-icons/io5";
+import { useEffect, useState } from "react";
 import { useCart } from "react-use-cart";
 import Cookies from "js-cookie";
-//internal import
 
-import Price from "@component/common/Price";
+// internal import
 import Stock from "@component/common/Stock";
 import { notifyError } from "@utils/toast";
 import useAddToCart from "@hooks/useAddToCart";
 import Discount from "@component/common/Discount";
 import useUtilsFunction from "@hooks/useUtilsFunction";
-import ProductModal from "@component/modal/ProductModal";
 import useGetSetting from "@hooks/useGetSetting";
 import { trackEvent } from "@utils/trackEvent";
-import { UserContext } from "@context/UserContext";
+import { useRouter } from "next/router";
+// Replace with your actual logo path e.g. "/logo.png"
+const LOGO_PLACEHOLDER ="https://res.cloudinary.com/dgwwhniph/image/upload/v1773462761/product/MahabubMart.png";
 
 const ProductCard = ({ product, attributes }) => {
-  
-  
-  const [modalOpen, setModalOpen] = useState(false);
+ 
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
-
+  const [img1Loaded, setImg1Loaded] = useState(false);
+const [isNavigating, setIsNavigating] = useState(false);
   const { items, addItem, updateItemQuantity, inCart } = useCart();
   const { handleIncreaseQuantity } = useAddToCart();
   const { globalSetting } = useGetSetting();
   const { showingTranslateValue } = useUtilsFunction();
-  
+   const router = useRouter();
 
   const currency = globalSetting?.default_currency || "$";
 
+  useEffect(() => {
+    if (Cookies.get("userInfo")) {
+      const user = JSON.parse(Cookies.get("userInfo"));
+      setEmail(user.email);
+      setPhone(user.phone);
+    }
+  }, []);
 
-    useEffect(() => {
-      if (Cookies.get("userInfo")) {
-        const user = JSON.parse(Cookies.get("userInfo"));
-        setEmail(user.email);
-        setPhone(user.phone);
-        
-      }
-    }, []);
 
+  const images = typeof product?.image === "string"
+  ? product.image.split(",").map(img => img.trim())
+  : product?.image || [];
+
+const image1 = images[0] || null;
+const image2 = images[1] || null;
+const hasSecondImage = Boolean(image2);
+  
+
+const handleMoreInfo = (slug) => {
+   if (isNavigating) return;   // 🔥 prevent multiple push
+  setIsNavigating(true);
+  router.push(`/product/${slug}`);
+};
   const handleAddItem = (p) => {
     if (p.stock < 1) return notifyError("Insufficient stock!");
-
     if (p?.variants?.length > 0) {
-      setModalOpen(!modalOpen);
+      setModalOpen(true);
       return;
     }
-    const { slug, variants, categories, description, ...updatedProduct } =
-      product;
+    const { slug, variants, categories, description, ...updatedProduct } = product;
     const newItem = {
       ...updatedProduct,
       title: showingTranslateValue(p?.title),
@@ -61,170 +69,195 @@ const ProductCard = ({ product, attributes }) => {
     };
     addItem(newItem);
 
+    const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
-// / 🔥 UNIQUE EVENT ID
-  const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq(
+        "track",
+        "AddToCart",
+        {
+          value: newItem.price,
+          currency: "BDT",
+          content_ids: [newItem.id],
+          content_type: "product",
+          contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
+          content_name: newItem.title,
+        },
+        { eventID: eventId }
+      );
+    }
 
-// /  // 🔹 1️⃣ Browser Pixel (FB)
-  if (typeof window !== "undefined" && window.fbq) {
-    window.fbq(
-      "track",
-      "AddToCart",
-      {
-        value: newItem.price,
-        currency: "BDT",
-        content_ids: [newItem.id],
-        content_type: "product",
-        contents: [
-          {
-            id: newItem.id,
-            quantity: 1,
-            item_price: newItem.price,
-          },
-        ],
-        content_name: newItem.title,
-      },
-      { eventID: eventId } // ✅ This ensures CAPI + Pixel deduplication
-    );
-  }
-
-  // 🔹 2️⃣ Backend (FB CAPI + GA4)
-  trackEvent("AddToCart", {
-    value: newItem.price,
-    currency: "BDT",
-    product: newItem, // backend will extract properly
-    email: email || "",
-    phone: phone || "",
-    event_id: eventId, // same eventId → dedup
-    event_source_url: window.location.href,
-  });
+    trackEvent("AddToCart", {
+      value: newItem.price,
+      currency: "BDT",
+      product: newItem,
+      email: email || "",
+      phone: phone || "",
+      event_id: eventId,
+      event_source_url: window.location.href,
+    });
   };
 
+  const cartItem = items.find((i) => i.id === product._id);
+  const isInCart  = inCart(product._id);
+  const outOfStock = product.stock < 1;
 
+  const showPrice = product?.isCombination
+    ? product?.variants?.[0]?.price
+    : product?.prices?.price;
 
-  const handleModalOpen = (event, id) => {
-    setModalOpen(event);
-  };
+  const showOriginalPrice = product?.isCombination
+    ? product?.variants?.[0]?.originalPrice
+    : product?.prices?.originalPrice;
 
   return (
     <>
-      {modalOpen && (
-        <ProductModal
-          modalOpen={modalOpen}
-          setModalOpen={setModalOpen}
-          product={product}
-          currency={currency}
-          attributes={attributes}
-        />
-      )}
+     
 
-      <div className="group box-border overflow-hidden flex rounded-md shadow-sm pe-0 flex-col items-center bg-white relative">
+      {/* Card wrapper */}
+      <div  onClick={() => handleMoreInfo(product.slug)} className="group flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+
+        {/* ── Image area ── */}
         <div
-          onClick={() => handleModalOpen(!modalOpen, product._id)}
-          className="relative flex justify-center w-full cursor-pointer pt-2"
+          className="relative w-full aspect-square bg-gray-50 overflow-hidden cursor-pointer"
+          
         >
-          <div className="left-3">
+          {/* Badges */}
+          <div >
             <Stock product={product} stock={product.stock} card />
+            <Discount product={product} />
           </div>
 
-          <Discount product={product} />
+          
+ {/* Placeholder (FULL COVER) */}
+  <div
+    className={`absolute inset-0 z-[1] transition-opacity duration-300 ${
+      img1Loaded ? "opacity-0 pointer-events-none" : "opacity-100"
+    }`}
+  >
+    <img
+      src={LOGO_PLACEHOLDER}
+      alt="loading"
+      className="w-full h-full object-contain opacity-40"
+    />
+  </div>
 
-          {product?.image[0] ? (
-            <Image
-              src={product.image[0]}
-              width={210}
-              height={210}
-              alt="product"
-              className="object-contain  transition duration-150 ease-linear transform group-hover:scale-105"
-            />
-          ) : (
-            <Image
-              src="https://res.cloudinary.com/ahossain/image/upload/v1655097002/placeholder_kvepfp.png"
-              width={210}
-              height={210}
-              alt="product"
-              className="object-cover transition duration-150 ease-linear transform group-hover:scale-105"
-            />
-          )}
+  {/* Primary Image */}
+  {image1 && (
+    <img
+      src={image1}
+      alt={showingTranslateValue(product?.title)}
+      onLoad={() => setImg1Loaded(true)}
+      onError={() => setImg1Loaded(true)}
+      className={`absolute inset-0 w-full h-full object-contain z-[2]
+        transition-all duration-500
+        ${img1Loaded ? "opacity-100" : "opacity-0"}
+        ${
+          hasSecondImage
+            ? "group-hover:opacity-0 group-hover:scale-105"
+            : "group-hover:scale-105"
+        }`}
+    />
+  )}
+
+  {/* Secondary Image */}
+  {hasSecondImage && img1Loaded && (
+    <img
+      src={image2}
+      alt="view 2"
+      className=" inset-0 w-full h-full object-contain z-[3]
+        opacity-0 scale-105
+        group-hover:opacity-100 group-hover:scale-100
+        transition-all duration-500"
+    />
+  )}
+
         </div>
-        <div className="w-full px-3 lg:px-4 pb-4 overflow-hidden">
-          <div className="relative mb-1">
-            <span className="text-gray-400 font-medium text-xs d-block mb-1">
+
+        {/* ── Body ── */}
+        <div className="flex flex-col px-3 pt-2 pb-3 flex-1">
+
+          {/* Unit */}
+          {product.unit && (
+            <span className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-0.5">
               {product.unit}
             </span>
-            <h2 className="text-heading truncate mb-0 block text-sm font-medium text-gray-600">
-              <span className="line-clamp-2">
-                {showingTranslateValue(product?.title)}
+          )}
+
+          {/* Title */}
+ {/* Title */}
+<h2
+  className="
+    text-sm font-bold text-slate-700 leading-snug mb-1
+    line-clamp-2
+    hover:line-clamp-none
+    transition-all duration-300
+    overflow-hidden
+    text-ellipsis
+  "
+>
+  {showingTranslateValue(product?.title)}
+</h2>
+
+          {/* Price */}
+          <div className="flex items-baseline gap-1.5 mb-2">
+            {showOriginalPrice && showOriginalPrice > showPrice && (
+              <span className="text-[11px] font-semibold text-slate-400 line-through">
+                {currency}{showOriginalPrice}
               </span>
-            </h2>
-          </div>
-
-          <div className="flex justify-between items-center text-heading text-sm sm:text-base space-s-2 md:text-base lg:text-xl">
-            <Price
-              card
-              product={product}
-              currency={currency}
-              price={
-                product?.isCombination
-                  ? product?.variants[0]?.price
-                  : product?.prices?.price
-              }
-              originalPrice={
-                product?.isCombination
-                  ? product?.variants[0]?.originalPrice
-                  : product?.prices?.originalPrice
-              }
-            />
-
-            {inCart(product._id) ? (
-              <div>
-                {items.map(
-                  (item) =>
-                    item.id === product._id && (
-                      <div
-                        key={item.id}
-                        className="h-9 w-auto flex flex-wrap items-center justify-evenly py-1 px-2 bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] text-white rounded"
-                      >
-                        <button
-                          onClick={() =>
-                            updateItemQuantity(item.id, item.quantity - 1)
-                          }
-                        >
-                          <span className="text-dark text-base">
-                            <IoRemove />
-                          </span>
-                        </button>
-                        <p className="text-sm text-dark px-1 font-serif font-semibold">
-                          {item.quantity}
-                        </p>
-                        <button
-                          onClick={() =>
-                            item?.variants?.length > 0
-                              ? handleAddItem(item)
-                              : handleIncreaseQuantity(item)
-                          }
-                        >
-                          <span className="text-dark text-base">
-                            <IoAdd />
-                          </span>
-                        </button>
-                      </div>
-                    )
-                )}{" "}
-              </div>
-            ) : (
-              <button
-                onClick={() => handleAddItem(product)}
-                aria-label="cart"
-                className="h-9 w-9 flex items-center justify-center border border-gray-200 rounded text-[#1F6BBF] hover:border-[#1F6BBF] hover:bg-[#1F6BBF] hover:text-white transition-all"
-              >
-                {" "}
-                <span className="text-xl">
-                  <IoBagAddSharp />
-                </span>{" "}
-              </button>
             )}
+            <span className="text-lg font-extrabold text-[#1F6BBF] tracking-tight">
+              {currency}{showPrice}
+            </span>
           </div>
+
+          {/* ── Cart control — always full width ── */}
+          {isInCart && cartItem ? (
+            /* Stepper */
+            <div className="flex items-center justify-between w-full bg-gradient-to-r from-[#1F6BBF] to-[#00a4db] rounded-xl px-4 py-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  updateItemQuantity(cartItem.id, cartItem.quantity - 1);
+                }}
+                className="text-white text-xl leading-none font-bold"
+                aria-label="Decrease"
+              >
+                −
+              </button>
+              <span className="text-white text-sm font-bold">{cartItem.quantity}</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  cartItem?.variants?.length > 0
+                    ? handleAddItem(cartItem)
+                    : handleIncreaseQuantity(cartItem);
+                }}
+                className="text-white text-xl leading-none font-bold"
+                aria-label="Increase"
+              >
+                +
+              </button>
+            </div>
+          ) : (
+            /* Order Now */
+            <button
+              disabled={outOfStock}
+              onClick={(e) => {
+                e.stopPropagation();
+                handleAddItem(product);
+              }}
+              className={`w-full py-2 rounded-xl text-sm font-bold text-white tracking-wide
+                transition-all duration-200 active:scale-95
+                ${outOfStock
+                  ? "bg-slate-300 cursor-not-allowed"
+                  : "bg-gradient-to-r from-[#1F6BBF] to-[#00a4db] shadow-md hover:shadow-lg hover:opacity-90"
+                }`}
+            >
+              {outOfStock ? "Out of Stock" : "Order Now"}
+            </button>
+          )}
+
         </div>
       </div>
     </>

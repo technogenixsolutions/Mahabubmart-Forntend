@@ -19,7 +19,7 @@ const Category = () => {
   const {data, loading, error} = useAsync(() =>
     CategoryServices.getShowingCategory()
   );
-console.log(data)
+
   
 
   return (

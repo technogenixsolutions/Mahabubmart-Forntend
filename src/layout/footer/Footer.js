@@ -388,7 +388,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <FacebookIcon size={34} round />
+                            <FacebookIcon size={34} className="rounded-full" />
                           </a>
                         </Link>
                       </li>
@@ -405,7 +405,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <FaSquareInstagram  size={34} round color={["#FD1D1D"] }/>
+                            <FaSquareInstagram  size={34} className="rounded-full" color={["#FD1D1D"] }/>
                           </a>
                         </Link>
                       </li>
@@ -422,7 +422,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <SiTiktok size={34} round color={["#000000"]} />
+                            <SiTiktok size={34} className="rounded-full" color={["#000000"]} />
                           </a>
                         </Link>
                       </li>
@@ -439,7 +439,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <LinkedinIcon size={34} round />
+                            <LinkedinIcon size={34} className="rounded-full" />
                           </a>
                         </Link>
                       </li>
@@ -456,7 +456,7 @@ const Footer = () => {
                             rel="noreferrer"
                             target="_blank"
                             className="block text-center mx-auto text-white hover:text-white">
-                            <WhatsappIcon size={34} round />
+                            <WhatsappIcon size={34} className="rounded-full" />
                           </a>
                         </Link>
                       </li>
