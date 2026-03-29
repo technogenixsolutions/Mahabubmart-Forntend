@@ -48,6 +48,7 @@ module.exports = withPWA({
       "fakestoreapi.com",
       "res.cloudinary.com",
       "lh3.googleusercontent.com",
+      "www.mahabubmart.com",
       "images.dashter.com",
     ],
   },
