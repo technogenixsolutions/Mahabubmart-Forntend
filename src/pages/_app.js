@@ -80,7 +80,6 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <FbPixel />
-      <ChatWidget />
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
         <UserProvider>
           <Provider store={store}>
