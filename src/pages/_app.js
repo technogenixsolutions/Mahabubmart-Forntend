@@ -15,7 +15,7 @@ import { SidebarProvider } from "@context/SidebarContext";
 import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
 import { FbPixel } from "@utils/fbpixlescript";
-import ChatWidget from "@component/chatwidget/Chatwidget";
+
 
 const stripePromise = getStripe();
 let persistor = persistStore(store);
