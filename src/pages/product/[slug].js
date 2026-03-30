@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FiChevronRight, FiMinus, FiPlus } from "react-icons/fi";
+import { FaWhatsapp } from "react-icons/fa";
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -38,8 +39,8 @@ import useGetSetting from "@hooks/useGetSetting";
 import Reviews from "./Reviews/Reviews";
 import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
+
 const ProductScreen = ({ product, attributes, relatedProduct }) => {
-  // console.log('attributes',attributes)
   const router = useRouter();
   const prevRef = useRef(null);
   const nextRef = useRef(null);
@@ -49,12 +50,9 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
 
   const currency = globalSetting?.default_currency || "$";
 
-  // console.log('product',product)
-
   const { isLoading, setIsLoading } = useContext(SidebarContext);
   const { handleAddItem, item, setItem } = useAddToCart();
 
-  // react hook
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
   const [value, setValue] = useState("");
@@ -69,66 +67,64 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
   const [variantTitle, setVariantTitle] = useState([]);
   const [variants, setVariants] = useState([]);
 
+  // ─── WhatsApp number (তোমার নম্বর দাও) ──────────────────────────────────
+  const WHATSAPP_NUMBER = "+8801921619808"; // ← এখানে তোমার WhatsApp নম্বর দাও (country code সহ, + ছাড়া)
+
   useEffect(() => {
-        if (Cookies.get("userInfo")) {
-          const user = JSON.parse(Cookies.get("userInfo"));
-          setEmail(user.email);
-          setPhone(user.phone);
-          
-        }
-      }, []);
+    if (Cookies.get("userInfo")) {
+      const user = JSON.parse(Cookies.get("userInfo"));
+      setEmail(user.email);
+      setPhone(user.phone);
+    }
+  }, []);
 
+  useEffect(() => {
+    if (!product?._id) return;
 
-useEffect(() => {
-  if (!product?._id) return;
- 
-  const eventId =
-    "viewcontent_" + product._id + "_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
- 
-  // 🔹 Browser Pixel
-  if (typeof window !== "undefined" && window.fbq) {
-    window.fbq(
-      "track",
-      "ViewContent",
-      {
-        content_ids: [product._id],
-        content_name: product.title,
-        content_type: "product",
-        value: product.price,
-        currency: "BDT",
-      },
-      { eventID: eventId }
-    );
-  }
- 
-  // 🔹 Server CAPI + GA4
-  trackEvent("ViewContent", {
-    event_id: eventId,
-    email: email || "",
-    phone: phone || "",
-    event_source_url: window.location.href, // ✅ এটা আগে ছিল না
-    value: product.price,
-    currency: "BDT",
-    items: [
-      {
-        id: product._id,
-        name: product.title || "",
-        quantity: 1,
-        item_price: product.price,
-        price: product.price,
-      },
-    ],
-    content_ids: [product._id],
-    content_type: "product",
-  });
-}, [product?._id]); // ✅ শুধু _id দিয়ে dependency — বারবার fire হবে না
+    const eventId =
+      "viewcontent_" + product._id + "_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq(
+        "track",
+        "ViewContent",
+        {
+          content_ids: [product._id],
+          content_name: product.title,
+          content_type: "product",
+          value: product.price,
+          currency: "BDT",
+        },
+        { eventID: eventId }
+      );
+    }
+
+    trackEvent("ViewContent", {
+      event_id: eventId,
+      email: email || "",
+      phone: phone || "",
+      event_source_url: window.location.href,
+      value: product.price,
+      currency: "BDT",
+      items: [
+        {
+          id: product._id,
+          name: product.title || "",
+          quantity: 1,
+          item_price: product.price,
+          price: product.price,
+        },
+      ],
+      content_ids: [product._id],
+      content_type: "product",
+    });
+  }, [product?._id]);
 
   useEffect(() => {
     if (value) {
       const result = product?.variants?.filter((variant) =>
         Object.keys(selectVa).every((k) => selectVa[k] === variant[k])
       );
-      // console.log('result',result)
       const res = result?.map(
         ({
           originalPrice,
@@ -143,7 +139,6 @@ useEffect(() => {
           ...rest
         }) => ({ ...rest })
       );
-      // console.log("res", res);
 
       const filterKey = Object.keys(Object.assign({}, ...res));
       const selectVar = filterKey?.reduce(
@@ -159,7 +154,6 @@ useEffect(() => {
         Object.keys(newObj).every((k) => newObj[k] === v[k])
       );
 
-      // console.log("result2", result2);
       if (result.length <= 0 || result2 === undefined) return setStock(0);
 
       setVariants(result);
@@ -219,7 +213,6 @@ useEffect(() => {
   useEffect(() => {
     const res = Object.keys(Object.assign({}, ...product?.variants));
     const varTitle = attributes?.filter((att) => res.includes(att?._id));
-
     setVariantTitle(varTitle?.sort());
   }, [variants, attributes]);
 
@@ -230,9 +223,7 @@ useEffect(() => {
   const handleAddToCart = (p) => {
     if (p.variants.length === 1 && p.variants[0].quantity < 1)
       return notifyError("Insufficient stock");
-    // if (notAvailable) return notifyError('This Variation Not Available Now!');
     if (stock <= 0) return notifyError("Insufficient stock");
-    // console.log('selectVariant', selectVariant);
 
     if (
       product?.variants.map(
@@ -249,13 +240,9 @@ useEffect(() => {
             ? p._id
             : p._id +
               variantTitle
-                ?.map(
-                  // (att) => selectVariant[att.title.replace(/[^a-zA-Z0-9]/g, '')]
-                  (att) => selectVariant[att._id]
-                )
+                ?.map((att) => selectVariant[att._id])
                 .join("-")
         }`,
-
         title: `${
           p.variants.length <= 1
             ? showingTranslateValue(product?.title)
@@ -263,7 +250,6 @@ useEffect(() => {
               "-" +
               variantTitle
                 ?.map(
-                  // (att) => selectVariant[att.title.replace(/[^a-zA-Z0-9]/g, '')]
                   (att) =>
                     att.variants?.find((v) => v._id === selectVariant[att._id])
                 )
@@ -276,51 +262,56 @@ useEffect(() => {
       };
       handleAddItem(newItem);
 
-  const eventId ="addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
- 
-  // 🔹 Browser Pixel
-  if (typeof window !== "undefined" && window.fbq) {
-    window.fbq(
-      "track",
-      "AddToCart",
-      {
+      const eventId =
+        "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+      if (typeof window !== "undefined" && window.fbq) {
+        window.fbq(
+          "track",
+          "AddToCart",
+          {
+            value: newItem.price,
+            currency: "BDT",
+            content_ids: [newItem.id],
+            content_type: "product",
+            contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
+            content_name: newItem.title,
+          },
+          { eventID: eventId }
+        );
+      }
+
+      trackEvent("AddToCart", {
         value: newItem.price,
         currency: "BDT",
+        email: email || "",
+        phone: phone || "",
+        event_id: eventId,
+        event_source_url: window.location.href,
+        items: [
+          {
+            id: newItem.id,
+            name: newItem.title,
+            quantity: 1,
+            item_price: newItem.price,
+            price: newItem.price,
+          },
+        ],
         content_ids: [newItem.id],
         content_type: "product",
-        contents: [{ id: newItem.id, quantity: 1, item_price: newItem.price }],
-        content_name: newItem.title,
-      },
-      { eventID: eventId }
-    );
-  }
- 
-  // 🔹 Server CAPI + GA4
-  // ✅ items array পাঠাও — product object না
-  trackEvent("AddToCart", {
-    value: newItem.price,
-    currency: "BDT",
-    email: email || "",
-    phone: phone || "",
-    event_id: eventId,
-    event_source_url: window.location.href,
-    items: [
-      {
-        id: newItem.id,
-        name: newItem.title,
-        quantity: 1,
-        item_price: newItem.price,
-        price: newItem.price,
-      },
-    ],
-    content_ids: [newItem.id],
-    content_type: "product",
-  });
-
-
+      });
     } else {
       return notifyError("Please select all variant first!");
     }
+  };
+
+  // ─── WhatsApp Order Handler ───────────────────────────────────────────────
+  const handleWhatsAppOrder = () => {
+    const productTitle = showingTranslateValue(product?.title);
+    const productUrl = `https://www.mahabubmart.com/product/${router.query.slug}`;
+    const message = `🛒 *Order Request*\n\n*Product:* ${productTitle}\n*Price:* ${currency}${price}\n*Link:* ${productUrl}\n\nআমি এই পণ্যটি অর্ডার করতে চাই।`;
+    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+    window.open(whatsappUrl, "_blank");
   };
 
   const handleChangeImage = (img) => {
@@ -329,12 +320,37 @@ useEffect(() => {
 
   const { t } = useTranslation();
 
-  // category name slug
   const category_name = showingTranslateValue(product?.category?.name)
     .toLowerCase()
     .replace(/[^A-Z0-9]+/gi, "-");
 
-  // console.log("discount", discount);
+  // ─── Description: HTML string বের করা ────────────────────────────────────
+  const descriptionHtml =
+    typeof product?.description === "object"
+      ? product?.description[lang] || product?.description?.en || ""
+      : product?.description || "";
+
+  const isHtmlDescription = /<[a-z][\s\S]*>/i.test(descriptionHtml);
+
+  // HTML description এর preview (first ~300 chars of text content)
+  const HTML_PREVIEW_CHARS = 300;
+  const getHtmlPreview = (html) => {
+    // strip tags to count visible characters
+    const text = html.replace(/<[^>]*>/g, "");
+    if (text.length <= HTML_PREVIEW_CHARS) return { preview: html, needsToggle: false };
+    // find a safe cut point in the original html
+    let visibleCount = 0;
+    let cutIndex = 0;
+    let inTag = false;
+    for (let i = 0; i < html.length; i++) {
+      if (html[i] === "<") { inTag = true; }
+      if (!inTag) visibleCount++;
+      if (html[i] === ">") { inTag = false; }
+      if (visibleCount >= HTML_PREVIEW_CHARS) { cutIndex = i + 1; break; }
+    }
+    return { preview: html.slice(0, cutIndex) + "...", needsToggle: true };
+  };
+  const { preview: htmlPreview, needsToggle: htmlNeedsToggle } = getHtmlPreview(descriptionHtml);
 
   return (
     <>
@@ -345,48 +361,72 @@ useEffect(() => {
           title={showingTranslateValue(product?.title)}
           description={showingTranslateValue(product.description)}
         >
-          <div className="px-0 py-10 lg:py-10">
+          {/* ── Product Description HTML styles ── */}
+          <style jsx global>{`
+      
+            .product-description h1,
+            .product-description h2,
+            .product-description h3,
+            .product-description h4 {
+              font-weight: 700;
+              margin-bottom: 0.5rem;
+              margin-top: 0.75rem;
+              color: #1a202c;
+              font-family: serif;
+            }
+            .product-description h3 { font-size: 1.1rem; }
+            .product-description p {
+              margin-bottom: 0.5rem;
+              line-height: 1.7;
+              color: #4a5568;
+              font-size: 0.875rem;
+            }
+            .product-description ul,
+            .product-description ol {
+              padding-left: 1.25rem;
+              margin-bottom: 0.75rem;
+            }
+            .product-description ul { list-style-type: disc; }
+            .product-description ol { list-style-type: decimal; }
+            .product-description li {
+              margin-bottom: 0.3rem;
+              font-size: 0.875rem;
+              color: #4a5568;
+              line-height: 1.6;
+            }
+            .product-description strong { color: #2d3748; }
+            .product-description br { display: none; }
+          `}</style>
+
+          <div className="px-0 py-6 lg:py-10">
             <div className="mx-auto px-3 lg:px-10 max-w-screen-2xl">
+              {/* Breadcrumb */}
               <div className="flex items-center pb-4">
                 <ol className="flex items-center w-full overflow-hidden font-serif">
                   <li className="text-sm pr-1 transition duration-200 ease-in cursor-pointer hover:text-[#1F6BBF] font-semibold">
-                    <Link href="/">
-                      <a>Home</a>
-                    </Link>
+                    <Link href="/"><a>Home</a></Link>
                   </li>
-                  <li className="text-sm mt-[1px]">
-                    {" "}
-                    <FiChevronRight />{" "}
-                  </li>
-                  <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-[#1F6BBF] font-semibold ">
-                    <Link
-                      href={`/search?category=${category_name}&_id=${product?.category?._id}` || "/"}
-                    >
-                      <button
-                        type="button"
-                        onClick={() => setIsLoading(!isLoading)}
-                      >
+                  <li className="text-sm mt-[1px]"><FiChevronRight /></li>
+                  <li className="text-sm pl-1 transition duration-200 ease-in cursor-pointer hover:text-[#1F6BBF] font-semibold">
+                    <Link href={`/search?category=${category_name}&_id=${product?.category?._id}` || "/"}>
+                      <button type="button" onClick={() => setIsLoading(!isLoading)}>
                         {category_name}
                       </button>
                     </Link>
                   </li>
-                  <li className="text-sm mt-[1px]">
-                    {" "}
-                    <FiChevronRight />{" "}
-                  </li>
-                  <li className="text-sm px-1 transition duration-200 ease-in ">
+                  <li className="text-sm mt-[1px]"><FiChevronRight /></li>
+                  <li className="text-sm px-1 transition duration-200 ease-in truncate max-w-[160px] sm:max-w-xs">
                     {showingTranslateValue(product?.title)}
                   </li>
                 </ol>
               </div>
+
               <div className="w-full rounded-lg p-3 lg:p-12 bg-white">
-                <div className="flex flex-col xl:flex-row">
-                  <div className="flex-shrink-0 xl:pr-10 lg:block w-full mx-auto md:w-6/12 lg:w-5/12 xl:w-4/12">
-                    <Discount
-                      slug={true}
-                      product={product}
-                      discount={discount}
-                    />
+                {/* ── Main product layout ── */}
+                <div className="flex flex-col xl:flex-row gap-6">
+                  {/* ── Image Section ── */}
+                  <div className="w-full mx-auto md:w-6/12 lg:w-5/12 xl:w-4/12 xl:pr-10 flex-shrink-0">
+                    <Discount slug={true} product={product} discount={discount} />
 
                     {product.image[0] ? (
                       <Image
@@ -395,6 +435,7 @@ useEffect(() => {
                         width={650}
                         height={650}
                         priority
+                        className="w-full h-auto"
                       />
                     ) : (
                       <Image
@@ -402,6 +443,7 @@ useEffect(() => {
                         width={650}
                         height={650}
                         alt="product Image"
+                        className="w-full h-auto"
                       />
                     )}
 
@@ -417,25 +459,24 @@ useEffect(() => {
                     )}
                   </div>
 
+                  {/* ── Details Section ── */}
                   <div className="w-full">
-                    <div className="flex flex-col md:flex-row lg:flex-row xl:flex-row">
-                      <div className=" w-3/5 xl:pr-6 md:pr-6  md:w-2/3 mob-w-full">
-                        <div className="mb-6">
+                    <div className="flex flex-col lg:flex-row gap-4">
+                      {/* ── Left: Info + Actions ── */}
+                      <div className="w-full lg:w-2/3 xl:pr-6">
+                        <div className="mb-4">
                           <h1 className="leading-7 text-lg md:text-xl lg:text-2xl mb-1 font-semibold font-serif text-gray-800">
                             {showingTranslateValue(product?.title)}
                           </h1>
-
                           <p className="uppercase font-serif font-medium text-gray-500 text-sm">
                             SKU :{" "}
-                            <span className="font-bold text-gray-600">
-                              {product.sku}
-                            </span>
+                            <span className="font-bold text-gray-600">{product.sku}</span>
                           </p>
-
                           <div className="relative">
                             <Stock stock={stock} />
                           </div>
                         </div>
+
                         <Price
                           price={price}
                           product={product}
@@ -443,13 +484,14 @@ useEffect(() => {
                           originalPrice={originalPrice}
                         />
 
+                        {/* Variants */}
                         <div className="mb-4">
                           {variantTitle?.map((a, i) => (
                             <span key={i + 1}>
                               <h4 className="text-sm py-1">
                                 {showingTranslateValue(a?.name)}:
                               </h4>
-                              <div className="flex flex-row mb-3">
+                              <div className="flex flex-row flex-wrap mb-3">
                                 <VariantList
                                   att={a._id}
                                   lang={lang}
@@ -466,149 +508,148 @@ useEffect(() => {
                           ))}
                         </div>
 
-                        <div>
-                          <div className="text-sm leading-6 text-gray-500 md:leading-7">
-                            {isReadMore
-                              ? showingTranslateValue(
-                                  product?.description
-                                )?.slice(0, 230)
-                              : showingTranslateValue(product?.description)}
-                            <br />
-                            {Object?.keys(product?.description)?.includes(lang)
-                              ? product?.description[lang]?.length > 230 && (
-                                  <span
-                                    onClick={() => setIsReadMore(!isReadMore)}
-                                    className="read-or-hide"
-                                  >
-                                    {isReadMore
-                                      ? t("common:moreInfo")
-                                      : t("common:showLess")}
-                                  </span>
-                                )
-                              : product?.description?.en?.length > 230 && (
-                                  <span
-                                    onClick={() => setIsReadMore(!isReadMore)}
-                                    className="read-or-hide"
-                                  >
-                                    {isReadMore
-                                      ? t("common:moreInfo")
-                                      : t("common:showLess")}
-                                  </span>
-                                )}
-                          </div>
+                        {/* ── Description (HTML render with toggle) ── */}
+                        <div className="mb-4">
+                          {isHtmlDescription ? (
+                            <div>
+                              <div
+                                className="product-description text-sm leading-6 text-gray-500"
+                                dangerouslySetInnerHTML={{
+                                  __html: isReadMore ? htmlPreview : descriptionHtml,
+                                }}
+                              />
+                              {htmlNeedsToggle && (
+                                <span
+                                  onClick={() => setIsReadMore(!isReadMore)}
+                                  className="read-or-hide cursor-pointer text-[#1F6BBF] font-semibold text-sm mt-1 inline-block hover:underline"
+                                >
+                                  {isReadMore ? t("common:moreInfo") : t("common:showLess")}
+                                </span>
+                              )}
+                            </div>
+                          ) : (
+                            <div className="text-sm leading-6 text-gray-500 md:leading-7">
+                              {isReadMore
+                                ? showingTranslateValue(product?.description)?.slice(0, 230)
+                                : showingTranslateValue(product?.description)}
+                              <br />
+                              {Object?.keys(product?.description)?.includes(lang)
+                                ? product?.description[lang]?.length > 230 && (
+                                    <span
+                                      onClick={() => setIsReadMore(!isReadMore)}
+                                      className="read-or-hide cursor-pointer text-[#1F6BBF] font-semibold text-sm mt-1 inline-block hover:underline"
+                                    >
+                                      {isReadMore ? t("common:moreInfo") : t("common:showLess")}
+                                    </span>
+                                  )
+                                : product?.description?.en?.length > 230 && (
+                                    <span
+                                      onClick={() => setIsReadMore(!isReadMore)}
+                                      className="read-or-hide cursor-pointer text-[#1F6BBF] font-semibold text-sm mt-1 inline-block hover:underline"
+                                    >
+                                      {isReadMore ? t("common:moreInfo") : t("common:showLess")}
+                                    </span>
+                                  )}
+                            </div>
+                          )}
+                        </div>
 
-                          <div className="flex items-center mt-4">
-                            <div className="flex items-center justify-between space-s-3 sm:space-s-4 w-full">
-                              <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
-                                <button
-                                  onClick={() => setItem(item - 1)}
-                                  disabled={item === 1}
-                                  className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
-                                >
-                                  <span className="text-dark text-base">
-                                    <FiMinus />
-                                  </span>
-                                </button>
-                                <p className="font-semibold flex items-center justify-center h-full  transition-colors duration-250 ease-in-out cursor-default flex-shrink-0 text-base text-heading w-8  md:w-20 xl:w-24">
-                                  {item}
-                                </p>
-                                <button
-                                  onClick={() => setItem(item + 1)}
-                                  disabled={selectVariant?.quantity <= item}
-                                  className="flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-s border-gray-300 hover:text-gray-500"
-                                >
-                                  <span className="text-dark text-base">
-                                    <FiPlus />
-                                  </span>
-                                </button>
-                              </div>
+                        {/* ── Add to Cart + WhatsApp ── */}
+                        <div className="flex flex-col gap-3 mt-4">
+                          {/* Quantity + Add to Cart */}
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            {/* Quantity control */}
+                            <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
                               <button
-                                onClick={() => handleAddToCart(product)}
-                                className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 ml-4 md:px-6 lg:px-8 py-4 md:py-3.5 lg:py-4 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db]  hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] w-full h-12"
+                                onClick={() => setItem(item - 1)}
+                                disabled={item === 1}
+                                className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
                               >
-                                {t("common:addToCart")}
+                                <span className="text-dark text-base"><FiMinus /></span>
+                              </button>
+                              <p className="font-semibold flex items-center justify-center h-full cursor-default flex-shrink-0 text-base text-heading w-8 md:w-20 xl:w-24">
+                                {item}
+                              </p>
+                              <button
+                                onClick={() => setItem(item + 1)}
+                                disabled={selectVariant?.quantity <= item}
+                                className="flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-s border-gray-300 hover:text-gray-500"
+                              >
+                                <span className="text-dark text-base"><FiPlus /></span>
                               </button>
                             </div>
+
+                            {/* Add to Cart Button */}
+                            <button
+                              onClick={() => handleAddToCart(product)}
+                              className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-4 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] flex-1 h-11 md:h-12"
+                            >
+                              {t("common:addToCart")}
+                            </button>
                           </div>
 
-                          <div className="flex flex-col mt-4">
-                            <span className="font-serif font-semibold py-1 text-sm d-block">
-                              <span className="text-gray-800">
-                                {t("common:category")}:
-                              </span>{" "}
-                              <Link
-                                href={`/search?category=${category_name}&_id=${product?.category?._id}` || ""}
+                          {/* WhatsApp Order Button */}
+                          <button
+                            onClick={handleWhatsAppOrder}
+                            className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-md font-semibold font-serif text-sm text-white transition ease-in-out duration-300 bg-[#25D366] hover:bg-[#1ebe5d] h-11 md:h-12"
+                          >
+                            <FaWhatsapp size={20} />
+                            <span>Order on WhatsApp</span>
+                          </button>
+                        </div>
+
+                        {/* Category & Tags */}
+                        <div className="flex flex-col mt-4">
+                          <span className="font-serif font-semibold py-1 text-sm d-block">
+                            <span className="text-gray-800">{t("common:category")}:</span>{" "}
+                            <Link href={`/search?category=${category_name}&_id=${product?.category?._id}` || ""}>
+                              <button
+                                type="button"
+                                className="text-gray-600 font-serif font-medium underline ml-2 hover:text-[#1F6BBF]"
+                                onClick={() => setIsLoading(!isLoading)}
                               >
-                                <button
-                                  type="button"
-                                  className="text-gray-600 font-serif font-medium underline ml-2 hover:text-[#1F6BBF]"
-                                  onClick={() => setIsLoading(!isLoading)}
-                                >
-                                  {category_name}
-                                </button>
-                              </Link>
-                            </span>
+                                {category_name}
+                              </button>
+                            </Link>
+                          </span>
+                          {/* Tags swiper — horizontal scroll, no overflow */}
+                          <div className="tags-swiper flex flex-row gap-2 mt-2 overflow-x-auto pb-1">
                             <Tags product={product} />
                           </div>
+                        </div>
 
-                          {/* social share */}
-                          <div className="mt-8">
-                            <h3 className="text-base font-semibold mb-1 font-serif">
-                              {t("common:shareYourSocial")}
-                            </h3>
-                            <p className="font-sans text-sm text-gray-500">
-                              {t("common:shareYourSocialText")}
-                            </p>
-                            <ul className="flex mt-4">
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF] mr-2 transition ease-in-out duration-500">
-                                <FacebookShareButton
+                        {/* Social Share */}
+                        <div className="mt-6">
+                          <h3 className="text-base font-semibold mb-1 font-serif">
+                            {t("common:shareYourSocial")}
+                          </h3>
+                          <p className="font-sans text-sm text-gray-500">
+                            {t("common:shareYourSocialText")}
+                          </p>
+                          <ul className="flex flex-wrap gap-2 mt-4">
+                            {[
+                              { Btn: FacebookShareButton, Icon: FacebookIcon },
+                              { Btn: TwitterShareButton, Icon: TwitterIcon },
+                              { Btn: RedditShareButton, Icon: RedditIcon },
+                              { Btn: WhatsappShareButton, Icon: WhatsappIcon },
+                              { Btn: LinkedinShareButton, Icon: LinkedinIcon },
+                            ].map(({ Btn, Icon }, idx) => (
+                              <li key={idx} className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF] transition ease-in-out duration-500">
+                                <Btn
                                   url={`https://www.mahabubmart.com/product/${router.query.slug}`}
                                   quote=""
                                 >
-                                  <FacebookIcon size={32} round />
-                                </FacebookShareButton>
+                                  <Icon size={32} round />
+                                </Btn>
                               </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
-                                <TwitterShareButton
-                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
-                                  quote=""
-                                >
-                                  <TwitterIcon size={32} round />
-                                </TwitterShareButton>
-                              </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
-                                <RedditShareButton
-                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
-                                  quote=""
-                                >
-                                  <RedditIcon size={32} round />
-                                </RedditShareButton>
-                              </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
-                                <WhatsappShareButton
-                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
-                                  quote=""
-                                >
-                                  <WhatsappIcon size={32} round />
-                                </WhatsappShareButton>
-                              </li>
-                              <li className="flex items-center text-center border border-gray-100 rounded-full hover:bg-[#1F6BBF]  mr-2 transition ease-in-out duration-500">
-                                <LinkedinShareButton
-                                  url={`https://www.mahabubmart.com/product/${router.query.slug}`}
-                                  quote=""
-                                >
-                                  <LinkedinIcon size={32} round />
-                                </LinkedinShareButton>
-                              </li>
-                            </ul>
-                          </div>
+                            ))}
+                          </ul>
                         </div>
                       </div>
 
-                      {/* shipping description card */}
-
-                      <div className="w-full xl:w-5/12 lg:w-6/12 md:w-5/12">
-                        <div className="mt-6 md:mt-0 lg:mt-0 bg-gray-50 border border-gray-100 p-4 lg:p-8 rounded-lg">
+                      {/* ── Right: Shipping Card ── */}
+                      <div className="w-full lg:w-5/12">
+                        <div className="mt-0 bg-gray-50 border border-gray-100 p-4 lg:p-8 rounded-lg">
                           <Card />
                         </div>
                       </div>
@@ -616,12 +657,13 @@ useEffect(() => {
                   </div>
                 </div>
 
+                {/* Reviews */}
                 <div>
-               <Reviews product={product} />
+                  <Reviews product={product} />
                 </div>
               </div>
 
-              {/* related products */}
+              {/* Related Products */}
               {relatedProduct?.length >= 2 && (
                 <div className="pt-10 lg:pt-20 lg:pb-10">
                   <h3 className="leading-7 text-lg lg:text-xl mb-3 font-semibold font-serif hover:text-gray-600">
@@ -650,8 +692,6 @@ useEffect(() => {
   );
 };
 
-// you can use getServerSideProps alternative for getStaticProps and getStaticPaths
-
 export const getServerSideProps = async (context) => {
   const { slug } = context.params;
 
@@ -660,11 +700,10 @@ export const getServerSideProps = async (context) => {
       category: "",
       slug: slug,
     }),
-
     AttributeServices.getShowingAttributes({}),
   ]);
-  let product = {};
 
+  let product = {};
   if (slug) {
     product = data?.products?.find((p) => p.slug === slug);
   }
