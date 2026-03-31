@@ -127,14 +127,20 @@ const MainCarousel = () => {
             key={i + 1}
           >
             <div className="text-sm text-gray-600 hover:text-emerald-dark">
-              <Image
-                layout="responsive"
-                width={950}
-                height={400}
-                src={item.image}
-                alt={item.title}
-                className="object-cover"
-              />
+             {!item?.image ? (
+  // Skeleton UI
+  <div className="w-full h-[400px] bg-gray-200 animate-pulse rounded-lg" />
+) : (
+  // Real Image
+  <Image
+    layout="responsive"
+    width={950}
+    height={400}
+    src={item.image}
+    alt={item.title || "slider"}
+    className="object-cover"
+  />
+)}
             </div>
             <div className="absolute top-0 left-0 z-10 p-r-16 flex-col flex w-full h-full place-items-start justify-center">
               <div className="pl-4 pr-12 sm:pl-10 sm:pr-16 w-10/12 lg:w-8/12 xl:w-7/12">

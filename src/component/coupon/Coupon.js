@@ -10,7 +10,7 @@ import OfferTimer from "@component/coupon/OfferTimer";
 import useUtilsFunction from "@hooks/useUtilsFunction";
 import useGetSetting from "@hooks/useGetSetting";
 
-const Coupon = ({ couponInHome }) => {
+const Coupon = () => {
   const [copiedCode, setCopiedCode] = useState("");
   const [copied, setCopied] = useState(false);
 
@@ -18,7 +18,7 @@ const Coupon = ({ couponInHome }) => {
   const { globalSetting } = useGetSetting();
   const { showingTranslateValue } = useUtilsFunction();
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "৳";
 
   // console.log("coupon  data", data);
 
@@ -35,116 +35,6 @@ const Coupon = ({ couponInHome }) => {
         <p className="flex justify-center align-middle items-center m-auto text-xl text-red-500">
           <span> {error}</span>
         </p>
-      ) : couponInHome ? (
-        data?.slice(0, 2).map((coupon) => (
-          <div
-            key={coupon._id}
-            className="coupon coupon-home mx-4 my-5 block md:flex lg:flex md:justify-between lg:justify-between items-center bg-white rounded-md shadow"
-          >
-            <div className="tengah py-2 px-3 flex items-center justify-items-start">
-              <figure>
-                <Image
-                  src={coupon.logo || ""}
-                  width={100}
-                  height={100}
-                  className="rounded-lg"
-                  alt={showingTranslateValue(coupon.title)}
-                />
-              </figure>
-              <div className="ml-3">
-                <div className="flex items-center font-serif">
-                  <h6 className="pl-1 text-base font-medium text-gray-600">
-                    <span className="text-lg md:text-xl lg:text-xl text-red-500 font-bold">
-                      {coupon?.discountType?.type === "fixed" ? (
-                        <span>${coupon?.discountType?.value}</span>
-                      ) : (
-                        <span>{coupon?.discountType?.value}%</span>
-                      )}
-                    </span>{" "}
-                    Off
-                  </h6>
-                  <div className="ml-2">
-                    {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                      <span className="text-red-600 inline-block px-4 py-1 rounded-full font-medium text-xs bg-red-100">
-                        Inactive
-                      </span>
-                    ) : (
-                      <span className="text-[#1F6BBF] inline-block px-4 py-1 rounded-full font-medium text-xs bg-emerald-100">
-                        Active
-                      </span>
-                    )}
-                  </div>
-                </div>
-                <h2 className="pl-1 font-serif text-base text-gray-700 leading-6 font-semibold mb-2">
-                  {showingTranslateValue(coupon?.title)}
-                </h2>
-                {dayjs().isAfter(dayjs(coupon.endTime)) ? (
-                  <span className="inline-block mb-2">
-                    <div className="flex items-center font-semibold">
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                      :
-                      <span className="flex items-center justify-center bg-red-500 text-white text-sm font-serif font-semibold mx-1 px-2 py-1 rounded">
-                        00
-                      </span>
-                    </div>
-                  </span>
-                ) : (
-                  <span className="inline-block mb-2">
-                    <div className="flex items-center font-semibold">
-                      <OfferTimer
-                        expiryTimestamp={new Date(coupon.endTime)}
-                        darkGreen
-                      />
-                    </div>
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="md:border-l-2 lg:border-l-2 border-dashed lg:w-1/3 md:w-1/3 relative px-4">
-              <div className="info flex items-center">
-                <div className="w-full">
-                  <div className="block">
-                    <div className="font-serif border border-dashed bg-emerald-50 py-1 border-emerald-300 rounded-lg text-center block">
-                      <CopyToClipboard
-                        text={coupon.couponCode}
-                        onCopy={() => handleCopied(coupon.couponCode)}
-                      >
-                        <button className="block w-full">
-                          {copied && coupon.couponCode === copiedCode ? (
-                            <span className="text-[#1F6BBF] text-sm leading-7 font-semibold">
-                              Copied!
-                            </span>
-                          ) : (
-                            <span className="uppercase font-serif font-semibold text-sm leading-7 text-[#1F6BBF]">
-                              {coupon.couponCode}{" "}
-                            </span>
-                          )}
-                        </button>
-                      </CopyToClipboard>
-                    </div>
-                  </div>
-                  <p className="text-xs leading-4 text-gray-500 mt-2">
-                    * This coupon apply when shopping more then{" "}
-                    <span className="font-bold">
-                      {currency}
-                      {coupon.minimumAmount}
-                    </span>{" "}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))
       ) : (
         data?.map((coupon) => (
           <div
@@ -196,7 +86,7 @@ const Coupon = ({ couponInHome }) => {
                 <h2 className="pl-1 text-base font-medium text-gray-600">
                   <span className="text-lg md:text-xl lg:text-xl text-red-500 font-bold">
                     {coupon?.discountType?.type === "fixed" ? (
-                      <span>${coupon?.discountType?.value}</span>
+                      <span>{currency}{coupon?.discountType?.value}</span>
                     ) : (
                       <span>{coupon?.discountType?.value}%</span>
                     )}
