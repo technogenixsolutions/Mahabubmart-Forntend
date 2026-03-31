@@ -1,3 +1,4 @@
+import { MdProductionQuantityLimits } from "react-icons/md";
 import {
   // FiUser,
   FiGift,
@@ -9,7 +10,7 @@ import {
   FiCreditCard,
   FiMail,
   FiMapPin,
-  FiShoppingBag,
+
   FiFileText,
   FiUsers,
   FiPocket,
@@ -18,22 +19,23 @@ import {
   FiPhoneIncoming,
 } from "react-icons/fi";
 
+
 const pages = [
-  // {
-  //   title: 'User',
-  //   href: '/user/dashboard',
-  //   icon: FiUser,
-  // },
+  {
+    title: 'All Products',
+    href: '/products',
+    icon: MdProductionQuantityLimits,
+  },
   {
     title: "Offers",
     href: "/offer",
     icon: FiGift,
   },
-  {
-    title: "Checkout",
-    href: "/checkout",
-    icon: FiShoppingBag,
-  },
+  // {
+  //   title: "Checkout",
+  //   href: "/checkout",
+  //   icon: FiShoppingBag,
+  // },
   {
     title: "FAQs",
     href: "/faq",

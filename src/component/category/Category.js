@@ -90,14 +90,7 @@ const Category = () => {
             </h3>
             
             <div className="relative grid gap-1 p-6">
-                   <Link href="/products">
-                                      <a
-                                       
-                                        className="font-serif mx-4 py-2 text-sm font-medium hover:text-[#1F6BBF]">
-                                      
-                                        All Products
-                                      </a>
-                                    </Link>
+               
               {pages?.map((item) => (
                 <a
                   key={item.title || "/"}
