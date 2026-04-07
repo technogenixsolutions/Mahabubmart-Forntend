@@ -1,4 +1,3 @@
-// pages/_app.js
 import "@styles/custom.css";
 import { CartProvider } from "react-use-cart";
 import { Elements } from "@stripe/react-stripe-js";
@@ -27,7 +26,7 @@ function MyApp({ Component, pageProps }) {
   const emailRef = useRef("");
   const phoneRef = useRef("");
 
-  // user info cookie load
+  // Load user info from cookie
   useEffect(() => {
     try {
       const cookie = Cookies.get("userInfo");
@@ -64,20 +63,25 @@ function MyApp({ Component, pageProps }) {
 
       // Client-side tracking
       if (window.fbq && window._fbPixelReady) {
-        window.fbq("track", "PageView", {}, { eventID });
+        // ✅ Prevent duplicate firing
+        if (!window._lastFiredEventID || window._lastFiredEventID !== eventID) {
+          window.fbq("track", "PageView", {}, { eventID });
+          window._lastFiredEventID = eventID;
+        }
         window._pendingPageView = null;
       } else {
+        // fbq not ready yet, store pending
         window._pendingPageView = { eventID, url: window.location.href };
       }
     };
 
-    // initial load
+    // Initial page load
     if (!initialTracked.current) {
       initialTracked.current = true;
       handlePageView();
     }
 
-    // route change
+    // Route change tracking
     router.events.on("routeChangeComplete", handlePageView);
     return () => {
       router.events.off("routeChangeComplete", handlePageView);

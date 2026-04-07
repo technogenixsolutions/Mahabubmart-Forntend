@@ -1,4 +1,3 @@
-// utils/fbpixlescript.js
 import Script from "next/script";
 
 const FB_PIXEL_ID = "1759892261652978";
@@ -19,9 +18,9 @@ export const FbPixel = () => (
         s.parentNode.insertBefore(t,s)
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-      // SPA auto tracking বন্ধ করো
+      // SPA auto-tracking বন্ধ করো
       fbq('set', 'autoConfig', false, '${FB_PIXEL_ID}');
-
+      
       fbq('init', '${FB_PIXEL_ID}');
 
       window._fbPixelReady = true;
@@ -29,6 +28,7 @@ export const FbPixel = () => (
       // Pending PageView থাকলে fire করো
       if (window._pendingPageView) {
         fbq('track', 'PageView', {}, { eventID: window._pendingPageView.eventID });
+        window._lastFiredEventID = window._pendingPageView.eventID;
         window._pendingPageView = null;
       }
     `}
