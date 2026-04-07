@@ -55,7 +55,12 @@ export const lead = async (orderResponse, user) => {
   const payload = mapCartToPayload(cart, total);
   const eventId = "lead_" + (orderResponse?._id || Date.now());
 
-  // Browser pixel এ Lead
+  // ✅ fbp/fbc browser cookie থেকে নিন
+  const fbp = typeof document !== "undefined"
+    ? document.cookie.match(/_fbp=([^;]+)/)?.[1] || "" : "";
+  const fbc = typeof document !== "undefined"
+    ? document.cookie.match(/_fbc=([^;]+)/)?.[1] || "" : "";
+
   if (typeof window !== "undefined" && window.fbq) {
     window.fbq("track", "Lead", {
       value: payload.value,
@@ -66,7 +71,6 @@ export const lead = async (orderResponse, user) => {
     }, { eventID: eventId });
   }
 
-  // Server CAPI তে Lead (GA4 + FB)
   await trackEvent("Lead", {
     ...payload,
     email: user?.email || "",
@@ -77,10 +81,12 @@ export const lead = async (orderResponse, user) => {
     zipCode: user?.zipCode || "",
     country: user?.country || "",
     address: user?.address || "",
+    fbp,
+    fbc,
     event_id: eventId,
     order_id: orderResponse?._id || "",
     event_source_url: typeof window !== "undefined" ? window.location.href : "",
-    page_path: typeof window !== "undefined" ? window.location.pathname : ""
+    page_path: typeof window !== "undefined" ? window.location.pathname : "",
   });
 };
 

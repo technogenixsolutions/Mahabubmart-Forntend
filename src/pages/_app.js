@@ -15,6 +15,7 @@ import { SidebarProvider } from "@context/SidebarContext";
 import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
 import { FbPixel } from "@utils/fbpixlescript";
+import { use } from "react";
 
 
 const stripePromise = getStripe();
@@ -35,8 +36,10 @@ function MyApp({ Component, pageProps }) {
   useEffect(() => {
     try {
       const cookie = Cookies.get("userInfo");
+    
       if (cookie) {
         const user = JSON.parse(cookie);
+        console.log(user)
         emailRef.current = user.email || "";
         phoneRef.current = user.phone || "";
         setEmail(user.email || "");

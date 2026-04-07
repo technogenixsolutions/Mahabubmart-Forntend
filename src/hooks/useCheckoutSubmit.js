@@ -157,10 +157,15 @@ const useCheckoutSubmit = () => {
       paymentMethod: data.paymentMethod,
       status: "Pending",
 
-    meta: {
-    source_url: typeof window !== "undefined" ? window.location.href : "",
-    page_path: typeof window !== "undefined" ? window.location.pathname : "",
-  },
+meta: {
+  source_url: typeof window !== "undefined" ? window.location.href : "",
+  page_path: typeof window !== "undefined" ? window.location.pathname : "",
+  fbp: typeof document !== "undefined"
+    ? document.cookie.match(/_fbp=([^;]+)/)?.[1] || "" : "",
+  fbc: typeof document !== "undefined"
+    ? document.cookie.match(/_fbc=([^;]+)/)?.[1] || "" : "",
+  user_agent: typeof navigator !== "undefined" ? navigator.userAgent : "",
+},
     };
 
 

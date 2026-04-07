@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import InputArea from "@component/form/InputArea";
 import Error from "@component/form/Error";
@@ -38,7 +38,19 @@ const cod = () => {
     isSubmitting,
   } = useOrderNowSubmit();
   const [successModalData, setSuccessModalData] = useState(null);
-  
+    const [userEmail, setUserEmail] = useState("");  // ✅ যোগ করুন
+
+
+    // ✅ login করা user এর email নিন
+  useEffect(() => {
+    try {
+      const cookie = Cookies.get("userInfo");
+      if (cookie) {
+        const user = JSON.parse(cookie);
+        setUserEmail(user.email || "");
+      }
+    } catch (e) {}
+  }, []);
 
   const handleSubmitOrder = async (data) => {
     const orderData = await submitHandler(data);
@@ -46,7 +58,7 @@ const cod = () => {
 
     // ✅ শুধু form data থেকে নাও — userInfo লাগবে না
    await lead(orderData, {
-    email: data.email || "",
+    email: userEmail || "",  // ✅ cookie থেকে আসবে
     phone: data.contact || "",
     firstName: data.firstName || "", // ✅ নতুন
     address: data.address || "",     // ✅ নতুন
