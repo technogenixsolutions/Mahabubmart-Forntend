@@ -1,3 +1,4 @@
+// pages/_app.js
 import "@styles/custom.css";
 import { CartProvider } from "react-use-cart";
 import { Elements } from "@stripe/react-stripe-js";
@@ -5,7 +6,7 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { PersistGate } from "redux-persist/integration/react";
 import { persistStore } from "redux-persist";
 import { Provider } from "react-redux";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/router";
 import store from "@redux/store";
 import getStripe from "@utils/stripe";
@@ -16,7 +17,6 @@ import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
 import { FbPixel } from "@utils/fbpixlescript";
 
-
 const stripePromise = getStripe();
 let persistor = persistStore(store);
 
@@ -24,11 +24,10 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   const initialTracked = useRef(false);
 
-  // user info refs
   const emailRef = useRef("");
   const phoneRef = useRef("");
 
-  // Load user info from cookie
+  // user info cookie load
   useEffect(() => {
     try {
       const cookie = Cookies.get("userInfo");
@@ -42,49 +41,48 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
+  // SPA PageView tracking
+  useEffect(() => {
+    const handlePageView = () => {
+      if (typeof window === "undefined") return;
 
-useEffect(() => {
-  const handlePageView = () => {
-    if (typeof window === "undefined") return;
+      const eventID = "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+      const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
+      const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
 
-    const newEventId =
-      "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
-    const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
-    const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
+      // Server-side tracking
+      trackEvent("PageView", {
+        event_id: eventID,
+        email: emailRef.current,
+        phone: phoneRef.current,
+        fbp,
+        fbc,
+        value: 0,
+        items: [],
+        event_source_url: window.location.href,
+      });
 
-    // ✅ Server-side track
-    trackEvent("PageView", {
-      event_id: newEventId,
-      email: emailRef.current,
-      phone: phoneRef.current,
-      fbp,
-      fbc,
-      value: 0,
-      items: [],
-      event_source_url: window.location.href,
-    });
+      // Client-side tracking
+      if (window.fbq && window._fbPixelReady) {
+        window.fbq("track", "PageView", {}, { eventID });
+        window._pendingPageView = null;
+      } else {
+        window._pendingPageView = { eventID, url: window.location.href };
+      }
+    };
 
-    // ✅ fbq ready হলে এখনই fire করো, না হলে pending রাখো
-    if (window.fbq && window._fbPixelReady) {
-      window.fbq("track", "PageView", {}, { eventID: newEventId });
-    } else {
-      window._pendingPageView = {
-        eventID: newEventId,
-        url: window.location.href,
-      };
+    // initial load
+    if (!initialTracked.current) {
+      initialTracked.current = true;
+      handlePageView();
     }
-  };
 
-  if (!initialTracked.current) {
-    initialTracked.current = true;
-    handlePageView();
-  }
-
-  router.events.on("routeChangeComplete", handlePageView);
-  return () => {
-    router.events.off("routeChangeComplete", handlePageView);
-  };
-}, [router.events]);
+    // route change
+    router.events.on("routeChangeComplete", handlePageView);
+    return () => {
+      router.events.off("routeChangeComplete", handlePageView);
+    };
+  }, [router.events]);
 
   return (
     <>

@@ -19,15 +19,16 @@ export const FbPixel = () => (
         s.parentNode.insertBefore(t,s)
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
-      // ✅ SPA auto route tracking বন্ধ করো
+      // SPA auto tracking বন্ধ করো
       fbq('set', 'autoConfig', false, '${FB_PIXEL_ID}');
 
       fbq('init', '${FB_PIXEL_ID}');
-      
+
       window._fbPixelReady = true;
+
+      // Pending PageView থাকলে fire করো
       if (window._pendingPageView) {
-        var p = window._pendingPageView;
-        fbq('track', 'PageView', {}, { eventID: p.eventID });
+        fbq('track', 'PageView', {}, { eventID: window._pendingPageView.eventID });
         window._pendingPageView = null;
       }
     `}
