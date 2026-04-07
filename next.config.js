@@ -4,22 +4,17 @@ const nextTranslate = require("next-translate");
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
-  runtimeCaching: [
-    // ✅ Facebook pixel — cache করবে না
-    {
-      urlPattern: /^https:\/\/www\.facebook\.com\/tr.*/i,
-      handler: "NetworkOnly",
-    },
-    {
-      urlPattern: /^https:\/\/connect\.facebook\.net.*/i,
-      handler: "NetworkOnly",
-    },
-    ...runtimeCaching, // ✅ filter বাদ, সরাসরি spread করো
-  ],
-  buildExcludes: [/middleware-manifest.json$/],
+  skipWaiting: true,
   scope: "/",
   sw: "service-worker.js",
-  skipWaiting: true,
+  buildExcludes: [/middleware-manifest\.json$/],
+
+  // ✅ THIS FIXES YOUR ERROR
+  fallbacks: {
+    document: "/_offline",
+  },
+
+  runtimeCaching,
   disable: process.env.NODE_ENV === "development",
 });
 
@@ -30,9 +25,7 @@ module.exports = withPWA({
     return [
       {
         source: "/:path*",
-        has: [
-          { type: "host", value: "mahabubmart.com" },
-        ],
+        has: [{ type: "host", value: "mahabubmart.com" }],
         destination: "https://www.mahabubmart.com/:path*",
         permanent: true,
       },
