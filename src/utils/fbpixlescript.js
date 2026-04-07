@@ -8,16 +8,6 @@ export const FbPixel = () => (
     id="fb-pixel"
     strategy="afterInteractive"
     crossOrigin="anonymous"
-    onLoad={() => {
-      // ✅ Script load হওয়ার পর window এ flag set করো
-      window._fbPixelReady = true;
-      // ✅ Pending event থাকলে fire করো
-      if (window._pendingPageView) {
-        const { eventID, url } = window._pendingPageView;
-        window.fbq("track", "PageView", {}, { eventID });
-        window._pendingPageView = null;
-      }
-    }}
   >
     {`
       !function(f,b,e,v,n,t,s){
@@ -30,7 +20,14 @@ export const FbPixel = () => (
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
       fbq('init', '${FB_PIXEL_ID}');
-      // ❌ PageView এখানে fire করব না
+      
+      // ✅ Script নিজেই pending event check করবে
+      window._fbPixelReady = true;
+      if (window._pendingPageView) {
+        var p = window._pendingPageView;
+        fbq('track', 'PageView', {}, { eventID: p.eventID });
+        window._pendingPageView = null;
+      }
     `}
   </Script>
 );
