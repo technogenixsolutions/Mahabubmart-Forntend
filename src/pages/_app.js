@@ -38,8 +38,8 @@ function MyApp({ Component, pageProps }) {
       const cookie = Cookies.get("userInfo");
     
       if (cookie) {
-    
-        console.log(user)
+        const user = JSON.parse(cookie);
+      
         emailRef.current = user.email || "";
         phoneRef.current = user.phone || "";
         setEmail(user.email || "");
@@ -50,13 +50,18 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const handlePageView = () => {
-      const newEventId =
-        "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
 
+        // ✅ window check আগে
+  if (typeof window === "undefined") return;
+      const newEventId = "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+  const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
+  const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
       trackEvent("PageView", {
         event_id: newEventId,
         email: emailRef.current || "",
         phone: phoneRef.current || "",
+        fbp,
+        fbc,
         value: 0,
         items: [],
         event_source_url: window.location.href,
