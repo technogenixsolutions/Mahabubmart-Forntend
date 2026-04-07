@@ -42,7 +42,6 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-// _app.js
 
 useEffect(() => {
   const handlePageView = () => {
@@ -53,7 +52,7 @@ useEffect(() => {
     const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
     const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
 
-    // Server-side
+    // ✅ Server-side track
     trackEvent("PageView", {
       event_id: newEventId,
       email: emailRef.current,
@@ -65,17 +64,15 @@ useEffect(() => {
       event_source_url: window.location.href,
     });
 
-    // ✅ fbq ready না হলে wait করো
-    const fireFbq = () => {
-      if (window.fbq) {
-        window.fbq("track", "PageView", {}, { eventID: newEventId });
-      } else {
-        // fbq load না হলে 500ms পর আবার try করো
-        setTimeout(fireFbq, 500);
-      }
-    };
-
-    fireFbq();
+    // ✅ fbq ready হলে এখনই fire করো, না হলে pending রাখো
+    if (window.fbq && window._fbPixelReady) {
+      window.fbq("track", "PageView", {}, { eventID: newEventId });
+    } else {
+      window._pendingPageView = {
+        eventID: newEventId,
+        url: window.location.href,
+      };
+    }
   };
 
   if (!initialTracked.current) {
