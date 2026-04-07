@@ -4,7 +4,18 @@ const nextTranslate = require("next-translate");
 const withPWA = require("next-pwa")({
   dest: "public",
   register: true,
-  runtimeCaching,
+  runtimeCaching: [
+    // ✅ Facebook pixel — cache করবে না
+    {
+      urlPattern: /^https:\/\/www\.facebook\.com\/tr.*/i,
+      handler: "NetworkOnly",
+    },
+    {
+      urlPattern: /^https:\/\/connect\.facebook\.net.*/i,
+      handler: "NetworkOnly",
+    },
+    ...runtimeCaching, // ✅ filter বাদ, সরাসরি spread করো
+  ],
   buildExcludes: [/middleware-manifest.json$/],
   scope: "/",
   sw: "service-worker.js",
@@ -15,7 +26,6 @@ const withPWA = require("next-pwa")({
 module.exports = withPWA({
   reactStrictMode: true,
 
-  // ✅ non-www → www redirect
   async redirects() {
     return [
       {
@@ -33,7 +43,6 @@ module.exports = withPWA({
     ignoreDuringBuilds: true,
   },
 
-  // ✅ শুধু আপনার actual locales রাখুন, example domains সরিয়ে দিলাম
   i18n: {
     locales: ["en-US", "es", "fr", "nl-NL"],
     defaultLocale: "en-US",
