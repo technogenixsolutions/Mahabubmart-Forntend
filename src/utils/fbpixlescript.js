@@ -19,9 +19,11 @@ export const FbPixel = () => (
         s.parentNode.insertBefore(t,s)
       }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
+      // ✅ SPA auto route tracking বন্ধ করো
+      fbq('set', 'autoConfig', false, '${FB_PIXEL_ID}');
+
       fbq('init', '${FB_PIXEL_ID}');
       
-      // ✅ Script নিজেই pending event check করবে
       window._fbPixelReady = true;
       if (window._pendingPageView) {
         var p = window._pendingPageView;
