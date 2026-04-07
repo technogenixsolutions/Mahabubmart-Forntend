@@ -15,7 +15,6 @@ import { SidebarProvider } from "@context/SidebarContext";
 import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
 import { FbPixel } from "@utils/fbpixlescript";
-import { use } from "react";
 
 
 const stripePromise = getStripe();
@@ -23,43 +22,39 @@ let persistor = persistStore(store);
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  
-  // ✅ initial PageView একবারই হবে
   const initialTracked = useRef(false);
-  
-  // email/phone ref — useEffect এ stale closure এড়াতে
+
+  // user info refs
   const emailRef = useRef("");
   const phoneRef = useRef("");
 
+  // Load user info from cookie
   useEffect(() => {
     try {
       const cookie = Cookies.get("userInfo");
-    
       if (cookie) {
         const user = JSON.parse(cookie);
-      
         emailRef.current = user.email || "";
         phoneRef.current = user.phone || "";
-        setEmail(user.email || "");
-        setPhone(user.phone || "");
       }
-    } catch (e) {}
+    } catch (e) {
+      console.warn("Error parsing userInfo cookie", e);
+    }
   }, []);
 
   useEffect(() => {
     const handlePageView = () => {
+      if (typeof window === "undefined") return;
 
-        // ✅ window check আগে
-  if (typeof window === "undefined") return;
       const newEventId = "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
-  const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
-  const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
+      const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
+      const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
+
+      // Server-side + Browser-side
       trackEvent("PageView", {
         event_id: newEventId,
-        email: emailRef.current || "",
-        phone: phoneRef.current || "",
+        email: emailRef.current,
+        phone: phoneRef.current,
         fbp,
         fbc,
         value: 0,
@@ -67,23 +62,23 @@ function MyApp({ Component, pageProps }) {
         event_source_url: window.location.href,
       });
 
-      if (typeof window !== "undefined" && window.fbq) {
+      if (window.fbq) {
         window.fbq("track", "PageView", {}, { eventID: newEventId });
       }
     };
 
-    // ✅ Initial load একবারই
+    // ✅ Initial load (deduplicate using ref)
     if (!initialTracked.current) {
       initialTracked.current = true;
       handlePageView();
     }
 
-    // ✅ Route change এ normally fire হবে
+    // ✅ Route change: fire new PageView
     router.events.on("routeChangeComplete", handlePageView);
     return () => {
       router.events.off("routeChangeComplete", handlePageView);
     };
-  }, [router.events]); // ✅ email/phone dependency সরিয়ে দিলাম
+  }, [router.events]);
 
   return (
     <>
