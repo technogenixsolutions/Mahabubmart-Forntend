@@ -42,7 +42,7 @@ const OrderNowModal = ({ close }) => {
     name: data.firstName || "",
     phone: data.contact || "",
     address: data.address || "",
-    event_source_url: window.location.href,
+    
   });
 
   if (data.paymentMethod === "Cash") {

@@ -174,6 +174,11 @@ const useOrderNowSubmit = () => {
       shippingCost,
       discount: discountAmount,
       total,
+
+    meta: {
+    source_url: typeof window !== "undefined" ? window.location.href : "",
+    page_path: typeof window !== "undefined" ? window.location.pathname : "",
+  },
     };
 
     // 🔹 Add order

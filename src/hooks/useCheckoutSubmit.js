@@ -156,6 +156,11 @@ const useCheckoutSubmit = () => {
       total,
       paymentMethod: data.paymentMethod,
       status: "Pending",
+
+    meta: {
+    source_url: typeof window !== "undefined" ? window.location.href : "",
+    page_path: typeof window !== "undefined" ? window.location.pathname : "",
+  },
     };
 
 
@@ -198,7 +203,7 @@ if (data.paymentMethod === "Cash") {
         city: data.city || "",
         zipCode: data.zipCode || "",
         country: data.country || "",
-        event_source_url: window.location.href,
+    
       });
 
       notifySuccess("Order Confirmed!");

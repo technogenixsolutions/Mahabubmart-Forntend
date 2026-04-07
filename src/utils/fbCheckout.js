@@ -79,7 +79,8 @@ export const lead = async (orderResponse, user) => {
     address: user?.address || "",
     event_id: eventId,
     order_id: orderResponse?._id || "",
-   event_source_url: user?.event_source_url || (typeof window !== "undefined" ? window.location.href : "https://www.mahabubmart.com"),
+    event_source_url: typeof window !== "undefined" ? window.location.href : "",
+    page_path: typeof window !== "undefined" ? window.location.pathname : ""
   });
 };
 
@@ -112,6 +113,7 @@ export const purchase = async (orderResponse, user) => {
     address: user?.address || "",
     event_id: eventId,
     order_id: orderResponse?._id || "",
-    event_source_url: typeof window !== "undefined" ? window.location.href : "",
+   event_source_url: typeof window !== "undefined" ? window.location.href : "",
+    page_path: typeof window !== "undefined" ? window.location.pathname : ""
   });
 };

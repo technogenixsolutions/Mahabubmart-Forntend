@@ -6,8 +6,8 @@ import InputShipping from "@component/form/InputShipping";
 
 
 import useOrderNowSubmit from "@hooks/useOrderNowSubmit";
-import { purchase } from "@utils/fbCheckout";
-import { UserContext } from "@context/UserContext";
+import { lead } from "@utils/fbCheckout";
+
 
 import dynamic from "next/dynamic";
 
@@ -38,14 +38,14 @@ const cod = () => {
     isSubmitting,
   } = useOrderNowSubmit();
   const [successModalData, setSuccessModalData] = useState(null);
-  const { state: { userInfo } } = useContext(UserContext); // 🔹 get user info
+  
 
   const handleSubmitOrder = async (data) => {
     const orderData = await submitHandler(data);
     if (!orderData) return;
 
     // ✅ শুধু form data থেকে নাও — userInfo লাগবে না
-   await purchase(orderData, {
+   await lead(orderData, {
     email: data.email || "",
     phone: data.contact || "",
     firstName: data.firstName || "", // ✅ নতুন
@@ -57,10 +57,7 @@ const cod = () => {
     }
   };
 
-  const handleClose = () => {
-    removeCoupon();
-   
-  };
+
 
   return (
     <>
