@@ -7,8 +7,8 @@ import InputShipping from "@component/form/InputShipping";
 
 import OrderSuccessModal from "./OrderSuccessModal";
 import useOrderNowSubmit from "@hooks/useOrderNowSubmit";
-import { purchase } from "@utils/fbCheckout";
-import { UserContext } from "@context/UserContext";
+import { lead } from "@utils/fbCheckout";
+
 
 const OrderNowModal = ({ close }) => {
   const {
@@ -31,19 +31,24 @@ const OrderNowModal = ({ close }) => {
   } = useOrderNowSubmit();
 
   const [successModalData, setSuccessModalData] = useState(null);
-  const { state: { userInfo } } = useContext(UserContext); // 🔹 get user info
+
 
   const handleSubmitOrder = async (data) => {
-    const orderData = await submitHandler(data);
-    if (!orderData) return;
+     const orderData = await submitHandler(data);
+  if (!orderData) return;
 
-     if (userInfo) {
-      await purchase(orderData, userInfo); // 🔹 Purchase API call
-    }
 
-    if (data.paymentMethod === "Cash") {
-      setSuccessModalData(orderData);
-    }
+  await lead(orderData, {
+    name: data.firstName || "",
+    phone: data.contact || "",
+    address: data.address || "",
+    event_source_url: window.location.href,
+  });
+
+  if (data.paymentMethod === "Cash") {
+    setSuccessModalData(orderData);
+  
+};
   };
 
   const handleClose = () => {

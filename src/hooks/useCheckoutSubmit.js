@@ -13,7 +13,7 @@ import OrderServices from "@services/OrderServices";
 import CouponServices from "@services/CouponServices";
 import SettingServices from "@services/SettingServices";
 import { notifyError, notifySuccess } from "@utils/toast";
-import { purchase } from "@utils/fbCheckout";
+import { lead, purchase } from "@utils/fbCheckout";
 
 const useCheckoutSubmit = () => {
   const {
@@ -160,20 +160,46 @@ const useCheckoutSubmit = () => {
 
 
 
-    if (data.paymentMethod === "Cash") {
+//     if (data.paymentMethod === "Cash") {
+//   OrderServices.addOrder(orderInfo)
+//     .then(async (res) => {
+//       // ✅ Fire purchase tracking
+
+//   await purchase(res, {
+//   email: data.email || "",
+//   phone: data.contact || "",
+//   firstName: data.firstName || "",
+//   lastName: data.lastName || "",
+//   city: data.city || "",        // ✅ checkout form এ আছে
+//   zipCode: data.zipCode || "",  // ✅ checkout form এ আছে
+//   country: data.country || "",  // ✅ checkout form এ আছে
+//  });
+
+//       notifySuccess("Order Confirmed!");
+//       emptyCart();
+//       Cookies.remove("couponInfo");
+//       router.push(`/order/${res._id}`);
+//     })
+//     .catch((err) => notifyError(err.message))
+//     .finally(() => setIsCheckoutSubmit(false));
+// }
+//   };
+
+
+if (data.paymentMethod === "Cash") {
   OrderServices.addOrder(orderInfo)
     .then(async (res) => {
-      // ✅ Fire purchase tracking
-
-  await purchase(res, {
-  email: data.email || "",
-  phone: data.contact || "",
-  firstName: data.firstName || "",
-  lastName: data.lastName || "",
-  city: data.city || "",        // ✅ checkout form এ আছে
-  zipCode: data.zipCode || "",  // ✅ checkout form এ আছে
-  country: data.country || "",  // ✅ checkout form এ আছে
- });
+      // ✅ COD → Lead (purchase না)
+      await lead(res, {
+        email: data.email || "",
+        phone: data.contact || "",
+        firstName: data.firstName || "",
+        lastName: data.lastName || "",
+        city: data.city || "",
+        zipCode: data.zipCode || "",
+        country: data.country || "",
+        event_source_url: window.location.href,
+      });
 
       notifySuccess("Order Confirmed!");
       emptyCart();
@@ -183,8 +209,7 @@ const useCheckoutSubmit = () => {
     .catch((err) => notifyError(err.message))
     .finally(() => setIsCheckoutSubmit(false));
 }
-  };
-
+  }
   return {
     handleSubmit,
     submitHandler,

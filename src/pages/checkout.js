@@ -31,7 +31,7 @@ const Checkout = () => {
     handleShippingCost,
 
     register,
-        setValue,
+    setValue,
     errors,
     showCard,
 
