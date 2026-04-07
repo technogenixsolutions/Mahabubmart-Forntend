@@ -42,43 +42,52 @@ function MyApp({ Component, pageProps }) {
     }
   }, []);
 
-  useEffect(() => {
-    const handlePageView = () => {
-      if (typeof window === "undefined") return;
+// _app.js
 
-      const newEventId = "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
-      const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
-      const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
+useEffect(() => {
+  const handlePageView = () => {
+    if (typeof window === "undefined") return;
 
-      // Server-side + Browser-side
-      trackEvent("PageView", {
-        event_id: newEventId,
-        email: emailRef.current,
-        phone: phoneRef.current,
-        fbp,
-        fbc,
-        value: 0,
-        items: [],
-        event_source_url: window.location.href,
-      });
+    const newEventId =
+      "pageview_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+    const fbp = document.cookie.match(/_fbp=([^;]+)/)?.[1] || "";
+    const fbc = document.cookie.match(/_fbc=([^;]+)/)?.[1] || "";
 
+    // Server-side
+    trackEvent("PageView", {
+      event_id: newEventId,
+      email: emailRef.current,
+      phone: phoneRef.current,
+      fbp,
+      fbc,
+      value: 0,
+      items: [],
+      event_source_url: window.location.href,
+    });
+
+    // ✅ fbq ready না হলে wait করো
+    const fireFbq = () => {
       if (window.fbq) {
         window.fbq("track", "PageView", {}, { eventID: newEventId });
+      } else {
+        // fbq load না হলে 500ms পর আবার try করো
+        setTimeout(fireFbq, 500);
       }
     };
 
-    // ✅ Initial load (deduplicate using ref)
-    if (!initialTracked.current) {
-      initialTracked.current = true;
-      handlePageView();
-    }
+    fireFbq();
+  };
 
-    // ✅ Route change: fire new PageView
-    router.events.on("routeChangeComplete", handlePageView);
-    return () => {
-      router.events.off("routeChangeComplete", handlePageView);
-    };
-  }, [router.events]);
+  if (!initialTracked.current) {
+    initialTracked.current = true;
+    handlePageView();
+  }
+
+  router.events.on("routeChangeComplete", handlePageView);
+  return () => {
+    router.events.off("routeChangeComplete", handlePageView);
+  };
+}, [router.events]);
 
   return (
     <>
