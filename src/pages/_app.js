@@ -38,7 +38,7 @@ function MyApp({ Component, pageProps }) {
       const cookie = Cookies.get("userInfo");
     
       if (cookie) {
-        const user = JSON.parse(cookie);
+    
         console.log(user)
         emailRef.current = user.email || "";
         phoneRef.current = user.phone || "";
