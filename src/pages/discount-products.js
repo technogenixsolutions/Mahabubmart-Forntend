@@ -21,7 +21,7 @@ const DiscountProductsPage = ({ initialProducts, attributes,  }) => {
 
   const [products, setProducts] = useState(initialProducts || []);
   const [page, setPage] = useState(1);
-  const [limit] = useState(15); // 15 products per page
+  const [limit] = useState(18); // 18 products per page
   const [loadingMore, setLoadingMore] = useState(false);
   const [priceSort, setPriceSort] = useState(""); // low / high
 
@@ -151,7 +151,7 @@ const DiscountProductsPage = ({ initialProducts, attributes,  }) => {
 // Server Side Props
 export const getServerSideProps = async (context) => {
   const [data, attributes] = await Promise.all([
-    ProductServices.getDiscountedProducts({ page: 1, limit: 15 }),
+    ProductServices.getDiscountedProducts({ page: 1, limit: 1 }),
     AttributeServices.getShowingAttributes(),
   ]);
 

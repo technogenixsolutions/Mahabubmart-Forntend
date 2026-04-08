@@ -153,7 +153,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
 // Server Side Props
 export const getServerSideProps = async (context) => {
   const [data, attributes] = await Promise.all([
-    ProductServices.getAllProducts({ page: 1, limit: 15 }),
+    ProductServices.getAllProducts({ page: 1, limit: 18 }),
     AttributeServices.getShowingAttributes(),
   ]);
 
