@@ -21,7 +21,7 @@ const ProductsPage = ({ initialProducts, attributes }) => {
 
   const [products, setProducts] = useState(initialProducts || []);
   const [page, setPage] = useState(1);
-  const [limit] = useState(15); // 15 products per page
+  const [limit] = useState(18); // 18 products per page
   const [loadingMore, setLoadingMore] = useState(false);
   const [priceSort, setPriceSort] = useState(""); // low / high
 
