@@ -49,13 +49,16 @@ const handleMoreInfo = (slug) => {
    if (isNavigating) return;   // 🔥 prevent multiple push
   setIsNavigating(true);
   router.push(`/product/${slug}`);
+   setIsNavigating(false); // ✅ reset করুন
 };
 
 
 const handleAddItem = (p) => {
+  if (!p) return; 
+   if (!p.prices) return notifyError("Product price not found!"); 
   if (p.stock < 1) return notifyError("Insufficient stock!");
   if (p?.variants?.length > 0) {
-    setModalOpen(true);
+    // setModalOpen(true);
     return;
   }
  
@@ -73,7 +76,7 @@ const handleAddItem = (p) => {
     id: p._id,
     variant: p.prices,
     price: p.prices.price,
-    originalPrice: product.prices?.originalPrice,
+    originalPrice: p?.prices?.originalPrice,
     image: productImages[0] || "",
   };
  
@@ -266,10 +269,12 @@ const handleAddItem = (p) => {
             /* Order Now */
             <button
               disabled={outOfStock}
-              onClick={(e) => {
-                e.stopPropagation();
-                handleAddItem(product);
-              }}
+  onClick={(e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    if (outOfStock) return;
+    handleAddItem(product);
+  }}
               className={`w-full py-2 rounded-xl text-sm font-bold text-white tracking-wide
                 transition-all duration-200 active:scale-95
                 ${outOfStock
