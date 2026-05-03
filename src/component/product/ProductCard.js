@@ -317,7 +317,8 @@ const LOGO_PLACEHOLDER =
 const ProductCard = ({ product, attributes }) => {
   const [email, setEmail] = useState();
   const [phone, setPhone] = useState();
-  const [img1Loaded, setImg1Loaded] = useState(false);
+  const [imgError, setImgError] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
   const { items, addItem, updateItemQuantity, inCart } = useCart();
   const { handleIncreaseQuantity } = useAddToCart();
@@ -327,47 +328,63 @@ const ProductCard = ({ product, attributes }) => {
 
   const currency = globalSetting?.default_currency || "$";
 
+  console.log(product)
+
   useEffect(() => {
     if (Cookies.get("userInfo")) {
-      const user = JSON.parse(Cookies.get("userInfo"));
-      setEmail(user.email);
-      setPhone(user.phone);
+      try {
+        const user = JSON.parse(Cookies.get("userInfo"));
+        setEmail(user.email);
+        setPhone(user.phone);
+      } catch (e) {}
     }
   }, []);
 
+  // ── Image parsing ──
   const images =
     typeof product?.image === "string"
-      ? product.image.split(",").map((img) => img.trim())
-      : product?.image || [];
+      ? product.image.split(",").map((img) => img.trim()).filter(Boolean)
+      : Array.isArray(product?.image)
+      ? product.image.filter(Boolean)
+      : [];
 
   const image1 = images[0] || null;
   const image2 = images[1] || null;
   const hasSecondImage = Boolean(image2);
 
+  // ── Navigate ──
   const handleNavigate = () => {
     router.push(`/product/${product.slug}`);
   };
 
+  // ── Add to cart ──
   const handleAddItem = (p) => {
     if (!p) return;
-    if (!p.prices) return notifyError("Product price not found!");
-    if (p.stock < 1) return notifyError("Insufficient stock!");
+
+    // prices check — discount product এও কাজ করবে
+    const prices = p.prices || p.variant || {};
+    const itemPrice = prices?.price ?? prices?.originalPrice ?? 0;
+
+    if (!itemPrice) return notifyError("Product price not found!");
+    if ((p.stock ?? 0) < 1) return notifyError("Insufficient stock!");
     if (p?.variants?.length > 0) return;
 
     const { slug, variants, categories, description, ...updatedProduct } = product;
 
     const productImages =
       typeof product?.image === "string"
-        ? product.image.split(",").map((img) => img.trim())
-        : product?.image || [];
+        ? product.image.split(",").map((img) => img.trim()).filter(Boolean)
+        : Array.isArray(product?.image)
+        ? product.image.filter(Boolean)
+        : [];
 
     const newItem = {
       ...updatedProduct,
       title: showingTranslateValue(p?.title),
       id: p._id,
-      variant: p.prices,
-      price: p.prices?.price,
-      originalPrice: p?.prices?.originalPrice,
+      variant: prices,
+      price: itemPrice,
+      originalPrice: prices?.originalPrice ?? itemPrice,
       image: productImages[0] || "",
     };
 
@@ -398,7 +415,8 @@ const ProductCard = ({ product, attributes }) => {
       email: email || "",
       phone: phone || "",
       event_id: eventId,
-      event_source_url: window.location.href,
+      event_source_url:
+        typeof window !== "undefined" ? window.location.href : "",
       items: [
         {
           id: newItem.id,
@@ -425,64 +443,41 @@ const ProductCard = ({ product, attributes }) => {
     ? product?.variants?.[0]?.originalPrice
     : product?.prices?.originalPrice;
 
-  return (
-    <div className="group flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+  // ── যে image দেখাবে ──
+  const displayImage =
+    imgError || !image1
+      ? LOGO_PLACEHOLDER
+      : isHovered && hasSecondImage
+      ? image2
+      : image1;
 
-      {/* ── Image area — click করলে navigate ── */}
+  return (
+    <div
+      className="group flex flex-col bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden"
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
+      {/* ── Image area ── */}
       <div
         onClick={handleNavigate}
-        className="relative w-full aspect-square bg-gray-50 overflow-hidden cursor-pointer"
+        className="relative w-full aspect-square bg-gray-100 overflow-hidden cursor-pointer flex items-center justify-center"
       >
-        <div>
+        {/* Badges */}
+        <div className="absolute top-0 left-0 z-10 w-full">
           <Stock product={product} stock={product.stock} card />
           <Discount product={product} />
         </div>
 
-        {/* Placeholder */}
-        <div
-          className={`absolute inset-0 z-[1] transition-opacity duration-300 ${
-            img1Loaded ? "opacity-0 pointer-events-none" : "opacity-100"
-          }`}
-        >
-          <img
-            src={LOGO_PLACEHOLDER}
-            alt="loading"
-            className="w-full h-full object-contain opacity-40"
-          />
-        </div>
-
-        {/* Primary Image */}
-        {image1 && (
-          <img
-            src={image1}
-            alt={showingTranslateValue(product?.title)}
-            onLoad={() => setImg1Loaded(true)}
-            onError={() => setImg1Loaded(true)}
-            className={`absolute inset-0 w-full h-full object-contain z-[2]
-              transition-all duration-500
-              ${img1Loaded ? "opacity-100" : "opacity-0"}
-              ${
-                hasSecondImage
-                  ? "group-hover:opacity-0 group-hover:scale-105"
-                  : "group-hover:scale-105"
-              }`}
-          />
-        )}
-
-        {/* Secondary Image */}
-        {hasSecondImage && img1Loaded && (
-          <img
-            src={image2}
-            alt="view 2"
-            className="absolute inset-0 w-full h-full object-contain z-[3]
-              opacity-0 scale-105
-              group-hover:opacity-100 group-hover:scale-100
-              transition-all duration-500"
-          />
-        )}
+        {/* ✅ Single img tag — সবচেয়ে simple ও reliable */}
+        <img
+          src={displayImage}
+          alt={showingTranslateValue(product?.title) || "product"}
+          onError={() => setImgError(true)}
+          className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+        />
       </div>
 
-      {/* ── Body — কোনো navigate নেই, button সবসময় কাজ করবে ── */}
+      {/* ── Body ── */}
       <div className="flex flex-col px-3 pt-2 pb-3 flex-1">
 
         {product.unit && (
@@ -495,8 +490,8 @@ const ProductCard = ({ product, attributes }) => {
         <h2
           onClick={handleNavigate}
           className="text-sm font-bold text-slate-700 leading-snug mb-1
-            line-clamp-2 hover:line-clamp-none cursor-pointer
-            transition-all duration-300 overflow-hidden text-ellipsis"
+            line-clamp-2 cursor-pointer hover:text-[#1F6BBF]
+            transition-colors duration-200 overflow-hidden"
         >
           {showingTranslateValue(product?.title)}
         </h2>
@@ -513,7 +508,7 @@ const ProductCard = ({ product, attributes }) => {
           </span>
         </div>
 
-        {/* Cart control */}
+        {/* ── Cart control ── */}
         {isInCart && cartItem ? (
           <div className="flex items-center justify-between w-full bg-gradient-to-r from-[#1F6BBF] to-[#00a4db] rounded-xl px-4 py-2">
             <button
