@@ -133,7 +133,7 @@ const cod = () => {
                 handleShippingCost={setShippingCost}
                 value="ঢাকা সিটির ভিতরে"
                 time="1-2 Days"
-                cost={70}
+                cost={60}
                 currency={currency}
               />
 
@@ -142,7 +142,7 @@ const cod = () => {
                 handleShippingCost={setShippingCost}
                 value="ঢাকা এবং চট্টগ্রাম সিটির বাহিরে"
                 time="3-5 Days"
-                cost={130}
+                cost={120}
                 currency={currency}
               />
 

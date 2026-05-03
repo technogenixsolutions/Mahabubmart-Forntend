@@ -224,7 +224,7 @@ const Checkout = () => {
                           // cost={60}
                                 value="ঢাকা সিটির ভিতরে"
               time="1-2 Days"
-              cost={70}
+              cost={60}
                         />
                         <Error errorName={errors.shippingOption} />
                       </div>
@@ -239,7 +239,7 @@ const Checkout = () => {
                           // cost={20}
                               value="ঢাকা এবং চট্টগ্রাম সিটির বাহিরে"
               time="3-5 Days"
-              cost={130}
+              cost={120}
            
                         />
                         <Error errorName={errors.shippingOption} />
