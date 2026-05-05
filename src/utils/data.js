@@ -28,7 +28,7 @@ const pages = [
   },
   {
     title: "Offers",
-    href: "/offer",
+    href: "/discount-products",
     icon: FiGift,
   },
   // {

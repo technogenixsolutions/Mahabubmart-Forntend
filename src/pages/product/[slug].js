@@ -1,10 +1,12 @@
+
+
 import useTranslation from "next-translate/useTranslation";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import { FiChevronRight, FiMinus, FiPlus } from "react-icons/fi";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaWhatsapp, FaPhoneAlt, FaFacebookMessenger, FaMicrophone } from "react-icons/fa";
 import {
   FacebookIcon,
   FacebookShareButton,
@@ -39,6 +41,7 @@ import useGetSetting from "@hooks/useGetSetting";
 import Reviews from "./Reviews/Reviews";
 import Cookies from "js-cookie";
 import { trackEvent } from "@utils/trackEvent";
+import { useCart } from "react-use-cart";
 
 const ProductScreen = ({ product, attributes, relatedProduct }) => {
   const router = useRouter();
@@ -67,8 +70,24 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
   const [variantTitle, setVariantTitle] = useState([]);
   const [variants, setVariants] = useState([]);
 
-  // ─── WhatsApp number (তোমার নম্বর দাও) ──────────────────────────────────
-  const WHATSAPP_NUMBER = "+8801921619808"; // ← এখানে তোমার WhatsApp নম্বর দাও (country code সহ, + ছাড়া)
+  // ─── WhatsApp number ──────────────────────────────────────────────────────
+  const WHATSAPP_NUMBER = "+8801921619808";
+
+  // ─── নতুন constants ───────────────────────────────────────────────────────
+  const CALL_NUMBER    = "+8801921619808";   // ← তোমার call নম্বর
+  const MESSENGER_PAGE = "mahabubmart";       // ← তোমার Facebook page name
+
+  // ─── Countdown Timer State ────────────────────────────────────────────────
+  const [timeLeft, setTimeLeft] = useState(null);
+
+  // ─── Voice recording state ────────────────────────────────────────────────
+  const [isListening, setIsListening] = useState(false);
+
+
+
+
+// component এর ভেতরে
+const { addItem, updateItemQuantity, getItem } = useCart();
 
   useEffect(() => {
     if (Cookies.get("userInfo")) {
@@ -220,6 +239,33 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
     setIsLoading(false);
   }, [product]);
 
+
+  // ─── Countdown Timer useEffect (নতুন) ─────────────────────────────────────
+  useEffect(() => {
+    const endDate = product?.prices?.discountEndDate;
+    if (!endDate) return;
+
+    const end = new Date(endDate).getTime();
+
+    const tick = () => {
+      const now = Date.now();
+      const diff = end - now;
+      if (diff <= 0) {
+        setTimeLeft(null);
+        return;
+      }
+      const days    = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours   = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      setTimeLeft({ days, hours, minutes, seconds });
+    };
+
+    tick();
+    const interval = setInterval(tick, 1000);
+    return () => clearInterval(interval);
+  }, [product?.prices?.discountEndDate]);
+
   const handleAddToCart = (p) => {
     if (p.variants.length === 1 && p.variants[0].quantity < 1)
       return notifyError("Insufficient stock");
@@ -314,6 +360,142 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
     window.open(whatsappUrl, "_blank");
   };
 
+const handleOrderNow = () => {
+  if (stock <= 0) return notifyError("Insufficient stock");
+
+  // ✅ handleAddToCart এর মতোই proper id + title বানাও
+  const { variants, categories, description, ...updatedProduct } = product;
+
+  const newItem = {
+    ...updatedProduct,
+    id: `${
+      product.variants.length <= 1
+        ? product._id
+        : product._id +
+          variantTitle?.map((att) => selectVariant[att._id]).join("-")
+    }`,
+    title: `${
+      product.variants.length <= 1
+        ? showingTranslateValue(product?.title)
+        : showingTranslateValue(product?.title) +
+          "-" +
+          variantTitle
+            ?.map((att) => att.variants?.find((v) => v._id === selectVariant[att._id]))
+            .map((el) => showingTranslateValue(el?.name))
+    }`,
+    image: img || product.image?.[0],
+    variant: selectVariant, // ✅ variant সহ
+    price: price,
+    originalPrice: originalPrice,
+  };
+
+  // ✅ react-use-cart এ add/update
+  const existing = getItem(newItem.id);
+  if (existing) {
+    updateItemQuantity(newItem.id, existing.quantity + item);
+  } else {
+    addItem(newItem, item);
+  }
+
+  // ✅ localStorage sync
+  const codExisting = JSON.parse(localStorage.getItem("codProducts")) || [];
+  const index = codExisting.findIndex((p) => p.id === newItem.id);
+  if (index > -1) {
+    codExisting[index].quantity += item;
+  } else {
+    codExisting.push({ ...newItem, quantity: item });
+  }
+  localStorage.setItem("codProducts", JSON.stringify(codExisting));
+
+  // ✅ FB + trackEvent
+  const eventId = "addtocart_" + Date.now() + "_" + Math.floor(Math.random() * 1000);
+
+  if (typeof window !== "undefined" && window.fbq) {
+    window.fbq(
+      "track",
+      "AddToCart",
+      {
+        value: newItem.price,
+        currency: "BDT",
+        content_ids: [newItem.id],
+        content_type: "product",
+        contents: [{ id: newItem.id, quantity: item, item_price: newItem.price }],
+        content_name: newItem.title,
+      },
+      { eventID: eventId }
+    );
+  }
+
+  trackEvent("AddToCart", {
+    value: newItem.price,
+    currency: "BDT",
+    email: email || "",
+    phone: phone || "",
+    event_id: eventId,
+    event_source_url: window.location.href,
+    items: [
+      {
+        id: newItem.id,
+        name: newItem.title,
+        quantity: item,
+        item_price: newItem.price,
+        price: newItem.price,
+      },
+    ],
+    content_ids: [newItem.id],
+    content_type: "product",
+  });
+
+ 
+
+  router.push("/cod");
+};
+  // // ─── Voice Order Handler (নতুন) ───────────────────────────────────────────
+  // const handleVoiceOrder = () => {
+  //   if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+  //     alert("আপনার browser এ voice recognition support নেই।");
+  //     return;
+  //   }
+  //   const SpeechRecognition =
+  //     window.SpeechRecognition || window.webkitSpeechRecognition;
+  //   const recognition = new SpeechRecognition();
+  //   recognition.lang = "bn-BD";
+  //   recognition.interimResults = false;
+  //   recognition.maxAlternatives = 1;
+
+  //   setIsListening(true);
+
+  //   recognition.onresult = (event) => {
+  //     const transcript = event.results[0][0].transcript;
+  //     setIsListening(false);
+  //     if (typeof window !== "undefined") {
+  //       localStorage.setItem(
+  //         "codProduct",
+  //         JSON.stringify({
+  //           _id: product._id,
+  //           title: showingTranslateValue(product?.title),
+  //           image: img || product.image?.[0],
+  //           price: price,
+  //           originalPrice: originalPrice,
+  //           variant: selectVariant,
+  //           quantity: item,
+  //           slug: router.query.slug,
+  //           voiceNote: transcript,
+  //         })
+  //       );
+  //     }
+  //     router.push("/cod");
+  //   };
+
+  //   recognition.onerror = () => {
+  //     setIsListening(false);
+  //     alert("Voice recognition এ সমস্যা হয়েছে, আবার চেষ্টা করুন।");
+  //   };
+
+  //   recognition.onend = () => setIsListening(false);
+  //   recognition.start();
+  // };
+
   const handleChangeImage = (img) => {
     setImg(img);
   };
@@ -332,13 +514,10 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
 
   const isHtmlDescription = /<[a-z][\s\S]*>/i.test(descriptionHtml);
 
-  // HTML description এর preview (first ~300 chars of text content)
   const HTML_PREVIEW_CHARS = 300;
   const getHtmlPreview = (html) => {
-    // strip tags to count visible characters
     const text = html.replace(/<[^>]*>/g, "");
     if (text.length <= HTML_PREVIEW_CHARS) return { preview: html, needsToggle: false };
-    // find a safe cut point in the original html
     let visibleCount = 0;
     let cutIndex = 0;
     let inTag = false;
@@ -363,7 +542,6 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
         >
           {/* ── Product Description HTML styles ── */}
           <style jsx global>{`
-      
             .product-description h1,
             .product-description h2,
             .product-description h3,
@@ -396,6 +574,56 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
             }
             .product-description strong { color: #2d3748; }
             .product-description br { display: none; }
+
+            /* ── Glassy shimmer animation (নতুন) ── */
+            @keyframes shimmer-slide {
+              0%   { left: -75%; }
+              100% { left: 125%; }
+            }
+            .btn-glassy {
+              position: relative;
+              overflow: hidden;
+            }
+            .btn-glassy::after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: -75%;
+              width: 50%;
+              height: 100%;
+              background: linear-gradient(
+                120deg,
+                transparent 0%,
+                rgba(255,255,255,0.28) 50%,
+                transparent 100%
+              );
+              transform: skewX(-20deg);
+              animation: shimmer-slide 2.4s ease-in-out infinite;
+              pointer-events: none;
+            }
+
+            /* Countdown boxes */
+            @keyframes pulse-soft {
+              0%, 100% { transform: scale(1); }
+              50%       { transform: scale(1.04); }
+            }
+            .countdown-box {
+              animation: pulse-soft 1s ease-in-out infinite;
+            }
+
+            /* Voice pulse ring */
+            @keyframes voice-ring {
+              0%   { transform: scale(1);   opacity: 0.7; }
+              100% { transform: scale(1.7); opacity: 0; }
+            }
+            .voice-ring::before {
+              content: '';
+              position: absolute;
+              inset: 0;
+              border-radius: 0.375rem;
+              background: rgba(5, 150, 105, 0.4);
+              animation: voice-ring 1s ease-out infinite;
+            }
           `}</style>
 
           <div className="px-0 py-6 lg:py-10">
@@ -507,9 +735,154 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                             </span>
                           ))}
                         </div>
+<div> {/* ── Discount Countdown Timer (নতুন) ── */}
+                          {timeLeft && (
+                            <div className="w-full rounded-lg bg-orange-50 border border-orange-100 px-3 py-2">
+                              <p className="text-xs text-center text-orange-500 font-semibold mb-2 font-serif tracking-wide">
+                                ⏰ অফার শেষ হবে
+                              </p>
+                              <div className="flex justify-center gap-2">
+                                {[
+                                  { val: timeLeft.days,    label: "দিন" },
+                                  { val: timeLeft.hours,   label: "ঘণ্টা" },
+                                  { val: timeLeft.minutes, label: "মিনিট" },
+                                  { val: timeLeft.seconds, label: "সেকেন্ড" },
+                                ].map(({ val, label }, i) => (
+                                  <div
+                                    key={i}
+                                    className="countdown-box flex flex-col items-center justify-center w-14 h-14 rounded-lg shadow-md"
+                                    style={{
+                                      background: "linear-gradient(135deg, #f97316 0%, #ea580c 100%)",
+                                      animationDelay: `${i * 0.15}s`,
+                                    }}
+                                  >
+                                    <span className="text-xl font-bold text-white leading-none">
+                                      {String(val).padStart(2, "0")}
+                                    </span>
+                                    <span className="text-[10px] text-orange-100 mt-0.5 font-serif">
+                                      {label}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}</div>
 
-                        {/* ── Description (HTML render with toggle) ── */}
-                        <div className="mb-4">
+
+               
+
+                        {/* ── Add to Cart + WhatsApp (existing — unchanged) ── */}
+                        <div className="flex flex-col gap-3 mt-4">
+                          {/* Quantity + Add to Cart */}
+
+                              {/* ── Order Now Button (নতুন) ── */}
+                          <button
+                            onClick={handleOrderNow}
+                            className="btn-glassy w-full flex items-center justify-center gap-2 py-3 px-6 rounded-md font-bold font-serif text-base text-white h-12 md:h-14 shadow-lg transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                            style={{
+                              background: "linear-gradient(90deg, #f59e0b 0%, #f97316 50%, #ef4444 100%)",
+                            }}
+                          >
+                            🛒 Order Now
+                          </button>
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            {/* Quantity control */}
+                            <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
+                              <button
+                                onClick={() => setItem(item - 1)}
+                                disabled={item === 1}
+                                className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
+                              >
+                                <span className="text-dark text-base"><FiMinus /></span>
+                              </button>
+                              <p className="font-semibold flex items-center justify-center h-full cursor-default flex-shrink-0 text-base text-heading w-8 md:w-20 xl:w-24">
+                                {item}
+                              </p>
+                              <button
+                                onClick={() => setItem(item + 1)}
+                                disabled={selectVariant?.quantity <= item}
+                                className="flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-s border-gray-300 hover:text-gray-500"
+                              >
+                                <span className="text-dark text-base"><FiPlus /></span>
+                              </button>
+                            </div>
+
+                            {/* Add to Cart Button */}
+                            <button
+                              onClick={() => handleAddToCart(product)}
+                              className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-4 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] flex-1 h-11 md:h-12"
+                            >
+                              {t("common:addToCart")}
+                            </button>
+                          </div>
+
+                          {/* WhatsApp Order Button (existing — unchanged) */}
+                          <button
+                            onClick={handleWhatsAppOrder}
+                            className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-md font-semibold font-serif text-sm text-white transition ease-in-out duration-300 bg-[#25D366] hover:bg-[#1ebe5d] h-11 md:h-12"
+                          >
+                            <FaWhatsapp size={20} />
+                            <span>Order on WhatsApp</span>
+                          </button>
+
+
+                         
+
+                      
+
+                          {/* ── Call + Messenger row (নতুন) ── */}
+                          <div className="flex gap-2">
+                            {/* কল করুন */}
+                            <a
+                              href={`tel:${CALL_NUMBER}`}
+                              className="btn-glassy flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-md font-semibold font-serif text-sm text-white h-11 md:h-12 shadow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                              style={{
+                                background: "linear-gradient(90deg, #f59e0b 0%, #d97706 100%)",
+                              }}
+                            >
+                              <FaPhoneAlt size={14} />
+                              <span>কল করুন {CALL_NUMBER}</span>
+                            </a>
+                          </div>
+
+                          {/* ── Messenger full width (নতুন) ── */}
+                          <a
+                            href={`https://m.me/${MESSENGER_PAGE}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn-glassy w-full flex items-center justify-center gap-2 py-3 px-6 rounded-md font-semibold font-serif text-sm text-white h-11 md:h-12 shadow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                            style={{
+                              background: "linear-gradient(90deg, #0084FF 0%, #0063cc 100%)",
+                            }}
+                          >
+                            <FaFacebookMessenger size={18} />
+                            <span>Chat with Us Messenger</span>
+                          </a>
+
+                          {/* ── Voice Order Button (নতুন) ── */}
+                          {/* <button
+                            onClick={handleVoiceOrder}
+                            className={`btn-glassy ${isListening ? "voice-ring" : ""} w-full flex items-center justify-center gap-2 py-3 px-6 rounded-md font-semibold font-serif text-sm text-white h-11 md:h-12 shadow transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]`}
+                            style={{
+                              background: isListening
+                                ? "linear-gradient(90deg, #dc2626 0%, #b91c1c 100%)"
+                                : "linear-gradient(90deg, #059669 0%, #047857 100%)",
+                            }}
+                          >
+                            <FaMicrophone size={16} className={isListening ? "animate-pulse" : ""} />
+                            <span>
+                              {isListening ? "শুনছি... বলুন" : "voice দিয়ে order করুন"}
+                            </span>
+                          </button> */}
+
+                        </div>
+
+
+         {/* ── Description (HTML render with toggle) ── */}
+                        <div className="mb-4 my-8">
+                      
+                            <h3 className="text-gray-800 font-bold ">{t("Description")}:</h3>
+                      
                           {isHtmlDescription ? (
                             <div>
                               <div
@@ -553,51 +926,6 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                             </div>
                           )}
                         </div>
-
-                        {/* ── Add to Cart + WhatsApp ── */}
-                        <div className="flex flex-col gap-3 mt-4">
-                          {/* Quantity + Add to Cart */}
-                          <div className="flex items-center gap-2 sm:gap-3">
-                            {/* Quantity control */}
-                            <div className="group flex items-center justify-between rounded-md overflow-hidden flex-shrink-0 border h-11 md:h-12 border-gray-300">
-                              <button
-                                onClick={() => setItem(item - 1)}
-                                disabled={item === 1}
-                                className="flex items-center justify-center flex-shrink-0 h-full transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-e border-gray-300 hover:text-gray-500"
-                              >
-                                <span className="text-dark text-base"><FiMinus /></span>
-                              </button>
-                              <p className="font-semibold flex items-center justify-center h-full cursor-default flex-shrink-0 text-base text-heading w-8 md:w-20 xl:w-24">
-                                {item}
-                              </p>
-                              <button
-                                onClick={() => setItem(item + 1)}
-                                disabled={selectVariant?.quantity <= item}
-                                className="flex items-center justify-center h-full flex-shrink-0 transition ease-in-out duration-300 focus:outline-none w-8 md:w-12 text-heading border-s border-gray-300 hover:text-gray-500"
-                              >
-                                <span className="text-dark text-base"><FiPlus /></span>
-                              </button>
-                            </div>
-
-                            {/* Add to Cart Button */}
-                            <button
-                              onClick={() => handleAddToCart(product)}
-                              className="text-sm leading-4 inline-flex items-center cursor-pointer transition ease-in-out duration-300 font-semibold font-serif text-center justify-center border-0 border-transparent rounded-md focus-visible:outline-none focus:outline-none text-white px-4 md:px-6 lg:px-8 py-3 md:py-3.5 lg:py-4 hover:text-white bg-gradient-to-r from-[#1F6BBF] via-[#279FDF] to-[#00a4db] hover:from-[#155a9e] hover:via-[#1e88c8] hover:to-[#0090c2] flex-1 h-11 md:h-12"
-                            >
-                              {t("common:addToCart")}
-                            </button>
-                          </div>
-
-                          {/* WhatsApp Order Button */}
-                          <button
-                            onClick={handleWhatsAppOrder}
-                            className="w-full flex items-center justify-center gap-2 py-3 px-6 rounded-md font-semibold font-serif text-sm text-white transition ease-in-out duration-300 bg-[#25D366] hover:bg-[#1ebe5d] h-11 md:h-12"
-                          >
-                            <FaWhatsapp size={20} />
-                            <span>Order on WhatsApp</span>
-                          </button>
-                        </div>
-
                         {/* Category & Tags */}
                         <div className="flex flex-col mt-4">
                           <span className="font-serif font-semibold py-1 text-sm d-block">
@@ -612,7 +940,6 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
                               </button>
                             </Link>
                           </span>
-                          {/* Tags swiper — horizontal scroll, no overflow */}
                           <div className="tags-swiper flex flex-row gap-2 mt-2 overflow-x-auto pb-1">
                             <Tags product={product} />
                           </div>

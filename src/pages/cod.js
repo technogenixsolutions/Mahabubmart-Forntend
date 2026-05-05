@@ -3,10 +3,14 @@ import { IoClose } from "react-icons/io5";
 import InputArea from "@component/form/InputArea";
 import Error from "@component/form/Error";
 import InputShipping from "@component/form/InputShipping";
-
+import Cookies from "js-cookie"; // ✅ এটা যোগ করুন top-এ
 
 import useOrderNowSubmit from "@hooks/useOrderNowSubmit";
-import { lead } from "@utils/fbCheckout";
+
+import { useCart } from "react-use-cart";
+
+import { UserContext } from "@context/UserContext";
+import { initiateCheckout, lead } from "@utils/fbCheckout";
 
 
 import dynamic from "next/dynamic";
@@ -15,6 +19,7 @@ import dynamic from "next/dynamic";
 //internal import
 import Layout from "@layout/Layout";
 import OrderSuccessModal from "@component/cart/OrderSuccessModal";
+import OrderSummaryCard from "@component/OrderSummaryCard/OrderSummaryCard";
 
 
 const cod = () => {
@@ -39,7 +44,8 @@ const cod = () => {
   } = useOrderNowSubmit();
   const [successModalData, setSuccessModalData] = useState(null);
     const [userEmail, setUserEmail] = useState("");  // ✅ যোগ করুন
-
+const { items } = useCart();
+const { state: { userInfo } } = useContext(UserContext);
 
     // ✅ login করা user এর email নিন
   useEffect(() => {
@@ -55,6 +61,12 @@ const cod = () => {
   const handleSubmitOrder = async (data) => {
     const orderData = await submitHandler(data);
     if (!orderData) return;
+
+      // ✅ order confirm হওয়ার পরে — final cart + total দিয়ে
+  await initiateCheckout({ cart: items, total: cartTotal },   {
+    ...userInfo,
+    phone: data.contact || "", // ✅ এখানে add করো
+  });
 
     // ✅ শুধু form data থেকে নাও — userInfo লাগবে না
    await lead(orderData, {
@@ -73,7 +85,7 @@ const cod = () => {
 
   return (
     <>
-      <Layout title="Checkout" description="this is checkout page">
+      <Layout title="COD" description="this is cod page">
         <div className="mx-auto max-w-screen-2xl px-3 sm:px-10 mt-8 my-10 py-5">
             
 
@@ -84,6 +96,8 @@ const cod = () => {
            
           </div>
 
+        <div className="flex flex-col-reverse lg:flex-row gap-6 mt-4">
+       <div className="w-full lg:w-7/12">
           <form onSubmit={handleSubmit(handleSubmitOrder)} className="p-2 space-y-2 text-sm overflow-y-auto">
 
             <InputArea
@@ -215,6 +229,18 @@ const cod = () => {
               {isSubmitting ? "Processing..." : "আপনার অর্ডার কনফার্ম করুন"}
             </button>
           </form>
+        </div>
+          {/* ── Right: Order Summary ── */}
+        <div className="w-full lg:w-5/12">
+  <OrderSummaryCard
+    currency={currency}
+    shippingCost={shippingCost}
+    discountAmount={discountAmount}
+    total={total}
+  />
+</div>
+
+        </div>
         </div>
   
 

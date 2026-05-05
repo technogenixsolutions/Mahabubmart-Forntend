@@ -19,7 +19,7 @@ const useOrderNowSubmit = () => {
     state: { userInfo },
   } = useContext(UserContext);
 
-  const router = useRouter();
+
   const { items, cartTotal, isEmpty, emptyCart } = useCart();
 
   const [shippingCost, setShippingCost] = useState(0);
@@ -195,6 +195,8 @@ const useOrderNowSubmit = () => {
     Cookies.remove("couponInfo");
     sessionStorage.removeItem("products");
     emptyCart();
+
+  localStorage.removeItem("codProducts"); // ✅ এটা যোগ করুন
 
     setIsSubmitting(false);
     return res;

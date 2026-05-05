@@ -38,8 +38,8 @@ const [pendingCheckout, setPendingCheckout] = useState(false);
 
   const orderNowButton = (
   <button
-    onClick={async () => {
-    await initiateCheckout({ cart: items, total: cartTotal }, userInfo);
+    onClick={ () => {
+
 
      closeCartDrawer();
     router.push("/cod"); // 🔹 Redirect to COD page
