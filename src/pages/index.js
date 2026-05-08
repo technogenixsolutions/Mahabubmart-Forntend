@@ -264,7 +264,7 @@ export const getServerSideProps = async (context) => {
   const { cookies } = context.req;
   const { query, _id } = context.query;
 
-  const [data, attributes] = await Promise.all([
+  const [data, attributes, promotion] = await Promise.all([
     ProductServices.getShowingStoreProducts({
       category: _id ? _id : "",
       title: query ? query : "",
