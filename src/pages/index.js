@@ -19,8 +19,10 @@ import AttributeServices from "@services/AttributeServices";
 import CMSkeleton from "@component/preloader/CMSkeleton";
 import FAQ from "@component/faq/FAQ";
 import Link from "next/link";
+import PromotionServices from "@services/PromotionServices";
+import PromotionModal from "@component/modal/PromotionModal";
 
-const Home = ({ popularProducts, discountProducts, attributes }) => {
+const Home = ({ popularProducts, discountProducts, attributes, promotion }) => {
 
   const router = useRouter();
   const { isLoading, setIsLoading } = useContext(SidebarContext);
@@ -43,6 +45,8 @@ const Home = ({ popularProducts, discountProducts, attributes }) => {
       ) : (
         <Layout>
           <div className="min-h-screen">
+
+              <PromotionModal promotion={promotion} />
             <StickyCart />
             <div className="bg-white">
               <div className="mx-auto py-5 max-w-screen-2xl px-3 sm:px-10">
@@ -267,6 +271,7 @@ export const getServerSideProps = async (context) => {
     }),
 
     AttributeServices?.getShowingAttributes(),
+    PromotionServices.getShowingPromotions(), 
   ]);
 
   const popularProducts = data?.products?.filter((p) => p.prices.discount < 1);
@@ -282,6 +287,7 @@ export const getServerSideProps = async (context) => {
       discountProducts: discountProducts,
       cookies: cookies,
       attributes,
+      promotion: promotion || null, // এটা যোগ করুন
     },
   };
 };
