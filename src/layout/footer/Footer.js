@@ -324,7 +324,7 @@ const Footer = () => {
               <Link href="/">
                 <a className="mr-3 lg:mr-12 xl:mr-12 flex items-center h-12" rel="noreferrer">
                   <Image
-                    src="https://res.cloudinary.com/dgwwhniph/image/upload/v1773404263/Gemini_Generated_Image_kk11j3kk11j3kk11_1_je0nc7.png"
+                    src="https://res.cloudinary.com/dgwwhniph/image/upload/v1778692696/odpllow1gnoqkvezzfto.png"
       alt="mahabubmart"
       width={180}
       height={60}
