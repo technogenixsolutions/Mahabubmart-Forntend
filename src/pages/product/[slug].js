@@ -51,7 +51,7 @@ const ProductScreen = ({ product, attributes, relatedProduct }) => {
   const { globalSetting } = useGetSetting();
   const { lang, showingTranslateValue, getNumber } = useUtilsFunction();
 
-  const currency = globalSetting?.default_currency || "$";
+  const currency = globalSetting?.default_currency || "৳";
 
   const { isLoading, setIsLoading } = useContext(SidebarContext);
   const { handleAddItem, item, setItem } = useAddToCart();
@@ -656,7 +656,7 @@ const handleOrderNow = () => {
                   <div className="w-full mx-auto md:w-6/12 lg:w-5/12 xl:w-4/12 xl:pr-10 flex-shrink-0">
                     <Discount slug={true} product={product} discount={discount} />
 
-                    {product.image[0] ? (
+                    {product?.image[0] ? (
                       <Image
                         src={img || product.image[0]}
                         alt="product"
@@ -675,7 +675,7 @@ const handleOrderNow = () => {
                       />
                     )}
 
-                    {product.image.length > 1 && (
+                    {product?.image.length > 1 && (
                       <div className="flex flex-row flex-wrap mt-4 border-t">
                         <ImageCarousel
                           images={product.image}
